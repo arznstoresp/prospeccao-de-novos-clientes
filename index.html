@@ -12,7 +12,7 @@
   --bg:#0a0a0a; --surface:#111111; --card:#181818; --raised:#202020;
   --line:#2c2c2c; --line2:#3a3a3a;
   --neon:#ff6a00; --neon2:#e55a00;
-  --amber:#ffd166; --red:#ff3d00;
+  --amber:#ffd166; --green:#4ade80;
   --text:#f5f0eb; --sub:#7a6a5a; --hint:#4a3a2a;
   --radius-sm:8px; --radius:12px; --radius-lg:16px;
   --gap:12px; --pad:16px; --input-h:46px;
@@ -20,140 +20,65 @@
 html { -webkit-text-size-adjust:100%; }
 body {
   font-family:'Inter',sans-serif; background:var(--bg); color:var(--text);
-  min-height:100vh; min-height:100dvh; font-size:15px; line-height:1.5;
-  -webkit-font-smoothing:antialiased;
+  min-height:100vh; font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased;
 }
-.wrap {
-  max-width:1020px; margin:0 auto; background:var(--surface);
-  min-height:100vh; min-height:100dvh; display:flex; flex-direction:column;
-}
+.wrap { max-width:1020px; margin:0 auto; background:var(--surface); min-height:100vh; display:flex; flex-direction:column; }
 @media(min-width:768px){
   body{padding:1.5rem 1rem;}
   .wrap{border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;min-height:auto;}
 }
 
 /* HEADER */
-.header {
-  background:var(--card); border-bottom:1px solid var(--line);
-  padding:20px var(--pad) 0; position:sticky; top:0; z-index:100;
-}
-.logo {
-  font-family:'Syne',sans-serif; font-size:20px; font-weight:800;
-  color:var(--text); letter-spacing:1.5px; text-align:center;
-  margin-bottom:16px; line-height:1.3;
-}
+.header { background:var(--card); border-bottom:1px solid var(--line); padding:20px var(--pad) 0; position:sticky; top:0; z-index:100; }
+.logo { font-family:'Syne',sans-serif; font-size:20px; font-weight:800; color:var(--text); letter-spacing:1.5px; text-align:center; margin-bottom:16px; line-height:1.3; }
 .logo .brand{color:var(--neon);}
 .logo .sep{color:var(--line2);margin:0 8px;}
-.logo .sub{
-  display:block; color:var(--sub); font-size:11px; font-weight:600;
-  letter-spacing:3px; font-family:'Inter',sans-serif;
-  text-transform:uppercase; margin-top:3px;
-}
+.logo .sub{ display:block; color:var(--sub); font-size:11px; font-weight:600; letter-spacing:3px; font-family:'Inter',sans-serif; text-transform:uppercase; margin-top:3px; }
 @media(min-width:480px){.logo{font-size:24px;}}
 
 /* TABS */
-.tabs-nav {
-  display:flex; overflow-x:auto; -webkit-overflow-scrolling:touch;
-  scrollbar-width:none; margin:0 calc(-1*var(--pad)); padding:0 var(--pad);
-}
+.tabs-nav { display:flex; overflow-x:auto; -webkit-overflow-scrolling:touch; scrollbar-width:none; margin:0 calc(-1*var(--pad)); padding:0 var(--pad); }
 .tabs-nav::-webkit-scrollbar{display:none;}
-.tab-btn {
-  flex:0 0 auto; background:transparent; border:none;
-  border-bottom:3px solid transparent; margin-bottom:-1px;
-  color:var(--sub); font-family:'Inter',sans-serif; font-size:12px;
-  font-weight:700; letter-spacing:.3px; padding:12px 16px 10px;
-  cursor:pointer; transition:color .15s,border-color .15s;
-  display:flex; align-items:center; gap:5px; white-space:nowrap;
-}
+.tab-btn { flex:0 0 auto; background:transparent; border:none; border-bottom:3px solid transparent; margin-bottom:-1px; color:var(--sub); font-family:'Inter',sans-serif; font-size:12px; font-weight:700; letter-spacing:.3px; padding:12px 16px 10px; cursor:pointer; transition:color .15s,border-color .15s; display:flex; align-items:center; gap:5px; white-space:nowrap; }
 .tab-btn:hover{color:var(--text);}
 .tab-btn.active{color:var(--neon);border-bottom-color:var(--neon);}
 .tab-icon{font-size:15px;line-height:1;}
-@media(min-width:480px){
-  .tabs-nav{justify-content:center;}
-  .tab-btn{flex:1;justify-content:center;font-size:13px;padding:13px 12px 11px;}
-}
+@media(min-width:480px){ .tabs-nav{justify-content:center;} .tab-btn{flex:1;justify-content:center;font-size:13px;padding:13px 12px 11px;} }
 
-/* TAB CONTENT */
+/* CONTENT */
 .tab-content{display:none;padding:var(--pad);flex:1;}
 .tab-content.active{display:block;}
 
 /* PANELS */
-.panel {
-  background:var(--card); border:1px solid var(--line);
-  border-radius:var(--radius); padding:var(--pad); margin-bottom:var(--gap);
-}
+.panel { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); padding:var(--pad); margin-bottom:var(--gap); }
 .panel:last-child{margin-bottom:0;}
-.panel-title {
-  font-size:10px; font-weight:800; color:var(--neon);
-  text-transform:uppercase; letter-spacing:2px;
-  margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--line);
-  display:flex; align-items:center; gap:6px;
-}
+.panel-title { font-size:10px; font-weight:800; color:var(--neon); text-transform:uppercase; letter-spacing:2px; margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--line); display:flex; align-items:center; gap:6px; }
 
 /* FIELDS */
 .field-group{margin-bottom:12px;}
 .field-group:last-child{margin-bottom:0;}
-label {
-  display:block; font-size:11px; font-weight:700; color:var(--sub);
-  margin-bottom:5px; letter-spacing:.4px; text-transform:uppercase;
-}
-input[type=text], input[type=number], select, textarea {
-  width:100%; height:var(--input-h); background:var(--raised);
-  border:1.5px solid var(--line2); border-radius:var(--radius-sm);
-  color:var(--text); font-family:'Inter',sans-serif; font-size:16px;
-  font-weight:600; padding:0 12px; outline:none;
-  transition:border-color .15s,box-shadow .15s;
-  -webkit-appearance:none; appearance:none;
-}
-input[type=text]:focus, select:focus, textarea:focus {
-  border-color:var(--neon); box-shadow:0 0 0 3px rgba(255,106,0,.12);
-}
-textarea {
-  height:auto; padding:10px 12px; resize:vertical;
-  font-size:14px; min-height:80px; line-height:1.5;
-}
-select {
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a6a5a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat:no-repeat; background-position:right 12px center; padding-right:32px;
-}
-select option{background:var(--card);}
+label { display:block; font-size:11px; font-weight:700; color:var(--sub); margin-bottom:5px; letter-spacing:.4px; text-transform:uppercase; }
+input[type=text], select, textarea { width:100%; height:var(--input-h); background:var(--raised); border:1.5px solid var(--line2); border-radius:var(--radius-sm); color:var(--text); font-family:'Inter',sans-serif; font-size:16px; font-weight:600; padding:0 12px; outline:none; transition:border-color .15s,box-shadow .15s; -webkit-appearance:none; appearance:none; }
+input[type=text]:focus, textarea:focus { border-color:var(--neon); box-shadow:0 0 0 3px rgba(255,106,0,.12); }
+textarea { height:auto; padding:10px 12px; resize:vertical; font-size:14px; min-height:80px; line-height:1.5; }
 
 /* RANGE */
-input[type=range] {
-  width:100%; height:4px; padding:0; background:var(--line2);
-  border:none; border-radius:4px; cursor:pointer; margin-top:8px;
-  -webkit-appearance:none; appearance:none; outline:none;
-}
-input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance:none; width:22px; height:22px;
-  background:var(--neon); border-radius:50%;
-  box-shadow:0 0 0 4px rgba(255,106,0,.2); transition:box-shadow .15s;
-}
+input[type=range] { width:100%; height:4px; padding:0; background:var(--line2); border:none; border-radius:4px; cursor:pointer; margin-top:8px; -webkit-appearance:none; appearance:none; outline:none; }
+input[type=range]::-webkit-slider-thumb { -webkit-appearance:none; width:22px; height:22px; background:var(--neon); border-radius:50%; box-shadow:0 0 0 4px rgba(255,106,0,.2); transition:box-shadow .15s; }
 input[type=range]::-webkit-slider-thumb:hover{box-shadow:0 0 0 7px rgba(255,106,0,.2);}
-.range-val {
-  font-family:'Syne',sans-serif; font-size:26px; font-weight:800;
-  color:var(--neon); line-height:1; margin-bottom:2px;
-}
+.range-val { font-family:'Syne',sans-serif; font-size:26px; font-weight:800; color:var(--neon); line-height:1; margin-bottom:2px; }
 .range-val span{font-size:13px;font-weight:400;font-family:'Inter',sans-serif;color:var(--sub);margin-left:2px;}
 .range-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--hint);margin-top:4px;letter-spacing:.5px;}
 
 /* TAGS */
 .tags-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
-.tag {
-  padding:5px 10px; background:var(--raised); border:1.5px solid var(--line2);
-  border-radius:20px; font-size:11px; font-weight:700; color:var(--sub);
-  cursor:pointer; transition:all .12s; letter-spacing:.3px; user-select:none;
-}
+.tag { padding:5px 10px; background:var(--raised); border:1.5px solid var(--line2); border-radius:20px; font-size:11px; font-weight:700; color:var(--sub); cursor:pointer; transition:all .12s; letter-spacing:.3px; user-select:none; }
 .tag:hover{border-color:var(--sub);color:var(--text);}
 .tag.on{border-color:var(--neon);color:var(--neon);background:rgba(255,106,0,.1);}
 
-/* POTENCIAL */
+/* POTENCIAL PILLS */
 .pot-row{display:flex;flex-wrap:wrap;gap:6px;}
-.pot-pill {
-  padding:5px 12px; border-radius:20px; font-size:11px; font-weight:700;
-  letter-spacing:.3px; cursor:pointer; border:1.5px solid var(--line2);
-  background:var(--raised); color:var(--sub); transition:all .12s;
-}
+.pot-pill { padding:5px 12px; border-radius:20px; font-size:11px; font-weight:700; letter-spacing:.3px; cursor:pointer; border:1.5px solid var(--line2); background:var(--raised); color:var(--sub); transition:all .12s; }
 .pot-pill:hover{border-color:var(--sub);color:var(--text);}
 .pot-pill.on-todos{border-color:var(--text);color:var(--text);background:rgba(245,240,235,.06);}
 .pot-pill.on-muito{border-color:var(--neon);color:var(--neon);background:rgba(255,106,0,.1);}
@@ -161,22 +86,32 @@ input[type=range]::-webkit-slider-thumb:hover{box-shadow:0 0 0 7px rgba(255,106,
 .pot-pill.on-media{border-color:var(--sub);color:var(--sub);background:rgba(122,106,90,.1);}
 
 /* BTNS */
-.btn {
-  display:inline-flex; align-items:center; justify-content:center; gap:6px;
-  border:none; border-radius:var(--radius-sm); font-family:'Inter',sans-serif;
-  font-size:13px; font-weight:700; cursor:pointer;
-  transition:opacity .15s,background .15s; padding:0 16px; height:var(--input-h);
-  letter-spacing:.3px; white-space:nowrap;
-}
+.btn { display:inline-flex; align-items:center; justify-content:center; gap:6px; border:none; border-radius:var(--radius-sm); font-family:'Inter',sans-serif; font-size:13px; font-weight:700; cursor:pointer; transition:opacity .15s,background .15s; padding:0 16px; height:var(--input-h); letter-spacing:.3px; white-space:nowrap; }
 .btn:active{opacity:.75;}
 .btn:disabled{opacity:.35;cursor:not-allowed;}
 .btn-primary{background:var(--neon);color:#fff;width:100%;}
 .btn-primary:hover:not(:disabled){background:var(--neon2);}
-.btn-ghost{background:var(--raised);border:1.5px solid var(--line2);color:var(--sub);}
+.btn-ghost{background:var(--raised);border:1.5px solid var(--line2);color:var(--sub);width:100%;}
 .btn-ghost:hover{border-color:var(--sub);color:var(--text);}
 .btn-wa{background:#25D366;color:#fff;flex:1;font-size:12px;}
 .btn-wa:hover{background:#1da851;}
 .btn-wa svg{width:13px;height:13px;fill:#fff;flex-shrink:0;}
+
+/* LOC STATUS BOX */
+.loc-box { font-size:12px; padding:10px 12px; background:var(--raised); border:1.5px solid var(--line2); border-radius:var(--radius-sm); line-height:1.6; color:var(--sub); margin-top:8px; }
+.loc-box.ok { border-color:var(--neon); color:var(--text); }
+.loc-box.err { border-color:#ff3d00; color:#ff7a5c; }
+
+/* LOC CHIPS (endereços salvos) */
+.loc-chips{display:flex;flex-direction:column;gap:6px;margin-top:8px;}
+.loc-chip { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:9px 12px; background:var(--raised); border:1.5px solid var(--line2); border-radius:var(--radius-sm); cursor:pointer; transition:all .12s; }
+.loc-chip:hover{border-color:var(--neon);}
+.loc-chip.active{border-color:var(--neon);background:rgba(255,106,0,.08);}
+.loc-chip-name{font-size:12px;font-weight:700;color:var(--text);flex:1;}
+.loc-chip-addr{font-size:10px;color:var(--sub);flex:2;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.loc-chip-del{font-size:16px;color:var(--sub);cursor:pointer;flex-shrink:0;padding:0 4px;transition:color .12s;}
+.loc-chip-del:hover{color:#ff3d00;}
+.loc-chip-badge{font-size:9px;font-weight:800;padding:2px 7px;border-radius:20px;background:var(--neon);color:#fff;flex-shrink:0;}
 
 /* STATS */
 .stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap);margin-bottom:var(--gap);}
@@ -194,18 +129,11 @@ input[type=range]::-webkit-slider-thumb:hover{box-shadow:0 0 0 7px rgba(255,106,
 @media(max-width:560px){.result-grid{grid-template-columns:1fr;}}
 
 /* RESULT CARD */
-.result-card {
-  background:var(--card); border:1px solid var(--line);
-  border-radius:var(--radius); display:flex; flex-direction:column;
-  overflow:hidden; transition:border-color .15s;
-}
+.result-card { background:var(--card); border:1px solid var(--line); border-radius:var(--radius); display:flex; flex-direction:column; overflow:hidden; transition:border-color .15s; }
 .result-card:hover{border-color:var(--neon);}
 .rc-head{padding:12px 14px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
 .rc-name{font-size:13px;font-weight:700;line-height:1.35;flex:1;color:var(--text);}
-.badge{
-  font-size:9px;font-weight:800;letter-spacing:.8px;padding:3px 7px;
-  border-radius:20px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;
-}
+.badge{font-size:9px;font-weight:800;letter-spacing:.8px;padding:3px 7px;border-radius:20px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
 .b-muito{background:rgba(255,106,0,.15);color:var(--neon);border:1px solid rgba(255,106,0,.3);}
 .b-alta{background:rgba(255,209,102,.12);color:var(--amber);border:1px solid rgba(255,209,102,.3);}
 .b-media{background:rgba(122,106,90,.12);color:var(--sub);border:1px solid rgba(122,106,90,.3);}
@@ -214,82 +142,38 @@ input[type=range]::-webkit-slider-thumb:hover{box-shadow:0 0 0 7px rgba(255,106,
 .rc-row strong{color:var(--text);font-weight:600;}
 .rc-row.addr{font-size:10px;line-height:1.4;}
 .rc-dist{font-size:10px;color:var(--neon);font-weight:700;margin-bottom:4px;}
-
-/* MSG COLLAPSE */
-.rc-msg {
-  margin:10px 14px 0; background:var(--raised); border:1px solid var(--line);
-  border-radius:var(--radius-sm); padding:0 12px; font-size:12px; color:var(--sub);
-  line-height:1.7; white-space:pre-line; max-height:0; overflow:hidden;
-  transition:max-height .3s ease,padding .2s;
-}
+.rc-msg { margin:10px 14px 0; background:var(--raised); border:1px solid var(--line); border-radius:var(--radius-sm); padding:0 12px; font-size:12px; color:var(--sub); line-height:1.7; white-space:pre-line; max-height:0; overflow:hidden; transition:max-height .3s ease,padding .2s; }
 .rc-msg.open{max-height:600px;padding:10px 12px;}
-.rc-actions {
-  padding:10px 14px; margin-top:auto;
-  display:flex; align-items:stretch; gap:7px;
-  border-top:1px solid var(--line);
-}
-.btn-toggle-msg {
-  flex-shrink:0; width:72px; background:var(--raised);
-  border:1.5px solid var(--line2); border-radius:var(--radius-sm);
-  color:var(--sub); font-size:11px; font-weight:700; cursor:pointer;
-  font-family:'Inter',sans-serif; transition:all .12s; letter-spacing:.3px;
-  display:flex; align-items:center; justify-content:center;
-}
+.rc-actions { padding:10px 14px; margin-top:auto; display:flex; align-items:stretch; gap:7px; border-top:1px solid var(--line); }
+.btn-toggle-msg { flex-shrink:0; width:72px; background:var(--raised); border:1.5px solid var(--line2); border-radius:var(--radius-sm); color:var(--sub); font-size:11px; font-weight:700; cursor:pointer; font-family:'Inter',sans-serif; transition:all .12s; letter-spacing:.3px; display:flex; align-items:center; justify-content:center; }
 .btn-toggle-msg:hover{border-color:var(--sub);color:var(--text);}
 .btn-toggle-msg.open{border-color:var(--neon);color:var(--neon);background:rgba(255,106,0,.08);}
 
 /* EMPTY */
-.empty-state {
-  min-height:300px; display:flex; flex-direction:column;
-  align-items:center; justify-content:center;
-  gap:12px; text-align:center; color:var(--sub); padding:24px;
-}
+.empty-state { min-height:300px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:12px; text-align:center; color:var(--sub); padding:24px; }
 .empty-icon{font-size:48px;line-height:1;}
 .empty-state h3{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--text);}
 .empty-state p{font-size:13px;max-width:320px;line-height:1.65;color:var(--sub);}
 
 /* SPINNER */
 @keyframes spin{to{transform:rotate(360deg);}}
-.spinner{
-  width:28px;height:28px;border:3px solid var(--line2);
-  border-top-color:var(--neon);border-radius:50%;
-  animation:spin .65s linear infinite;
-}
+.spinner{width:28px;height:28px;border:3px solid var(--line2);border-top-color:var(--neon);border-radius:50%;animation:spin .65s linear infinite;}
 
 /* HINT */
 .hint-text{font-size:11px;color:var(--hint);margin-top:5px;line-height:1.5;letter-spacing:.2px;}
 .hint-text b{color:var(--sub);}
 
-/* PROXY BANNER */
-.proxy-banner {
-  background:rgba(255,106,0,.07); border:1px solid rgba(255,106,0,.2);
-  border-radius:var(--radius); padding:12px 14px; margin-bottom:var(--gap);
-  font-size:12px; color:var(--sub); line-height:1.65;
-}
+/* BANNER */
+.proxy-banner { background:rgba(255,106,0,.07); border:1px solid rgba(255,106,0,.2); border-radius:var(--radius); padding:12px 14px; margin-bottom:var(--gap); font-size:12px; color:var(--sub); line-height:1.65; }
 .proxy-banner b{color:var(--neon);}
-.proxy-banner code{
-  display:block; background:var(--raised); border:1px solid var(--line2);
-  border-radius:var(--radius-sm); padding:8px 12px; margin-top:8px;
-  font-size:11px; color:var(--text); word-break:break-all; font-family:monospace;
-}
+.proxy-banner code{ display:block; background:var(--raised); border:1px solid var(--line2); border-radius:var(--radius-sm); padding:8px 12px; margin-top:8px; font-size:11px; color:var(--text); word-break:break-all; font-family:monospace; }
 
 /* TOAST */
-#toast {
-  position:fixed; bottom:20px; right:20px;
-  background:var(--card); border:1px solid var(--neon); color:var(--neon);
-  padding:9px 16px; border-radius:var(--radius); font-size:12px; font-weight:700;
-  letter-spacing:.3px; opacity:0; transform:translateY(6px);
-  transition:all .2s; pointer-events:none; z-index:9999;
-}
+#toast { position:fixed; bottom:20px; right:20px; background:var(--card); border:1px solid var(--neon); color:var(--neon); padding:9px 16px; border-radius:var(--radius); font-size:12px; font-weight:700; letter-spacing:.3px; opacity:0; transform:translateY(6px); transition:all .2s; pointer-events:none; z-index:9999; }
 #toast.show{opacity:1;transform:translateY(0);}
 
 /* BACK TOP */
-#back-top {
-  position:fixed; bottom:20px; right:20px; width:38px; height:38px;
-  background:var(--raised); border:1px solid var(--line2); border-radius:var(--radius-sm);
-  color:var(--sub); font-size:16px; cursor:pointer; display:none;
-  align-items:center; justify-content:center; transition:all .15s; z-index:50;
-}
+#back-top { position:fixed; bottom:20px; right:20px; width:38px; height:38px; background:var(--raised); border:1px solid var(--line2); border-radius:var(--radius-sm); color:var(--sub); font-size:16px; cursor:pointer; display:none; align-items:center; justify-content:center; transition:all .15s; z-index:50; }
 #back-top.visible{display:flex;}
 #back-top:hover{border-color:var(--neon);color:var(--neon);}
 </style>
@@ -301,41 +185,48 @@ input[type=range]::-webkit-slider-thumb:hover{box-shadow:0 0 0 7px rgba(255,106,
   <div class="header">
     <div class="logo">
       <span class="brand">PROSPECÇÃO</span>
-      <span class="sep">|</span>
-      CLIENTES
+      <span class="sep">|</span>CLIENTES
       <span class="sub">Busca · Filtro · WhatsApp Direto</span>
     </div>
     <div class="tabs-nav">
-      <button class="tab-btn active" onclick="switchTab('busca',this)">
-        <span class="tab-icon">🔍</span> Buscar
-      </button>
+      <button class="tab-btn active" onclick="switchTab('busca',this)"><span class="tab-icon">🔍</span> Buscar</button>
       <button class="tab-btn" onclick="switchTab('resultados',this)">
         <span class="tab-icon">📋</span> Resultados
         <span id="badge-count" style="display:none;background:var(--neon);color:#fff;border-radius:10px;font-size:10px;padding:1px 6px;margin-left:2px"></span>
       </button>
-      <button class="tab-btn" onclick="switchTab('config',this)">
-        <span class="tab-icon">⚙️</span> Config.
-      </button>
+      <button class="tab-btn" onclick="switchTab('config',this)"><span class="tab-icon">⚙️</span> Config.</button>
     </div>
   </div>
 
-  <!-- TAB BUSCAR -->
+  <!-- ══ TAB BUSCAR ══ -->
   <div id="tab-busca" class="tab-content active">
 
+    <!-- ENDEREÇO DE ORIGEM -->
     <div class="panel">
-      <div class="panel-title">📍 Raio de Busca</div>
+      <div class="panel-title">📍 Endereço de Origem</div>
+      <div id="locAtiva" class="loc-box" style="margin-bottom:10px">
+        Nenhum endereço configurado — vá em <b>Config.</b> para cadastrar.
+      </div>
+      <button class="btn btn-ghost" style="height:36px;font-size:12px;width:auto;padding:0 14px" onclick="switchTab('config',document.querySelectorAll('.tab-btn')[2])">
+        ✏️ &nbsp;Alterar endereço
+      </button>
+    </div>
+
+    <!-- RAIO -->
+    <div class="panel">
+      <div class="panel-title">📐 Raio de Busca</div>
       <div class="range-val" id="raioDisplay">5 <span>km</span></div>
       <input type="range" id="raioSlider" min="1" max="25" value="5" step="1"
         oninput="document.getElementById('raioDisplay').innerHTML=this.value+' <span>km</span>'" />
       <div class="range-labels"><span>1 KM</span><span>25 KM</span></div>
     </div>
 
+    <!-- NICHO -->
     <div class="panel">
       <div class="panel-title">🏷️ Nicho / Tipo de Empresa</div>
       <div class="field-group">
         <label>Digite o nicho</label>
-        <input type="text" id="nichoInput"
-          placeholder="Ex: academia, restaurante, salão…"
+        <input type="text" id="nichoInput" placeholder="Ex: academia, restaurante, salão…"
           onkeydown="if(event.key==='Enter')buscar()" />
         <div class="hint-text">Pressione <b>Enter</b> ou clique em uma sugestão:</div>
       </div>
@@ -355,6 +246,7 @@ input[type=range]::-webkit-slider-thumb:hover{box-shadow:0 0 0 7px rgba(255,106,
       </div>
     </div>
 
+    <!-- POTENCIAL -->
     <div class="panel">
       <div class="panel-title">⚡ Filtrar por Potencial</div>
       <div class="pot-row">
@@ -365,13 +257,11 @@ input[type=range]::-webkit-slider-thumb:hover{box-shadow:0 0 0 7px rgba(255,106,
       </div>
     </div>
 
-    <button class="btn btn-primary" id="buscarBtn" onclick="buscar()">
-      🔍 &nbsp;Buscar Clientes
-    </button>
+    <button class="btn btn-primary" id="buscarBtn" onclick="buscar()">🔍 &nbsp;Buscar Clientes</button>
 
   </div>
 
-  <!-- TAB RESULTADOS -->
+  <!-- ══ TAB RESULTADOS ══ -->
   <div id="tab-resultados" class="tab-content">
     <div class="stats-row" id="statsRow" style="display:none">
       <div class="stat-card s-tot"><div class="stat-num" id="sTot">0</div><div class="stat-lbl">Encontrados</div></div>
@@ -383,52 +273,72 @@ input[type=range]::-webkit-slider-thumb:hover{box-shadow:0 0 0 7px rgba(255,106,
       <div class="empty-state">
         <div class="empty-icon">📋</div>
         <h3>Nenhuma busca ainda</h3>
-        <p>Vá para <b>Buscar</b>, configure o nicho e o raio e clique em Buscar Clientes.</p>
+        <p>Vá para <b>Buscar</b>, configure o endereço e o nicho, depois clique em Buscar Clientes.</p>
       </div>
     </div>
   </div>
 
-  <!-- TAB CONFIG -->
+  <!-- ══ TAB CONFIG ══ -->
   <div id="tab-config" class="tab-content">
 
     <div class="proxy-banner">
-      <b>⚙️ Como configurar o Proxy (obrigatório para busca real):</b><br>
-      1. Acesse <b>script.google.com</b> → Novo projeto<br>
-      2. Cole o código do arquivo <b>proxy-apps-script.gs</b> (entregue junto)<br>
-      3. Substitua <b>SUA_CHAVE_AQUI</b> pela sua chave do Google Places<br>
-      4. Clique em <b>Implantar → Nova implantação → App da Web</b><br>
-      5. Acesso: <b>Qualquer pessoa</b> → Implantar → Copie a URL<br>
-      6. Cole a URL abaixo e salve
-      <code id="proxyUrlExemplo">https://script.google.com/macros/s/SEU_ID/exec</code>
+      <b>⚙️ Proxy obrigatório para busca real:</b><br>
+      1. Acesse <b>script.google.com</b> → Novo projeto → Cole o código do <b>proxy-apps-script.gs</b><br>
+      2. Substitua <b>SUA_CHAVE_AQUI</b> pela sua chave do Google Places<br>
+      3. <b>Implantar → Nova implantação → App da Web → Qualquer pessoa → Implantar</b><br>
+      4. Copie a URL e cole no campo abaixo
+      <code>https://script.google.com/macros/s/SEU_ID/exec</code>
     </div>
 
+    <!-- ENDEREÇOS SALVOS -->
+    <div class="panel">
+      <div class="panel-title">📍 Endereços de Busca</div>
+      <div class="field-group">
+        <label>Nome do endereço (ex: Minha Loja, Cliente SP)</label>
+        <input type="text" id="nomeEndInput" placeholder="Ex: Minha Loja" />
+      </div>
+      <div class="field-group">
+        <label>Endereço completo</label>
+        <input type="text" id="enderecoInput"
+          placeholder="Ex: Rua Aparecida do Taboado, 608, São Paulo, SP"
+          onkeydown="if(event.key==='Enter')adicionarEndereco()" />
+        <div class="hint-text">Digite rua, número, bairro ou cidade. Será convertido para coordenadas automaticamente.</div>
+      </div>
+      <button class="btn btn-primary" style="margin-bottom:14px" onclick="adicionarEndereco()">
+        ➕ &nbsp;Adicionar Endereço
+      </button>
+      <div id="locStatusBox" class="loc-box" style="display:none;margin-bottom:10px"></div>
+      <div id="locChips"></div>
+    </div>
+
+    <!-- PROXY -->
     <div class="panel">
       <div class="panel-title">🔗 URL do Proxy (Apps Script)</div>
       <div class="field-group">
-        <label>URL da implantação do Apps Script</label>
+        <label>URL da implantação</label>
         <input type="text" id="proxyUrlInput" placeholder="https://script.google.com/macros/s/…/exec" />
-        <div class="hint-text">Esta URL substitui o corsproxy e garante raio e nicho 100% precisos.</div>
+        <div class="hint-text">Garante raio e nicho 100% precisos na busca.</div>
       </div>
       <button class="btn btn-primary" onclick="salvarProxy()">💾 &nbsp;Salvar URL do Proxy</button>
     </div>
 
+    <!-- ASSINATURA -->
     <div class="panel">
       <div class="panel-title">✍️ Assinatura das Mensagens</div>
       <div class="field-group">
         <label>Texto no final de cada mensagem</label>
-        <textarea id="assinatura" rows="3"
-          placeholder="Ex: Att, Minha Empresa | (11) 99999-9999">Att,
+        <textarea id="assinatura" rows="3" placeholder="Ex: Att, Minha Empresa | (11) 99999-9999">Att,
 Minha Empresa | (11) 99999-9999</textarea>
       </div>
       <button class="btn btn-primary" onclick="salvarAssinatura()">💾 &nbsp;Salvar Assinatura</button>
     </div>
 
+    <!-- MENSAGEM -->
     <div class="panel">
       <div class="panel-title">📝 Mensagem Personalizada</div>
       <div class="field-group">
         <label>Corpo da mensagem (use [NOME] para o nome da empresa)</label>
-        <textarea id="msgBase" rows="7"
-          placeholder="Deixe em branco para usar a mensagem padrão…"></textarea>
+        <textarea id="msgBase" rows="7" placeholder="Deixe em branco para usar a mensagem padrão…"></textarea>
         <div class="hint-text">Use <b>[NOME]</b> onde quiser inserir o nome da empresa. Deixe vazio para mensagem automática.</div>
       </div>
       <button class="btn btn-primary" onclick="salvarMsgBase()">💾 &nbsp;Salvar Mensagem</button>
@@ -442,81 +352,75 @@ Minha Empresa | (11) 99999-9999</textarea>
 <div id="toast"></div>
 
 <script>
-/* ══ ESTADO ══════════════════════════════════════════════════ */
+/* ══ ESTADO ════════════════════════════════════════════════ */
 let resultados = [];
 let potFiltro  = 'todos';
+let USER_LAT   = null;
+let USER_LNG   = null;
+let ENDERECOS  = [];   // [{nome, endereco, lat, lng}]
+let ATIVO_IDX  = -1;   // índice do endereço ativo
 
-/* ══ MAPA NICHO → TYPE GOOGLE PLACES ════════════════════════
-   type é o parâmetro exato aceito pela Places API Nearby Search
-   Ref: https://developers.google.com/maps/documentation/places/web-service/supported_types
-════════════════════════════════════════════════════════════ */
+/* ══ NICHO → TYPE GOOGLE PLACES ═══════════════════════════ */
 const NICHO_CFG = {
-  'academia':          { keyword:'academia fitness',        type:'gym' },
-  'fitness':           { keyword:'academia fitness',        type:'gym' },
-  'musculacao':        { keyword:'academia musculação',     type:'gym' },
-  'artes marciais':    { keyword:'artes marciais academia', type:'gym' },
-  'capoeira':          { keyword:'capoeira academia',       type:'gym' },
-  'restaurante':       { keyword:'restaurante',             type:'restaurant' },
-  'churrascaria':      { keyword:'churrascaria',            type:'restaurant' },
-  'lanchonete':        { keyword:'lanchonete',              type:'meal_takeaway' },
-  'bar':               { keyword:'bar',                     type:'bar' },
-  'cafe':              { keyword:'café cafeteria',          type:'cafe' },
-  'cafeteria':         { keyword:'cafeteria café',          type:'cafe' },
-  'salao de beleza':   { keyword:'salão de beleza',         type:'beauty_salon' },
-  'salao beleza':      { keyword:'salão de beleza',         type:'beauty_salon' },
-  'beleza':            { keyword:'salão beleza',            type:'beauty_salon' },
-  'cabeleireiro':      { keyword:'cabeleireiro salão',      type:'hair_care' },
-  'estetica':          { keyword:'clínica estética',        type:'beauty_salon' },
-  'nail salon':        { keyword:'nail salon unhas',        type:'beauty_salon' },
-  'spa':               { keyword:'spa',                     type:'spa' },
-  'buffet eventos':    { keyword:'buffet eventos',          type:'event_venue' },
-  'eventos':           { keyword:'espaço para eventos',     type:'event_venue' },
-  'buffet':            { keyword:'buffet',                  type:'event_venue' },
-  'escola idiomas':    { keyword:'escola de idiomas inglês',type:'language_school' },
-  'idiomas':           { keyword:'escola idiomas inglês',   type:'language_school' },
-  'escola':            { keyword:'escola',                  type:'school' },
-  'curso':             { keyword:'curso escola',            type:'school' },
-  'clinica medica':    { keyword:'clínica médica',          type:'doctor' },
-  'clinica':           { keyword:'clínica médica',          type:'doctor' },
-  'saude':             { keyword:'clínica saúde',           type:'doctor' },
-  'dentista':          { keyword:'dentista odontologia',    type:'dentist' },
-  'fisioterapia':      { keyword:'fisioterapia clínica',    type:'physiotherapist' },
-  'empresa seguranca': { keyword:'empresa de segurança',    type:'establishment' },
-  'seguranca':         { keyword:'segurança portaria',      type:'establishment' },
-  'limpeza':           { keyword:'empresa limpeza',         type:'establishment' },
-  'portaria':          { keyword:'portaria limpeza',        type:'establishment' },
-  'contabilidade':     { keyword:'escritório contabilidade',type:'accounting' },
-  'pet shop':          { keyword:'pet shop',                type:'pet_store' },
-  'veterinario':       { keyword:'veterinário clínica pet', type:'veterinary_care' },
-  'farmacia':          { keyword:'farmácia drogaria',       type:'pharmacy' },
-  'loja roupas':       { keyword:'loja de roupas moda',     type:'clothing_store' },
-  'moda':              { keyword:'loja moda roupas',        type:'clothing_store' },
-  'padaria':           { keyword:'padaria',                 type:'bakery' },
-  'confeitaria':       { keyword:'confeitaria padaria',     type:'bakery' },
-  'supermercado':      { keyword:'supermercado mercado',    type:'supermarket' },
-  'hotel':             { keyword:'hotel pousada',           type:'lodging' },
+  'academia':          { keyword:'academia fitness',         type:'gym' },
+  'fitness':           { keyword:'academia fitness',         type:'gym' },
+  'musculacao':        { keyword:'academia musculação',      type:'gym' },
+  'artes marciais':    { keyword:'artes marciais academia',  type:'gym' },
+  'capoeira':          { keyword:'capoeira academia',        type:'gym' },
+  'restaurante':       { keyword:'restaurante',              type:'restaurant' },
+  'churrascaria':      { keyword:'churrascaria',             type:'restaurant' },
+  'lanchonete':        { keyword:'lanchonete',               type:'meal_takeaway' },
+  'bar':               { keyword:'bar',                      type:'bar' },
+  'cafe':              { keyword:'café cafeteria',           type:'cafe' },
+  'cafeteria':         { keyword:'cafeteria café',           type:'cafe' },
+  'salao de beleza':   { keyword:'salão de beleza',          type:'beauty_salon' },
+  'salao beleza':      { keyword:'salão de beleza',          type:'beauty_salon' },
+  'beleza':            { keyword:'salão beleza',             type:'beauty_salon' },
+  'cabeleireiro':      { keyword:'cabeleireiro salão',       type:'hair_care' },
+  'estetica':          { keyword:'clínica estética',         type:'beauty_salon' },
+  'spa':               { keyword:'spa',                      type:'spa' },
+  'buffet eventos':    { keyword:'buffet eventos',           type:'event_venue' },
+  'eventos':           { keyword:'espaço para eventos',      type:'event_venue' },
+  'buffet':            { keyword:'buffet',                   type:'event_venue' },
+  'escola idiomas':    { keyword:'escola de idiomas inglês', type:'language_school' },
+  'idiomas':           { keyword:'escola idiomas inglês',    type:'language_school' },
+  'escola':            { keyword:'escola',                   type:'school' },
+  'curso':             { keyword:'curso escola',             type:'school' },
+  'clinica medica':    { keyword:'clínica médica',           type:'doctor' },
+  'clinica':           { keyword:'clínica médica',           type:'doctor' },
+  'saude':             { keyword:'clínica saúde',            type:'doctor' },
+  'dentista':          { keyword:'dentista odontologia',     type:'dentist' },
+  'fisioterapia':      { keyword:'fisioterapia clínica',     type:'physiotherapist' },
+  'empresa seguranca': { keyword:'empresa de segurança',     type:'establishment' },
+  'seguranca':         { keyword:'segurança portaria',       type:'establishment' },
+  'limpeza':           { keyword:'empresa limpeza',          type:'establishment' },
+  'contabilidade':     { keyword:'escritório contabilidade', type:'accounting' },
+  'pet shop':          { keyword:'pet shop',                 type:'pet_store' },
+  'veterinario':       { keyword:'veterinário clínica pet',  type:'veterinary_care' },
+  'farmacia':          { keyword:'farmácia drogaria',        type:'pharmacy' },
+  'moda':              { keyword:'loja moda roupas',         type:'clothing_store' },
+  'padaria':           { keyword:'padaria',                  type:'bakery' },
+  'confeitaria':       { keyword:'confeitaria padaria',      type:'bakery' },
+  'supermercado':      { keyword:'supermercado mercado',     type:'supermarket' },
 };
 
-function resolveNicho(q) {
-  const norm = q.toLowerCase().trim()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-  // Busca match exato ou parcial no mapa
-  for (const [key, cfg] of Object.entries(NICHO_CFG)) {
-    const k = key.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-    if (norm === k || norm.includes(k) || k.includes(norm)) return cfg;
+function resolveNicho(q){
+  const norm=q.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  for(const [key,cfg] of Object.entries(NICHO_CFG)){
+    const k=key.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    if(norm===k||norm.includes(k)||k.includes(norm)) return cfg;
   }
-  // Fallback: usa a query como keyword sem type fixo
-  return { keyword: q, type: '' };
+  return {keyword:q, type:''};
 }
 
-/* ══ DISTÂNCIA HAVERSINE (metros) ════════════════════════════ */
+/* ══ HAVERSINE (metros) ════════════════════════════════════ */
 function distM(lat1,lng1,lat2,lng2){
   const R=6371000, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
   const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
   return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 }
 
-/* ══ POTENCIAL ═══════════════════════════════════════════════ */
+/* ══ POTENCIAL ════════════════════════════════════════════ */
 function calcPot(r,c){
   const s=(r||0)*Math.log10((c||1)+1);
   if(s>=6) return 'muito';
@@ -525,7 +429,7 @@ function calcPot(r,c){
 }
 const POT_LABEL={muito:'Muito alto',alta:'Alto',media:'Médio'};
 
-/* ══ MENSAGEM ════════════════════════════════════════════════ */
+/* ══ MENSAGEM ══════════════════════════════════════════════ */
 function buildMsg(nome,nicho,rating,count){
   const assin=localStorage.getItem('prosp_assin')||
     document.getElementById('assinatura').value.trim()||'Att,\nMinha Empresa';
@@ -533,25 +437,134 @@ function buildMsg(nome,nicho,rating,count){
   if(base&&base.trim()) return base.replace(/\[NOME\]/g,nome)+'\n\n'+assin;
   const stars=(rating&&count)?`${rating} ★ (${count.toLocaleString('pt-BR')} avaliações)`:'';
   const dest=stars?` — ${stars} no Google —`:'';
-  return [
-    `Olá! Tudo bem? 😊`,``,
+  return [`Olá! Tudo bem? 😊`,``,
     `Somos especializados em *produtos personalizados* para empresas da região.`,``,
     `Vi que *${nome}*${dest} se destaca na área e queria apresentar nossas soluções: *camisetas, canecas, garrafas térmicas, uniformes e kits personalizados* com a identidade da empresa.`,``,
-    `Podemos montar um orçamento sem compromisso?`,``,assin
-  ].join('\n');
+    `Podemos montar um orçamento sem compromisso?`,``,assin].join('\n');
 }
 
-/* ══ TAGS ════════════════════════════════════════════════════ */
-function setTag(el,val){
-  const input=document.getElementById('nichoInput');
-  if(el.classList.contains('on')){el.classList.remove('on');input.value='';}
-  else{
-    document.querySelectorAll('.tag').forEach(t=>t.classList.remove('on'));
-    el.classList.add('on'); input.value=val;
+/* ══ GEOCODING (endereço → lat/lng via proxy) ═════════════ */
+async function geocodificarEndereco(endereco){
+  const proxyUrl=localStorage.getItem('prosp_proxy')||'';
+  if(!proxyUrl) return null;
+  try{
+    const url=`${proxyUrl}?endpoint=geocode&address=${encodeURIComponent(endereco)}`;
+    const res=await fetch(url);
+    const data=await res.json();
+    if(data.status==='OK'&&data.results&&data.results[0]){
+      const loc=data.results[0].geometry.location;
+      const formatted=data.results[0].formatted_address;
+      return {lat:loc.lat, lng:loc.lng, formatted};
+    }
+    return null;
+  }catch(e){console.warn('Geocode erro:',e);return null;}
+}
+
+/* ══ GERENCIAR ENDEREÇOS ══════════════════════════════════ */
+async function adicionarEndereco(){
+  const nome=document.getElementById('nomeEndInput').value.trim();
+  const addr=document.getElementById('enderecoInput').value.trim();
+  if(!nome){showToast('⚠️ Digite um nome para o endereço!');return;}
+  if(!addr){showToast('⚠️ Digite o endereço!');return;}
+
+  const proxyUrl=localStorage.getItem('prosp_proxy')||'';
+  if(!proxyUrl){
+    showToast('⚠️ Configure a URL do Proxy primeiro!');
+    return;
+  }
+
+  const box=document.getElementById('locStatusBox');
+  box.style.display='block';
+  box.className='loc-box';
+  box.innerHTML='🔄 Localizando endereço…';
+
+  const geo=await geocodificarEndereco(addr);
+  if(!geo){
+    box.className='loc-box err';
+    box.innerHTML='❌ Endereço não encontrado. Tente ser mais específico.';
+    return;
+  }
+
+  ENDERECOS.push({nome, endereco:geo.formatted, lat:geo.lat, lng:geo.lng});
+  salvarEnderecos();
+
+  document.getElementById('nomeEndInput').value='';
+  document.getElementById('enderecoInput').value='';
+  box.className='loc-box ok';
+  box.innerHTML=`✅ <b>${nome}</b> — ${geo.formatted}`;
+  setTimeout(()=>{box.style.display='none';},3000);
+
+  // Ativa automaticamente se for o primeiro
+  if(ENDERECOS.length===1) ativarEndereco(0);
+  renderChips();
+}
+
+function ativarEndereco(idx){
+  ATIVO_IDX=idx;
+  USER_LAT=ENDERECOS[idx].lat;
+  USER_LNG=ENDERECOS[idx].lng;
+  localStorage.setItem('prosp_ativo', idx);
+  atualizarLocAtiva();
+  renderChips();
+}
+
+function deletarEndereco(idx, e){
+  e.stopPropagation();
+  ENDERECOS.splice(idx,1);
+  salvarEnderecos();
+  if(ATIVO_IDX===idx){
+    ATIVO_IDX=ENDERECOS.length>0?0:-1;
+    if(ATIVO_IDX>=0){USER_LAT=ENDERECOS[0].lat;USER_LNG=ENDERECOS[0].lng;}
+    else{USER_LAT=null;USER_LNG=null;}
+    localStorage.setItem('prosp_ativo',ATIVO_IDX);
+  } else if(ATIVO_IDX>idx){
+    ATIVO_IDX--;
+    localStorage.setItem('prosp_ativo',ATIVO_IDX);
+  }
+  atualizarLocAtiva();
+  renderChips();
+  showToast('Endereço removido.');
+}
+
+function atualizarLocAtiva(){
+  const el=document.getElementById('locAtiva');
+  if(ATIVO_IDX>=0&&ENDERECOS[ATIVO_IDX]){
+    const e=ENDERECOS[ATIVO_IDX];
+    el.className='loc-box ok';
+    el.innerHTML=`📍 <b style="color:var(--neon)">${e.nome}</b><br><span style="font-size:11px">${e.endereco}</span>`;
+  } else {
+    el.className='loc-box';
+    el.innerHTML='Nenhum endereço configurado — vá em <b>Config.</b> para cadastrar.';
   }
 }
 
-/* ══ POTENCIAL FILTER ════════════════════════════════════════ */
+function renderChips(){
+  const container=document.getElementById('locChips');
+  if(!ENDERECOS.length){
+    container.innerHTML='<div style="font-size:12px;color:var(--hint);text-align:center;padding:12px">Nenhum endereço cadastrado ainda.</div>';
+    return;
+  }
+  container.innerHTML=ENDERECOS.map((e,i)=>`
+    <div class="loc-chip ${i===ATIVO_IDX?'active':''}" onclick="ativarEndereco(${i})">
+      <div class="loc-chip-name">${e.nome}</div>
+      <div class="loc-chip-addr">${e.endereco}</div>
+      ${i===ATIVO_IDX?'<span class="loc-chip-badge">ATIVO</span>':''}
+      <span class="loc-chip-del" onclick="deletarEndereco(${i},event)" title="Remover">✕</span>
+    </div>`).join('');
+}
+
+function salvarEnderecos(){
+  localStorage.setItem('prosp_enderecos', JSON.stringify(ENDERECOS));
+}
+
+/* ══ TAGS ══════════════════════════════════════════════════ */
+function setTag(el,val){
+  const input=document.getElementById('nichoInput');
+  if(el.classList.contains('on')){el.classList.remove('on');input.value='';}
+  else{document.querySelectorAll('.tag').forEach(t=>t.classList.remove('on'));el.classList.add('on');input.value=val;}
+}
+
+/* ══ POTENCIAL FILTER ══════════════════════════════════════ */
 function setPot(val,el){
   potFiltro=val;
   document.querySelectorAll('.pot-pill').forEach(b=>{b.className='pot-pill';});
@@ -559,12 +572,16 @@ function setPot(val,el){
   if(resultados.length) renderCards();
 }
 
-/* ══ BUSCA PRINCIPAL ═════════════════════════════════════════ */
-const BASE_LAT=-23.479, BASE_LNG=-46.628;
-
+/* ══ BUSCA PRINCIPAL ═══════════════════════════════════════ */
 async function buscar(){
   const query=document.getElementById('nichoInput').value.trim();
   if(!query){showToast('⚠️ Digite um nicho antes de buscar!');return;}
+
+  if(USER_LAT===null||USER_LNG===null){
+    showToast('⚠️ Configure um endereço na aba Config.!');
+    switchTab('config',document.querySelectorAll('.tab-btn')[2]);
+    return;
+  }
 
   const proxyUrl=localStorage.getItem('prosp_proxy')||'';
   if(!proxyUrl){
@@ -578,10 +595,13 @@ async function buscar(){
   btn.textContent='⏳  Buscando…';
   switchTab('resultados',document.querySelectorAll('.tab-btn')[1]);
   document.getElementById('statsRow').style.display='none';
+
+  const nomeAtivo=ENDERECOS[ATIVO_IDX]?.nome||'endereço configurado';
+  const raioKm=document.getElementById('raioSlider').value;
   document.getElementById('resultado').innerHTML=`
     <div class="empty-state">
       <div class="spinner"></div>
-      <p style="margin-top:16px">Buscando <b>${query}</b> em <b>${document.getElementById('raioSlider').value} km</b>…</p>
+      <p style="margin-top:16px">Buscando <b>${query}</b> em <b>${raioKm} km</b> ao redor de <b>${nomeAtivo}</b>…</p>
     </div>`;
 
   await buscarAPI(query, proxyUrl);
@@ -590,143 +610,102 @@ async function buscar(){
   btn.textContent='🔍  Buscar Clientes';
 }
 
-/* ══ BUSCA VIA PROXY APPS SCRIPT ═════════════════════════════ */
+/* ══ BUSCA VIA PROXY ═══════════════════════════════════════ */
 async function buscarAPI(query, proxyUrl){
-  const raioKm  = parseInt(document.getElementById('raioSlider').value);
-  const raioM   = raioKm * 1000;
-  const nicho   = resolveNicho(query);
-  const seen    = new Set();
-  const raw     = [];
+  const raioKm=parseInt(document.getElementById('raioSlider').value);
+  const raioM=raioKm*1000;
+  const nicho=resolveNicho(query);
+  const seen=new Set();
+  const raw=[];
+  const LAT=USER_LAT;
+  const LNG=USER_LNG;
 
-  // ── Monta URL do proxy com todos os parâmetros corretos ──
-  const buildProxyUrl = (pagetoken='') => {
-    let u = `${proxyUrl}?endpoint=nearbysearch`
-          + `&location=${BASE_LAT},${BASE_LNG}`
-          + `&radius=${raioM}`
-          + `&keyword=${encodeURIComponent(nicho.keyword)}`;
-    if(nicho.type) u += `&type=${nicho.type}`;
-    if(pagetoken)  u += `&pagetoken=${encodeURIComponent(pagetoken)}`;
+  const buildUrl=(pt='')=>{
+    let u=`${proxyUrl}?endpoint=nearbysearch&location=${LAT},${LNG}&radius=${raioM}&keyword=${encodeURIComponent(nicho.keyword)}`;
+    if(nicho.type) u+=`&type=${nicho.type}`;
+    if(pt) u+=`&pagetoken=${encodeURIComponent(pt)}`;
     return u;
   };
 
-  // ── Busca até 2 páginas (40 resultados máx) ──
-  try {
-    let pagetoken='';
-    for(let page=0; page<2; page++){
-      const res  = await fetch(buildProxyUrl(pagetoken));
-      const data = await res.json();
-
-      if(data.status!=='OK'&&data.status!=='ZERO_RESULTS'){
-        console.warn('API status:',data.status,data.error_message);
-        break;
-      }
-
+  try{
+    let pt='';
+    for(let pg=0;pg<2;pg++){
+      const res=await fetch(buildUrl(pt));
+      const data=await res.json();
+      if(data.status!=='OK'&&data.status!=='ZERO_RESULTS'){console.warn('API:',data.status);break;}
       for(const p of (data.results||[])){
         if(seen.has(p.place_id)) continue;
-
-        // ── Filtro de raio por coordenada real ──
-        const pLat=p.geometry?.location?.lat;
-        const pLng=p.geometry?.location?.lng;
-        if(pLat&&pLng&&distM(BASE_LAT,BASE_LNG,pLat,pLng)>raioM) continue;
-
-        seen.add(p.place_id);
-        raw.push(p);
+        const pLat=p.geometry?.location?.lat, pLng=p.geometry?.location?.lng;
+        if(pLat&&pLng&&distM(LAT,LNG,pLat,pLng)>raioM) continue;
+        seen.add(p.place_id); raw.push(p);
       }
-
-      pagetoken=data.next_page_token||'';
-      if(!pagetoken) break;
-      await new Promise(r=>setTimeout(r,2000)); // delay obrigatório entre páginas
+      pt=data.next_page_token||'';
+      if(!pt) break;
+      await new Promise(r=>setTimeout(r,2000));
     }
-  } catch(e){ console.warn('Erro busca:',e); }
+  }catch(e){console.warn('Erro busca:',e);}
 
-  // ── Busca detalhes (telefone + coord precisa) de cada resultado ──
   const det=[];
   for(const p of raw.slice(0,30)){
     try{
-      const url=`${proxyUrl}?endpoint=details&place_id=${p.place_id}`;
-      const res =await fetch(url);
+      const res=await fetch(`${proxyUrl}?endpoint=details&place_id=${p.place_id}`);
       const data=await res.json();
       const d=data.result;
       if(!d||!d.formatted_phone_number) continue;
-
-      // Confirma raio com coordenada precisa do detalhe
-      const dLat=d.geometry?.location?.lat;
-      const dLng=d.geometry?.location?.lng;
-      if(dLat&&dLng){
-        const dist=distM(BASE_LAT,BASE_LNG,dLat,dLng);
-        if(dist>raioM) continue;
-        const distKm=(dist/1000).toFixed(1);
-        det.push({
-          nome:     d.name,
-          tel:      d.formatted_phone_number,
-          telNum:   d.formatted_phone_number.replace(/\D/g,''),
-          avaliacao:d.rating?`${d.rating} ★ (${(d.user_ratings_total||0).toLocaleString('pt-BR')})`:'Sem avaliação',
-          rating:   d.rating||0,
-          count:    d.user_ratings_total||0,
-          end:      (d.formatted_address||'').replace(/, (Brazil|Brasil)$/,''),
-          distKm,
-          pot:      calcPot(d.rating,d.user_ratings_total),
-          msg:      buildMsg(d.name,query,d.rating,d.user_ratings_total),
-        });
-      }
-    } catch(e){ console.warn('Erro detalhe:',e); }
+      const dLat=d.geometry?.location?.lat, dLng=d.geometry?.location?.lng;
+      if(!dLat||!dLng) continue;
+      const dist=distM(LAT,LNG,dLat,dLng);
+      if(dist>raioM) continue;
+      det.push({
+        nome:d.name, tel:d.formatted_phone_number,
+        telNum:d.formatted_phone_number.replace(/\D/g,''),
+        avaliacao:d.rating?`${d.rating} ★ (${(d.user_ratings_total||0).toLocaleString('pt-BR')})`:'Sem avaliação',
+        rating:d.rating||0, count:d.user_ratings_total||0,
+        end:(d.formatted_address||'').replace(/, (Brazil|Brasil)$/,''),
+        distKm:(dist/1000).toFixed(1),
+        pot:calcPot(d.rating,d.user_ratings_total),
+        msg:buildMsg(d.name,query,d.rating,d.user_ratings_total),
+      });
+    }catch(e){console.warn('Erro detalhe:',e);}
   }
 
-  resultados=det.sort((a,b)=>{
-    const o={muito:0,alta:1,media:2};
-    return o[a.pot]-o[b.pot]||b.count-a.count;
-  });
+  resultados=det.sort((a,b)=>{const o={muito:0,alta:1,media:2};return o[a.pot]-o[b.pot]||b.count-a.count;});
 
   if(!resultados.length){
     document.getElementById('resultado').innerHTML=`
       <div class="empty-state">
         <div class="empty-icon">📭</div>
         <h3>Nenhuma empresa encontrada</h3>
-        <p>Não encontrei resultados para <b>"${query}"</b> em <b>${raioKm} km</b>.<br>
-        Tente aumentar o raio ou verifique o nicho.</p>
+        <p>Sem resultados para <b>"${query}"</b> em <b>${raioKm} km</b> ao redor de <b>${ENDERECOS[ATIVO_IDX]?.nome||'sua localização'}</b>.<br>Tente aumentar o raio ou verifique o nicho.</p>
       </div>`;
     document.getElementById('statsRow').style.display='none';
-  } else {
-    renderCards();
-  }
+  } else renderCards();
 }
 
-/* ══ RENDER CARDS ════════════════════════════════════════════ */
+/* ══ RENDER CARDS ══════════════════════════════════════════ */
 const WA_SVG=`<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
 
 function renderCards(){
   const lista=potFiltro==='todos'?resultados:resultados.filter(r=>r.pot===potFiltro);
   const cnt={muito:0,alta:0,media:0};
   resultados.forEach(r=>cnt[r.pot]++);
-
   document.getElementById('statsRow').style.display='grid';
-  document.getElementById('sTot').textContent  =resultados.length;
+  document.getElementById('sTot').textContent=resultados.length;
   document.getElementById('sMuito').textContent=cnt.muito;
-  document.getElementById('sAlta').textContent =cnt.alta;
+  document.getElementById('sAlta').textContent=cnt.alta;
   document.getElementById('sMedia').textContent=cnt.media;
-
   const bc=document.getElementById('badge-count');
   bc.textContent=resultados.length; bc.style.display='inline';
 
   if(!lista.length){
-    document.getElementById('resultado').innerHTML=`
-      <div class="empty-state">
-        <div class="empty-icon">🔍</div>
-        <h3>Sem resultados</h3>
-        <p>Tente outro nicho ou ajuste o filtro de potencial.</p>
-      </div>`;
+    document.getElementById('resultado').innerHTML=`<div class="empty-state"><div class="empty-icon">🔍</div><h3>Sem resultados</h3><p>Tente outro nicho ou ajuste o filtro de potencial.</p></div>`;
     return;
   }
-
   const html=lista.map((c,i)=>{
     const bc={muito:'b-muito',alta:'b-alta',media:'b-media'}[c.pot];
     const wa=`https://wa.me/55${c.telNum}?text=${encodeURIComponent(c.msg)}`;
-    return `
-    <div class="result-card">
-      <div class="rc-head">
-        <div class="rc-name">${c.nome}</div>
-        <span class="badge ${bc}">${POT_LABEL[c.pot]}</span>
-      </div>
+    return `<div class="result-card">
+      <div class="rc-head"><div class="rc-name">${c.nome}</div><span class="badge ${bc}">${POT_LABEL[c.pot]}</span></div>
       <div class="rc-info">
         <div class="rc-row">⭐ <strong>${c.avaliacao}</strong></div>
         <div class="rc-row">📞 <strong>${c.tel}</strong></div>
@@ -740,20 +719,18 @@ function renderCards(){
       <div class="rc-msg" id="cm${i}">${c.msg}</div>
     </div>`;
   }).join('');
-
   document.getElementById('resultado').innerHTML=`<div class="result-grid">${html}</div>`;
 }
 
-/* ══ TOGGLE MSG ══════════════════════════════════════════════ */
+/* ══ TOGGLE MSG ════════════════════════════════════════════ */
 function toggleMsg(i){
-  const box=document.getElementById('cm'+i);
-  const btn=document.getElementById('tb'+i);
+  const box=document.getElementById('cm'+i),btn=document.getElementById('tb'+i);
   const open=box.classList.toggle('open');
   btn.textContent=open?'Ocultar':'Ver msg';
   btn.classList.toggle('open',open);
 }
 
-/* ══ TABS ════════════════════════════════════════════════════ */
+/* ══ TABS ══════════════════════════════════════════════════ */
 function switchTab(id,el){
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
@@ -762,7 +739,7 @@ function switchTab(id,el){
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-/* ══ SAVES ═══════════════════════════════════════════════════ */
+/* ══ SAVES ═════════════════════════════════════════════════ */
 function salvarProxy(){
   const v=document.getElementById('proxyUrlInput').value.trim();
   if(!v){showToast('⚠️ URL não pode ficar vazia!');return;}
@@ -778,27 +755,42 @@ function salvarMsgBase(){
   showToast('✓ Mensagem salva!');
 }
 
-/* ══ TOAST ═══════════════════════════════════════════════════ */
+/* ══ TOAST ═════════════════════════════════════════════════ */
 function showToast(msg){
   const t=document.getElementById('toast');
   t.textContent=msg; t.classList.add('show');
   setTimeout(()=>t.classList.remove('show'),2500);
 }
 
-/* ══ BACK TOP ════════════════════════════════════════════════ */
+/* ══ BACK TOP ══════════════════════════════════════════════ */
 window.addEventListener('scroll',()=>{
   const b=document.getElementById('back-top');
   if(b) b.classList.toggle('visible',window.scrollY>300);
 });
 
-/* ══ INIT ════════════════════════════════════════════════════ */
-['prosp_assin','prosp_msg','prosp_proxy'].forEach(k=>{
-  const v=localStorage.getItem(k);
-  if(!v) return;
-  if(k==='prosp_assin') document.getElementById('assinatura').value=v;
-  if(k==='prosp_msg')   document.getElementById('msgBase').value=v;
-  if(k==='prosp_proxy') document.getElementById('proxyUrlInput').value=v;
-});
+/* ══ INIT ══════════════════════════════════════════════════ */
+(function init(){
+  const saved={
+    assin:  localStorage.getItem('prosp_assin'),
+    msg:    localStorage.getItem('prosp_msg'),
+    proxy:  localStorage.getItem('prosp_proxy'),
+    ends:   localStorage.getItem('prosp_enderecos'),
+    ativo:  localStorage.getItem('prosp_ativo'),
+  };
+  if(saved.assin)  document.getElementById('assinatura').value=saved.assin;
+  if(saved.msg)    document.getElementById('msgBase').value=saved.msg;
+  if(saved.proxy)  document.getElementById('proxyUrlInput').value=saved.proxy;
+  if(saved.ends){
+    try{
+      ENDERECOS=JSON.parse(saved.ends);
+      ATIVO_IDX=parseInt(saved.ativo??'0');
+      if(ATIVO_IDX<0||ATIVO_IDX>=ENDERECOS.length) ATIVO_IDX=ENDERECOS.length>0?0:-1;
+      if(ATIVO_IDX>=0){USER_LAT=ENDERECOS[ATIVO_IDX].lat;USER_LNG=ENDERECOS[ATIVO_IDX].lng;}
+      atualizarLocAtiva();
+      renderChips();
+    }catch(e){}
+  }
+})();
 </script>
 </body>
 </html>
