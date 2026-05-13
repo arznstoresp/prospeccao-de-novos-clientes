@@ -344,6 +344,18 @@ Minha Empresa | (11) 99999-9999</textarea>
       <button class="btn btn-primary" onclick="salvarMsgBase()">💾 &nbsp;Salvar Mensagem</button>
     </div>
 
+    <!-- BACKUP -->
+    <div class="panel">
+      <div class="panel-title">💾 Backup dos Dados</div>
+      <div style="font-size:12px;color:var(--sub);margin-bottom:12px;line-height:1.6;">
+        Salva todos os seus dados (endereços, proxy, assinatura e mensagem) em um arquivo <b>.json</b>. Use para backup ou para transferir para outro dispositivo ou navegador.
+      </div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <button class="btn btn-primary" style="flex:1;min-width:140px" onclick="exportarBackup()">⬇️ &nbsp;Exportar Backup</button>
+        <button class="btn btn-ghost" style="flex:1;min-width:140px" onclick="importarBackup()">⬆️ &nbsp;Importar Backup</button>
+      </div>
+    </div>
+
   </div>
 
 </div>
@@ -494,8 +506,18 @@ async function adicionarEndereco(){
   box.innerHTML=`✅ <b>${nome}</b> — ${geo.formatted}`;
   setTimeout(()=>{box.style.display='none';},3000);
 
-  // Ativa automaticamente se for o primeiro
-  if(ENDERECOS.length===1) ativarEndereco(0);
+  // Ativa o novo endereço automaticamente se for o primeiro
+  const novoIdx = ENDERECOS.length - 1;
+  if(ATIVO_IDX < 0) {
+    // Sem ativo ainda — ativa o recém-adicionado
+    ATIVO_IDX = novoIdx;
+    USER_LAT  = ENDERECOS[novoIdx].lat;
+    USER_LNG  = ENDERECOS[novoIdx].lng;
+    localStorage.setItem('prosp_ativo', ATIVO_IDX);
+  }
+
+  // Atualiza UI — ordem importa: primeiro estado, depois render
+  atualizarLocAtiva();
   renderChips();
 }
 
@@ -755,6 +777,48 @@ function salvarMsgBase(){
   showToast('✓ Mensagem salva!');
 }
 
+/* ══ BACKUP / RESTORE ══════════════════════════════════════ */
+function exportarBackup(){
+  const data={
+    v:2, exportado:new Date().toLocaleString('pt-BR'),
+    prosp_proxy:     localStorage.getItem('prosp_proxy')||'',
+    prosp_assin:     localStorage.getItem('prosp_assin')||'',
+    prosp_msg:       localStorage.getItem('prosp_msg')||'',
+    prosp_enderecos: localStorage.getItem('prosp_enderecos')||'[]',
+    prosp_ativo:     localStorage.getItem('prosp_ativo')||'0',
+  };
+  const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
+  const url=URL.createObjectURL(blob);
+  const a=document.createElement('a');
+  a.href=url; a.download=`backup-prospeccao-${new Date().toISOString().slice(0,10)}.json`;
+  a.click(); URL.revokeObjectURL(url);
+  showToast('✓ Backup exportado!');
+}
+
+function importarBackup(){
+  const input=document.createElement('input');
+  input.type='file'; input.accept='.json';
+  input.onchange=e=>{
+    const file=e.target.files[0]; if(!file) return;
+    const reader=new FileReader();
+    reader.onload=ev=>{
+      try{
+        const data=JSON.parse(ev.target.result);
+        if(!data.v){showToast('⚠️ Arquivo inválido!');return;}
+        if(data.prosp_proxy)     localStorage.setItem('prosp_proxy',data.prosp_proxy);
+        if(data.prosp_assin)     localStorage.setItem('prosp_assin',data.prosp_assin);
+        if(data.prosp_msg)       localStorage.setItem('prosp_msg',data.prosp_msg);
+        if(data.prosp_enderecos) localStorage.setItem('prosp_enderecos',data.prosp_enderecos);
+        if(data.prosp_ativo)     localStorage.setItem('prosp_ativo',data.prosp_ativo);
+        showToast('✓ Restaurado! Recarregando…');
+        setTimeout(()=>location.reload(),1200);
+      }catch(e){showToast('⚠️ Erro ao ler o arquivo!');}
+    };
+    reader.readAsText(file);
+  };
+  input.click();
+}
+
 /* ══ TOAST ═════════════════════════════════════════════════ */
 function showToast(msg){
   const t=document.getElementById('toast');
@@ -770,26 +834,35 @@ window.addEventListener('scroll',()=>{
 
 /* ══ INIT ══════════════════════════════════════════════════ */
 (function init(){
-  const saved={
-    assin:  localStorage.getItem('prosp_assin'),
-    msg:    localStorage.getItem('prosp_msg'),
-    proxy:  localStorage.getItem('prosp_proxy'),
-    ends:   localStorage.getItem('prosp_enderecos'),
-    ativo:  localStorage.getItem('prosp_ativo'),
-  };
-  if(saved.assin)  document.getElementById('assinatura').value=saved.assin;
-  if(saved.msg)    document.getElementById('msgBase').value=saved.msg;
-  if(saved.proxy)  document.getElementById('proxyUrlInput').value=saved.proxy;
-  if(saved.ends){
-    try{
-      ENDERECOS=JSON.parse(saved.ends);
-      ATIVO_IDX=parseInt(saved.ativo??'0');
-      if(ATIVO_IDX<0||ATIVO_IDX>=ENDERECOS.length) ATIVO_IDX=ENDERECOS.length>0?0:-1;
-      if(ATIVO_IDX>=0){USER_LAT=ENDERECOS[ATIVO_IDX].lat;USER_LNG=ENDERECOS[ATIVO_IDX].lng;}
-      atualizarLocAtiva();
-      renderChips();
-    }catch(e){}
+  const assin = localStorage.getItem('prosp_assin');
+  const msg   = localStorage.getItem('prosp_msg');
+  const proxy = localStorage.getItem('prosp_proxy');
+  const ends  = localStorage.getItem('prosp_enderecos');
+  const ativo = localStorage.getItem('prosp_ativo');
+
+  if(assin) document.getElementById('assinatura').value = assin;
+  if(msg)   document.getElementById('msgBase').value    = msg;
+  if(proxy) document.getElementById('proxyUrlInput').value = proxy;
+
+  // Carrega endereços salvos
+  if(ends){
+    try{ ENDERECOS = JSON.parse(ends); }catch(e){ ENDERECOS = []; }
+    if(!Array.isArray(ENDERECOS)) ENDERECOS = [];
   }
+
+  // Define ativo
+  if(ENDERECOS.length > 0){
+    const idx = (ativo !== null) ? parseInt(ativo) : 0;
+    ATIVO_IDX = (!isNaN(idx) && idx >= 0 && idx < ENDERECOS.length) ? idx : 0;
+    USER_LAT  = ENDERECOS[ATIVO_IDX].lat;
+    USER_LNG  = ENDERECOS[ATIVO_IDX].lng;
+  } else {
+    ATIVO_IDX = -1;
+  }
+
+  // Sempre atualiza UI
+  atualizarLocAtiva();
+  renderChips();
 })();
 </script>
 </body>
