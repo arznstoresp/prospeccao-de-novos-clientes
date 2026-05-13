@@ -8,546 +8,293 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Syne:wght@700;800&display=swap" rel="stylesheet">
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
 :root {
-  --bg:      #0a0a0a;
-  --surface: #111111;
-  --card:    #181818;
-  --raised:  #202020;
-  --line:    #2c2c2c;
-  --line2:   #3a3a3a;
-  --neon:    #ff6a00;
-  --neon2:   #e55a00;
-  --purple:  #ff8c42;
-  --pink:    #ffb347;
-  --amber:   #ffd166;
-  --sky:     #ff9a3c;
-  --red:     #ff3d00;
-  --text:    #f5f0eb;
-  --sub:     #7a6a5a;
-  --hint:    #4a3a2a;
-
-  --radius-sm: 8px;
-  --radius:    12px;
-  --radius-lg: 16px;
-  --gap:       12px;
-  --pad:       16px;
-  --input-h:   46px;
+  --bg:#0a0a0a; --surface:#111111; --card:#181818; --raised:#202020;
+  --line:#2c2c2c; --line2:#3a3a3a;
+  --neon:#ff6a00; --neon2:#e55a00;
+  --amber:#ffd166; --red:#ff3d00;
+  --text:#f5f0eb; --sub:#7a6a5a; --hint:#4a3a2a;
+  --radius-sm:8px; --radius:12px; --radius-lg:16px;
+  --gap:12px; --pad:16px; --input-h:46px;
 }
-
-html { -webkit-text-size-adjust: 100%; }
-
+html { -webkit-text-size-adjust:100%; }
 body {
-  font-family: 'Inter', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  min-height: 100dvh;
-  font-size: 15px;
-  line-height: 1.5;
-  -webkit-font-smoothing: antialiased;
+  font-family:'Inter',sans-serif; background:var(--bg); color:var(--text);
+  min-height:100vh; min-height:100dvh; font-size:15px; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
 }
-
-/* ── WRAPPER ── */
 .wrap {
-  max-width: 1020px;
-  margin: 0 auto;
-  background: var(--surface);
-  min-height: 100vh;
-  min-height: 100dvh;
-  display: flex;
-  flex-direction: column;
+  max-width:1020px; margin:0 auto; background:var(--surface);
+  min-height:100vh; min-height:100dvh; display:flex; flex-direction:column;
 }
-@media (min-width: 768px) {
-  body { padding: 1.5rem 1rem; }
-  .wrap { border: 1px solid var(--line); border-radius: var(--radius-lg); overflow: hidden; min-height: auto; }
+@media(min-width:768px){
+  body{padding:1.5rem 1rem;}
+  .wrap{border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;min-height:auto;}
 }
 
-/* ── HEADER ── */
+/* HEADER */
 .header {
-  background: var(--card);
-  border-bottom: 1px solid var(--line);
-  padding: 20px var(--pad) 0;
-  position: sticky;
-  top: 0;
-  z-index: 100;
+  background:var(--card); border-bottom:1px solid var(--line);
+  padding:20px var(--pad) 0; position:sticky; top:0; z-index:100;
 }
-
 .logo {
-  font-family: 'Syne', sans-serif;
-  font-size: 20px;
-  font-weight: 800;
-  color: var(--text);
-  letter-spacing: 1.5px;
-  text-align: center;
-  margin-bottom: 16px;
-  line-height: 1.3;
+  font-family:'Syne',sans-serif; font-size:20px; font-weight:800;
+  color:var(--text); letter-spacing:1.5px; text-align:center;
+  margin-bottom:16px; line-height:1.3;
 }
-.logo .brand { color: var(--neon); }
-.logo .sep   { color: var(--line2); margin: 0 8px; }
-.logo .sub   {
-  display: block;
-  color: var(--sub);
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 3px;
-  font-family: 'Inter', sans-serif;
-  text-transform: uppercase;
-  margin-top: 3px;
+.logo .brand{color:var(--neon);}
+.logo .sep{color:var(--line2);margin:0 8px;}
+.logo .sub{
+  display:block; color:var(--sub); font-size:11px; font-weight:600;
+  letter-spacing:3px; font-family:'Inter',sans-serif;
+  text-transform:uppercase; margin-top:3px;
 }
-@media (min-width: 480px) { .logo { font-size: 24px; } }
+@media(min-width:480px){.logo{font-size:24px;}}
 
-/* ── TABS ── */
+/* TABS */
 .tabs-nav {
-  display: flex;
-  overflow-x: auto;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  gap: 0;
-  margin: 0 calc(-1 * var(--pad));
-  padding: 0 var(--pad);
+  display:flex; overflow-x:auto; -webkit-overflow-scrolling:touch;
+  scrollbar-width:none; margin:0 calc(-1*var(--pad)); padding:0 var(--pad);
 }
-.tabs-nav::-webkit-scrollbar { display: none; }
-
+.tabs-nav::-webkit-scrollbar{display:none;}
 .tab-btn {
-  flex: 0 0 auto;
-  background: transparent;
-  border: none;
-  border-bottom: 3px solid transparent;
-  margin-bottom: -1px;
-  color: var(--sub);
-  font-family: 'Inter', sans-serif;
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: 0.3px;
-  padding: 12px 16px 10px;
-  cursor: pointer;
-  transition: color .15s, border-color .15s;
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  white-space: nowrap;
+  flex:0 0 auto; background:transparent; border:none;
+  border-bottom:3px solid transparent; margin-bottom:-1px;
+  color:var(--sub); font-family:'Inter',sans-serif; font-size:12px;
+  font-weight:700; letter-spacing:.3px; padding:12px 16px 10px;
+  cursor:pointer; transition:color .15s,border-color .15s;
+  display:flex; align-items:center; gap:5px; white-space:nowrap;
 }
-.tab-btn:active, .tab-btn:hover { color: var(--text); }
-.tab-btn.active { color: var(--neon); border-bottom-color: var(--neon); }
-.tab-icon { font-size: 15px; line-height: 1; }
-@media (min-width: 480px) {
-  .tabs-nav { justify-content: center; }
-  .tab-btn  { flex: 1; justify-content: center; font-size: 13px; padding: 13px 12px 11px; }
+.tab-btn:hover{color:var(--text);}
+.tab-btn.active{color:var(--neon);border-bottom-color:var(--neon);}
+.tab-icon{font-size:15px;line-height:1;}
+@media(min-width:480px){
+  .tabs-nav{justify-content:center;}
+  .tab-btn{flex:1;justify-content:center;font-size:13px;padding:13px 12px 11px;}
 }
 
-/* ── TAB CONTENT ── */
-.tab-content { display: none; padding: var(--pad); flex: 1; }
-.tab-content.active { display: block; }
+/* TAB CONTENT */
+.tab-content{display:none;padding:var(--pad);flex:1;}
+.tab-content.active{display:block;}
 
-/* ── PANELS ── */
+/* PANELS */
 .panel {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: var(--pad);
-  margin-bottom: var(--gap);
+  background:var(--card); border:1px solid var(--line);
+  border-radius:var(--radius); padding:var(--pad); margin-bottom:var(--gap);
 }
-.panel:last-child { margin-bottom: 0; }
-
+.panel:last-child{margin-bottom:0;}
 .panel-title {
-  font-size: 10px;
-  font-weight: 800;
-  color: var(--neon);
-  text-transform: uppercase;
-  letter-spacing: 2px;
-  margin-bottom: 14px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--line);
-  display: flex;
-  align-items: center;
-  gap: 6px;
+  font-size:10px; font-weight:800; color:var(--neon);
+  text-transform:uppercase; letter-spacing:2px;
+  margin-bottom:14px; padding-bottom:10px; border-bottom:1px solid var(--line);
+  display:flex; align-items:center; gap:6px;
 }
 
-/* ── FIELDS ── */
-.field-group { margin-bottom: 12px; }
-.field-group:last-child { margin-bottom: 0; }
-
+/* FIELDS */
+.field-group{margin-bottom:12px;}
+.field-group:last-child{margin-bottom:0;}
 label {
-  display: block;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--sub);
-  margin-bottom: 5px;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
+  display:block; font-size:11px; font-weight:700; color:var(--sub);
+  margin-bottom:5px; letter-spacing:.4px; text-transform:uppercase;
 }
-
-input[type=text],
-input[type=number],
-input[type=range],
-select,
-textarea {
-  width: 100%;
-  background: var(--raised);
-  border: 1.5px solid var(--line2);
-  border-radius: var(--radius-sm);
-  color: var(--text);
-  font-family: 'Inter', sans-serif;
-  font-size: 16px;
-  font-weight: 600;
-  padding: 0 12px;
-  outline: none;
-  transition: border-color .15s, box-shadow .15s;
-  -webkit-appearance: none;
-  appearance: none;
-  height: var(--input-h);
+input[type=text], input[type=number], select, textarea {
+  width:100%; height:var(--input-h); background:var(--raised);
+  border:1.5px solid var(--line2); border-radius:var(--radius-sm);
+  color:var(--text); font-family:'Inter',sans-serif; font-size:16px;
+  font-weight:600; padding:0 12px; outline:none;
+  transition:border-color .15s,box-shadow .15s;
+  -webkit-appearance:none; appearance:none;
 }
-input[type=text]:focus,
-input[type=number]:focus,
-select:focus,
-textarea:focus {
-  border-color: var(--neon);
-  box-shadow: 0 0 0 3px rgba(255,106,0,.12);
+input[type=text]:focus, select:focus, textarea:focus {
+  border-color:var(--neon); box-shadow:0 0 0 3px rgba(255,106,0,.12);
 }
 textarea {
-  height: auto;
-  padding: 10px 12px;
-  resize: vertical;
-  font-size: 14px;
-  min-height: 80px;
-  line-height: 1.5;
+  height:auto; padding:10px 12px; resize:vertical;
+  font-size:14px; min-height:80px; line-height:1.5;
 }
 select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a6a5a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  padding-right: 32px;
-  cursor: pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237a6a5a' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 12px center; padding-right:32px;
 }
-select option { background: var(--card); }
+select option{background:var(--card);}
 
-/* ── RANGE SLIDER ── */
+/* RANGE */
 input[type=range] {
-  height: 4px;
-  padding: 0;
-  background: var(--line2);
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  margin-top: 8px;
+  width:100%; height:4px; padding:0; background:var(--line2);
+  border:none; border-radius:4px; cursor:pointer; margin-top:8px;
+  -webkit-appearance:none; appearance:none; outline:none;
 }
 input[type=range]::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  width: 22px; height: 22px;
-  background: var(--neon);
-  border-radius: 50%;
-  box-shadow: 0 0 0 4px rgba(255,106,0,.2);
-  transition: box-shadow .15s;
+  -webkit-appearance:none; width:22px; height:22px;
+  background:var(--neon); border-radius:50%;
+  box-shadow:0 0 0 4px rgba(255,106,0,.2); transition:box-shadow .15s;
 }
-input[type=range]::-webkit-slider-thumb:hover {
-  box-shadow: 0 0 0 7px rgba(255,106,0,.2);
-}
-input[type=range]:focus { border-color: transparent; box-shadow: none; }
-
+input[type=range]::-webkit-slider-thumb:hover{box-shadow:0 0 0 7px rgba(255,106,0,.2);}
 .range-val {
-  font-family: 'Syne', sans-serif;
-  font-size: 26px;
-  font-weight: 800;
-  color: var(--neon);
-  line-height: 1;
-  margin-bottom: 2px;
+  font-family:'Syne',sans-serif; font-size:26px; font-weight:800;
+  color:var(--neon); line-height:1; margin-bottom:2px;
 }
-.range-val span { font-size: 13px; font-weight: 400; font-family: 'Inter', sans-serif; color: var(--sub); margin-left: 2px; }
-.range-labels { display: flex; justify-content: space-between; font-size: 10px; color: var(--hint); margin-top: 4px; letter-spacing: .5px; }
+.range-val span{font-size:13px;font-weight:400;font-family:'Inter',sans-serif;color:var(--sub);margin-left:2px;}
+.range-labels{display:flex;justify-content:space-between;font-size:10px;color:var(--hint);margin-top:4px;letter-spacing:.5px;}
 
-/* ── TAGS / PILLS ── */
-.tags-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+/* TAGS */
+.tags-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px;}
 .tag {
-  padding: 5px 10px;
-  background: var(--raised);
-  border: 1.5px solid var(--line2);
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 700;
-  color: var(--sub);
-  cursor: pointer;
-  transition: all .12s;
-  letter-spacing: .3px;
-  user-select: none;
+  padding:5px 10px; background:var(--raised); border:1.5px solid var(--line2);
+  border-radius:20px; font-size:11px; font-weight:700; color:var(--sub);
+  cursor:pointer; transition:all .12s; letter-spacing:.3px; user-select:none;
 }
-.tag:hover { border-color: var(--sub); color: var(--text); }
-.tag.on {
-  border-color: var(--neon);
-  color: var(--neon);
-  background: rgba(255,106,0,.1);
-}
+.tag:hover{border-color:var(--sub);color:var(--text);}
+.tag.on{border-color:var(--neon);color:var(--neon);background:rgba(255,106,0,.1);}
 
-/* ── FILTRO POTENCIAL ── */
-.pot-row { display: flex; flex-wrap: wrap; gap: 6px; }
+/* POTENCIAL */
+.pot-row{display:flex;flex-wrap:wrap;gap:6px;}
 .pot-pill {
-  padding: 5px 12px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: .3px;
-  cursor: pointer;
-  border: 1.5px solid var(--line2);
-  background: var(--raised);
-  color: var(--sub);
-  transition: all .12s;
+  padding:5px 12px; border-radius:20px; font-size:11px; font-weight:700;
+  letter-spacing:.3px; cursor:pointer; border:1.5px solid var(--line2);
+  background:var(--raised); color:var(--sub); transition:all .12s;
 }
-.pot-pill:hover { border-color: var(--sub); color: var(--text); }
-.pot-pill.on-todos  { border-color: var(--text);  color: var(--text);  background: rgba(245,240,235,.06); }
-.pot-pill.on-muito  { border-color: var(--neon);   color: var(--neon);  background: rgba(255,106,0,.1); }
-.pot-pill.on-alta   { border-color: var(--amber);  color: var(--amber); background: rgba(255,209,102,.1); }
-.pot-pill.on-media  { border-color: var(--sub);    color: var(--sub);   background: rgba(122,106,90,.1); }
+.pot-pill:hover{border-color:var(--sub);color:var(--text);}
+.pot-pill.on-todos{border-color:var(--text);color:var(--text);background:rgba(245,240,235,.06);}
+.pot-pill.on-muito{border-color:var(--neon);color:var(--neon);background:rgba(255,106,0,.1);}
+.pot-pill.on-alta{border-color:var(--amber);color:var(--amber);background:rgba(255,209,102,.1);}
+.pot-pill.on-media{border-color:var(--sub);color:var(--sub);background:rgba(122,106,90,.1);}
 
-/* ── BTNS ── */
+/* BTNS */
 .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
-  border: none;
-  border-radius: var(--radius-sm);
-  font-family: 'Inter', sans-serif;
-  font-size: 13px;
-  font-weight: 700;
-  cursor: pointer;
-  transition: opacity .15s, background .15s;
-  padding: 0 16px;
-  height: var(--input-h);
-  letter-spacing: .3px;
-  white-space: nowrap;
+  display:inline-flex; align-items:center; justify-content:center; gap:6px;
+  border:none; border-radius:var(--radius-sm); font-family:'Inter',sans-serif;
+  font-size:13px; font-weight:700; cursor:pointer;
+  transition:opacity .15s,background .15s; padding:0 16px; height:var(--input-h);
+  letter-spacing:.3px; white-space:nowrap;
 }
-.btn:active { opacity: .75; }
-.btn:disabled { opacity: .35; cursor: not-allowed; }
-.btn-primary  { background: var(--neon); color: #fff; width: 100%; }
-.btn-primary:hover:not(:disabled) { background: var(--neon2); }
-.btn-ghost {
-  background: var(--raised);
-  border: 1.5px solid var(--line2);
-  color: var(--sub);
-}
-.btn-ghost:hover { border-color: var(--sub); color: var(--text); }
-.btn-wa {
-  background: #25D366;
-  color: #fff;
-  flex: 1;
-  font-size: 12px;
-}
-.btn-wa:hover { background: #1da851; }
-.btn-wa svg { width: 13px; height: 13px; fill: #fff; flex-shrink: 0; }
+.btn:active{opacity:.75;}
+.btn:disabled{opacity:.35;cursor:not-allowed;}
+.btn-primary{background:var(--neon);color:#fff;width:100%;}
+.btn-primary:hover:not(:disabled){background:var(--neon2);}
+.btn-ghost{background:var(--raised);border:1.5px solid var(--line2);color:var(--sub);}
+.btn-ghost:hover{border-color:var(--sub);color:var(--text);}
+.btn-wa{background:#25D366;color:#fff;flex:1;font-size:12px;}
+.btn-wa:hover{background:#1da851;}
+.btn-wa svg{width:13px;height:13px;fill:#fff;flex-shrink:0;}
 
-/* ── STATS ── */
-.stats-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap); margin-bottom: var(--gap); }
-@media (max-width: 480px) { .stats-row { grid-template-columns: 1fr 1fr; } }
+/* STATS */
+.stats-row{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--gap);margin-bottom:var(--gap);}
+@media(max-width:480px){.stats-row{grid-template-columns:1fr 1fr;}}
+.stat-card{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:12px 14px;}
+.stat-num{font-family:'Syne',sans-serif;font-size:22px;font-weight:800;line-height:1;margin-bottom:3px;}
+.stat-lbl{font-size:10px;font-weight:700;color:var(--sub);letter-spacing:.4px;text-transform:uppercase;}
+.s-tot .stat-num{color:var(--text);}
+.s-muito .stat-num{color:var(--neon);}
+.s-alta .stat-num{color:var(--amber);}
+.s-media .stat-num{color:var(--sub);}
 
-.stat-card {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  padding: 12px 14px;
-}
-.stat-num {
-  font-family: 'Syne', sans-serif;
-  font-size: 22px;
-  font-weight: 800;
-  line-height: 1;
-  margin-bottom: 3px;
-}
-.stat-lbl {
-  font-size: 10px;
-  font-weight: 700;
-  color: var(--sub);
-  letter-spacing: .4px;
-  text-transform: uppercase;
-}
-.s-tot  .stat-num { color: var(--text); }
-.s-muito .stat-num { color: var(--neon); }
-.s-alta  .stat-num { color: var(--amber); }
-.s-media .stat-num { color: var(--sub); }
+/* RESULT GRID */
+.result-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:var(--gap);}
+@media(max-width:560px){.result-grid{grid-template-columns:1fr;}}
 
-/* ── RESULT GRID ── */
-.result-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
-  gap: var(--gap);
-}
-
-/* ── RESULT CARD ── */
+/* RESULT CARD */
 .result-card {
-  background: var(--card);
-  border: 1px solid var(--line);
-  border-radius: var(--radius);
-  display: flex;
-  flex-direction: column;
-  overflow: hidden;
-  transition: border-color .15s;
+  background:var(--card); border:1px solid var(--line);
+  border-radius:var(--radius); display:flex; flex-direction:column;
+  overflow:hidden; transition:border-color .15s;
 }
-.result-card:hover { border-color: var(--neon); }
-
-.rc-head {
-  padding: 12px 14px 0;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 8px;
+.result-card:hover{border-color:var(--neon);}
+.rc-head{padding:12px 14px 0;display:flex;align-items:flex-start;justify-content:space-between;gap:8px;}
+.rc-name{font-size:13px;font-weight:700;line-height:1.35;flex:1;color:var(--text);}
+.badge{
+  font-size:9px;font-weight:800;letter-spacing:.8px;padding:3px 7px;
+  border-radius:20px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;
 }
-.rc-name {
-  font-size: 13px;
-  font-weight: 700;
-  line-height: 1.35;
-  flex: 1;
-  color: var(--text);
-}
-.badge {
-  font-size: 9px;
-  font-weight: 800;
-  letter-spacing: .8px;
-  padding: 3px 7px;
-  border-radius: 20px;
-  text-transform: uppercase;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-.b-muito { background: rgba(255,106,0,.15);  color: var(--neon);  border: 1px solid rgba(255,106,0,.3); }
-.b-alta  { background: rgba(255,209,102,.12); color: var(--amber); border: 1px solid rgba(255,209,102,.3); }
-.b-media { background: rgba(122,106,90,.12);  color: var(--sub);   border: 1px solid rgba(122,106,90,.3); }
-
-.rc-info { padding: 10px 14px 0; }
-.rc-row {
-  font-size: 11px;
-  color: var(--sub);
-  margin-bottom: 4px;
-  display: flex;
-  align-items: flex-start;
-  gap: 5px;
-}
-.rc-row strong { color: var(--text); font-weight: 600; }
-.rc-row.addr { font-size: 10px; line-height: 1.4; }
+.b-muito{background:rgba(255,106,0,.15);color:var(--neon);border:1px solid rgba(255,106,0,.3);}
+.b-alta{background:rgba(255,209,102,.12);color:var(--amber);border:1px solid rgba(255,209,102,.3);}
+.b-media{background:rgba(122,106,90,.12);color:var(--sub);border:1px solid rgba(122,106,90,.3);}
+.rc-info{padding:10px 14px 0;}
+.rc-row{font-size:11px;color:var(--sub);margin-bottom:4px;display:flex;align-items:flex-start;gap:5px;}
+.rc-row strong{color:var(--text);font-weight:600;}
+.rc-row.addr{font-size:10px;line-height:1.4;}
+.rc-dist{font-size:10px;color:var(--neon);font-weight:700;margin-bottom:4px;}
 
 /* MSG COLLAPSE */
 .rc-msg {
-  margin: 10px 14px 0;
-  background: var(--raised);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-sm);
-  padding: 0 12px;
-  font-size: 12px;
-  color: var(--sub);
-  line-height: 1.7;
-  white-space: pre-line;
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height .3s ease, padding .2s;
+  margin:10px 14px 0; background:var(--raised); border:1px solid var(--line);
+  border-radius:var(--radius-sm); padding:0 12px; font-size:12px; color:var(--sub);
+  line-height:1.7; white-space:pre-line; max-height:0; overflow:hidden;
+  transition:max-height .3s ease,padding .2s;
 }
-.rc-msg.open { max-height: 600px; padding: 10px 12px; }
-
+.rc-msg.open{max-height:600px;padding:10px 12px;}
 .rc-actions {
-  padding: 10px 14px;
-  margin-top: auto;
-  display: flex;
-  align-items: stretch;
-  gap: 7px;
-  border-top: 1px solid var(--line);
+  padding:10px 14px; margin-top:auto;
+  display:flex; align-items:stretch; gap:7px;
+  border-top:1px solid var(--line);
 }
 .btn-toggle-msg {
-  flex-shrink: 0;
-  width: 72px;
-  background: var(--raised);
-  border: 1.5px solid var(--line2);
-  border-radius: var(--radius-sm);
-  color: var(--sub);
-  font-size: 11px;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: 'Inter', sans-serif;
-  transition: all .12s;
-  letter-spacing: .3px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-shrink:0; width:72px; background:var(--raised);
+  border:1.5px solid var(--line2); border-radius:var(--radius-sm);
+  color:var(--sub); font-size:11px; font-weight:700; cursor:pointer;
+  font-family:'Inter',sans-serif; transition:all .12s; letter-spacing:.3px;
+  display:flex; align-items:center; justify-content:center;
 }
-.btn-toggle-msg:hover { border-color: var(--sub); color: var(--text); }
-.btn-toggle-msg.open { border-color: var(--neon); color: var(--neon); background: rgba(255,106,0,.08); }
+.btn-toggle-msg:hover{border-color:var(--sub);color:var(--text);}
+.btn-toggle-msg.open{border-color:var(--neon);color:var(--neon);background:rgba(255,106,0,.08);}
 
-/* ── EMPTY STATE ── */
+/* EMPTY */
 .empty-state {
-  min-height: 300px;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 12px;
-  text-align: center;
-  color: var(--sub);
-  padding: 24px;
+  min-height:300px; display:flex; flex-direction:column;
+  align-items:center; justify-content:center;
+  gap:12px; text-align:center; color:var(--sub); padding:24px;
 }
-.empty-icon { font-size: 48px; line-height: 1; }
-.empty-state h3 {
-  font-family: 'Syne', sans-serif;
-  font-size: 17px;
-  font-weight: 800;
-  color: var(--text);
-}
-.empty-state p { font-size: 13px; max-width: 300px; line-height: 1.65; color: var(--sub); }
+.empty-icon{font-size:48px;line-height:1;}
+.empty-state h3{font-family:'Syne',sans-serif;font-size:17px;font-weight:800;color:var(--text);}
+.empty-state p{font-size:13px;max-width:320px;line-height:1.65;color:var(--sub);}
 
-/* ── SPINNER ── */
-@keyframes spin { to { transform: rotate(360deg); } }
-.spinner {
-  width: 28px; height: 28px;
-  border: 3px solid var(--line2);
-  border-top-color: var(--neon);
-  border-radius: 50%;
-  animation: spin .65s linear infinite;
+/* SPINNER */
+@keyframes spin{to{transform:rotate(360deg);}}
+.spinner{
+  width:28px;height:28px;border:3px solid var(--line2);
+  border-top-color:var(--neon);border-radius:50%;
+  animation:spin .65s linear infinite;
 }
 
-/* ── HINT TEXT ── */
-.hint-text {
-  font-size: 11px;
-  color: var(--hint);
-  margin-top: 5px;
-  line-height: 1.5;
-  letter-spacing: .2px;
-}
-.hint-text b { color: var(--sub); }
+/* HINT */
+.hint-text{font-size:11px;color:var(--hint);margin-top:5px;line-height:1.5;letter-spacing:.2px;}
+.hint-text b{color:var(--sub);}
 
-/* ── TOAST ── */
+/* PROXY BANNER */
+.proxy-banner {
+  background:rgba(255,106,0,.07); border:1px solid rgba(255,106,0,.2);
+  border-radius:var(--radius); padding:12px 14px; margin-bottom:var(--gap);
+  font-size:12px; color:var(--sub); line-height:1.65;
+}
+.proxy-banner b{color:var(--neon);}
+.proxy-banner code{
+  display:block; background:var(--raised); border:1px solid var(--line2);
+  border-radius:var(--radius-sm); padding:8px 12px; margin-top:8px;
+  font-size:11px; color:var(--text); word-break:break-all; font-family:monospace;
+}
+
+/* TOAST */
 #toast {
-  position: fixed; bottom: 20px; right: 20px;
-  background: var(--card);
-  border: 1px solid var(--neon);
-  color: var(--neon);
-  padding: 9px 16px;
-  border-radius: var(--radius);
-  font-size: 12px;
-  font-weight: 700;
-  letter-spacing: .3px;
-  opacity: 0; transform: translateY(6px);
-  transition: all .2s; pointer-events: none; z-index: 9999;
+  position:fixed; bottom:20px; right:20px;
+  background:var(--card); border:1px solid var(--neon); color:var(--neon);
+  padding:9px 16px; border-radius:var(--radius); font-size:12px; font-weight:700;
+  letter-spacing:.3px; opacity:0; transform:translateY(6px);
+  transition:all .2s; pointer-events:none; z-index:9999;
 }
-#toast.show { opacity: 1; transform: translateY(0); }
+#toast.show{opacity:1;transform:translateY(0);}
 
-/* ── BACK TO TOP ── */
+/* BACK TOP */
 #back-top {
-  position: fixed; bottom: 20px; right: 20px;
-  width: 38px; height: 38px;
-  background: var(--raised);
-  border: 1px solid var(--line2);
-  border-radius: var(--radius-sm);
-  color: var(--sub); font-size: 16px;
-  cursor: pointer; display: none;
-  align-items: center; justify-content: center;
-  transition: all .15s; z-index: 50;
+  position:fixed; bottom:20px; right:20px; width:38px; height:38px;
+  background:var(--raised); border:1px solid var(--line2); border-radius:var(--radius-sm);
+  color:var(--sub); font-size:16px; cursor:pointer; display:none;
+  align-items:center; justify-content:center; transition:all .15s; z-index:50;
 }
-#back-top.visible { display: flex; }
-#back-top:hover { border-color: var(--neon); color: var(--neon); }
-
-/* ── MOBILE ── */
-@media (max-width: 560px) {
-  .result-grid { grid-template-columns: 1fr; }
-}
+#back-top.visible{display:flex;}
+#back-top:hover{border-color:var(--neon);color:var(--neon);}
 </style>
 </head>
 <body>
-
 <div class="wrap">
 
   <!-- HEADER -->
@@ -558,7 +305,6 @@ input[type=range]:focus { border-color: transparent; box-shadow: none; }
       CLIENTES
       <span class="sub">Busca · Filtro · WhatsApp Direto</span>
     </div>
-
     <div class="tabs-nav">
       <button class="tab-btn active" onclick="switchTab('busca',this)">
         <span class="tab-icon">🔍</span> Buscar
@@ -573,7 +319,7 @@ input[type=range]:focus { border-color: transparent; box-shadow: none; }
     </div>
   </div>
 
-  <!-- ══ TAB: BUSCAR ══ -->
+  <!-- TAB BUSCAR -->
   <div id="tab-busca" class="tab-content active">
 
     <div class="panel">
@@ -591,21 +337,21 @@ input[type=range]:focus { border-color: transparent; box-shadow: none; }
         <input type="text" id="nichoInput"
           placeholder="Ex: academia, restaurante, salão…"
           onkeydown="if(event.key==='Enter')buscar()" />
-        <div class="hint-text">Pressione <b>Enter</b> ou clique em uma sugestão abaixo:</div>
+        <div class="hint-text">Pressione <b>Enter</b> ou clique em uma sugestão:</div>
       </div>
       <div class="tags-row">
         <span class="tag" onclick="setTag(this,'academia')">🏋️ Academia</span>
-        <span class="tag" onclick="setTag(this,'bar restaurante')">🍽️ Bar/Rest.</span>
-        <span class="tag" onclick="setTag(this,'salão beleza')">💅 Beleza</span>
+        <span class="tag" onclick="setTag(this,'restaurante')">🍽️ Restaurante</span>
+        <span class="tag" onclick="setTag(this,'bar')">🍺 Bar</span>
+        <span class="tag" onclick="setTag(this,'salao de beleza')">💅 Beleza</span>
         <span class="tag" onclick="setTag(this,'buffet eventos')">🎉 Eventos</span>
-        <span class="tag" onclick="setTag(this,'escola curso idiomas')">📚 Escola</span>
-        <span class="tag" onclick="setTag(this,'clínica médica saúde')">🏥 Clínica</span>
-        <span class="tag" onclick="setTag(this,'empresa segurança portaria limpeza')">🔒 Segurança</span>
-        <span class="tag" onclick="setTag(this,'escritório contabilidade empresa')">🏢 Corporativo</span>
-        <span class="tag" onclick="setTag(this,'pet shop veterinário')">🐾 Pet</span>
-        <span class="tag" onclick="setTag(this,'farmácia drogaria')">💊 Farmácia</span>
-        <span class="tag" onclick="setTag(this,'loja roupas moda')">👗 Moda</span>
-        <span class="tag" onclick="setTag(this,'padaria confeitaria')">🥐 Padaria</span>
+        <span class="tag" onclick="setTag(this,'escola idiomas')">📚 Escola</span>
+        <span class="tag" onclick="setTag(this,'clinica medica')">🏥 Clínica</span>
+        <span class="tag" onclick="setTag(this,'empresa seguranca')">🔒 Segurança</span>
+        <span class="tag" onclick="setTag(this,'contabilidade')">🏢 Contabil.</span>
+        <span class="tag" onclick="setTag(this,'pet shop')">🐾 Pet</span>
+        <span class="tag" onclick="setTag(this,'farmacia')">💊 Farmácia</span>
+        <span class="tag" onclick="setTag(this,'padaria')">🥐 Padaria</span>
       </div>
     </div>
 
@@ -625,37 +371,54 @@ input[type=range]:focus { border-color: transparent; box-shadow: none; }
 
   </div>
 
-  <!-- ══ TAB: RESULTADOS ══ -->
+  <!-- TAB RESULTADOS -->
   <div id="tab-resultados" class="tab-content">
-
     <div class="stats-row" id="statsRow" style="display:none">
       <div class="stat-card s-tot"><div class="stat-num" id="sTot">0</div><div class="stat-lbl">Encontrados</div></div>
       <div class="stat-card s-muito"><div class="stat-num" id="sMuito">0</div><div class="stat-lbl">Muito alto</div></div>
       <div class="stat-card s-alta"><div class="stat-num" id="sAlta">0</div><div class="stat-lbl">Alto</div></div>
       <div class="stat-card s-media"><div class="stat-num" id="sMedia">0</div><div class="stat-lbl">Médio</div></div>
     </div>
-
     <div id="resultado">
       <div class="empty-state">
         <div class="empty-icon">📋</div>
         <h3>Nenhuma busca ainda</h3>
-        <p>Vá para a aba <b>Buscar</b>, configure o nicho e o raio, depois clique em Buscar Clientes.</p>
+        <p>Vá para <b>Buscar</b>, configure o nicho e o raio e clique em Buscar Clientes.</p>
       </div>
     </div>
-
   </div>
 
-  <!-- ══ TAB: CONFIG ══ -->
+  <!-- TAB CONFIG -->
   <div id="tab-config" class="tab-content">
+
+    <div class="proxy-banner">
+      <b>⚙️ Como configurar o Proxy (obrigatório para busca real):</b><br>
+      1. Acesse <b>script.google.com</b> → Novo projeto<br>
+      2. Cole o código do arquivo <b>proxy-apps-script.gs</b> (entregue junto)<br>
+      3. Substitua <b>SUA_CHAVE_AQUI</b> pela sua chave do Google Places<br>
+      4. Clique em <b>Implantar → Nova implantação → App da Web</b><br>
+      5. Acesso: <b>Qualquer pessoa</b> → Implantar → Copie a URL<br>
+      6. Cole a URL abaixo e salve
+      <code id="proxyUrlExemplo">https://script.google.com/macros/s/SEU_ID/exec</code>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">🔗 URL do Proxy (Apps Script)</div>
+      <div class="field-group">
+        <label>URL da implantação do Apps Script</label>
+        <input type="text" id="proxyUrlInput" placeholder="https://script.google.com/macros/s/…/exec" />
+        <div class="hint-text">Esta URL substitui o corsproxy e garante raio e nicho 100% precisos.</div>
+      </div>
+      <button class="btn btn-primary" onclick="salvarProxy()">💾 &nbsp;Salvar URL do Proxy</button>
+    </div>
 
     <div class="panel">
       <div class="panel-title">✍️ Assinatura das Mensagens</div>
       <div class="field-group">
-        <label>Texto que aparece no final de cada mensagem</label>
+        <label>Texto no final de cada mensagem</label>
         <textarea id="assinatura" rows="3"
           placeholder="Ex: Att, Minha Empresa | (11) 99999-9999">Att,
 Minha Empresa | (11) 99999-9999</textarea>
-        <div class="hint-text">Este texto é incluído automaticamente em todas as mensagens geradas.</div>
       </div>
       <button class="btn btn-primary" onclick="salvarAssinatura()">💾 &nbsp;Salvar Assinatura</button>
     </div>
@@ -663,270 +426,290 @@ Minha Empresa | (11) 99999-9999</textarea>
     <div class="panel">
       <div class="panel-title">📝 Mensagem Personalizada</div>
       <div class="field-group">
-        <label>Texto principal (use [NOME] para o nome da empresa)</label>
-        <textarea id="msgBase" rows="5"
+        <label>Corpo da mensagem (use [NOME] para o nome da empresa)</label>
+        <textarea id="msgBase" rows="7"
           placeholder="Deixe em branco para usar a mensagem padrão…"></textarea>
-        <div class="hint-text">Deixe vazio para usar a mensagem automática por nicho. Use <b>[NOME]</b> onde quiser inserir o nome da empresa.</div>
+        <div class="hint-text">Use <b>[NOME]</b> onde quiser inserir o nome da empresa. Deixe vazio para mensagem automática.</div>
       </div>
       <button class="btn btn-primary" onclick="salvarMsgBase()">💾 &nbsp;Salvar Mensagem</button>
     </div>
 
-    <div class="panel">
-      <div class="panel-title">🔑 Google Places API (opcional)</div>
-      <div class="field-group">
-        <label>Chave de API</label>
-        <input type="text" id="apiKeyInput" placeholder="AIzaSy…" />
-        <div class="hint-text">
-          Sem chave: usa banco de dados local (34 empresas da Zona Norte–SP).<br>
-          Com chave: busca em tempo real qualquer região do Brasil.
-          Obtenha em <b>console.cloud.google.com</b> → Places API.
-        </div>
-      </div>
-      <button class="btn btn-primary" onclick="salvarApiKey()">💾 &nbsp;Salvar Chave</button>
-    </div>
-
   </div>
 
-</div><!-- /wrap -->
+</div>
 
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 <div id="toast"></div>
 
 <script>
-/* ══ ESTADO ══════════════════════════════════════════ */
+/* ══ ESTADO ══════════════════════════════════════════════════ */
 let resultados = [];
 let potFiltro  = 'todos';
 
-/* ══ BANCO LOCAL ════════════════════════════════════ */
-const DEMO = [
-  { nome:"BW Academia | Santana",              tel:"(11) 98711-3376", telNum:"11987113376", end:"R. Mateus Leme, 114 – Santana",                rating:4.9, count:1313, tags:["academia","fitness","gym","musculação","treino"] },
-  { nome:"Academia InShape",                   tel:"(11) 2231-5515",  telNum:"1122315515",  end:"R. Gen. Nestor Passos, 207 – Jd. Paraíso",   rating:4.5, count:421,  tags:["academia","fitness","gym","treino"] },
-  { nome:"Black Fitness Club",                 tel:"(11) 2976-9472",  telNum:"1129769472",  end:"R. Gaspar Soares, 88 – Santana",              rating:4.7, count:202,  tags:["academia","fitness","gym","treino"] },
-  { nome:"Silver Fitness & Spa",               tel:"(11) 97839-6044", telNum:"11978396044", end:"R. Cons. Moreira de Barros, 636 – Santana",   rating:4.8, count:112,  tags:["academia","fitness","spa","treino"] },
-  { nome:"Academia Gaviões 24h",               tel:"(11) 94074-7584", telNum:"11940747584", end:"Av. Parada Pinto, 2513 – V.N. Cachoeirinha",  rating:4.2, count:581,  tags:["academia","fitness","gym","treino"] },
-  { nome:"Power Gym – Jd. Paulistano",         tel:"(11) 94974-0433", telNum:"11949740433", end:"R. da União, 20 – Cidade Nitro Operária",     rating:4.9, count:34,   tags:["academia","fitness","gym","musculação","artes marciais"] },
-  { nome:"Centro de Treinamento de Capoeira",  tel:"(11) 98400-7446", telNum:"11984007446", end:"R. Alfonso Lazzari, 59 – Jd. Paulistano",    rating:5.0, count:11,   tags:["academia","artes marciais","esporte","capoeira","treino"] },
-  { nome:"Quintal do Espeto – Santana",        tel:"(11) 5095-6565",  telNum:"1150956565",  end:"Av. Gen. Ataliba Leonel, 1239 – Santana",    rating:4.6, count:7946, tags:["bar","restaurante","food","evento","churrasco"] },
-  { nome:"LeLui Bar e Cozinha",                tel:"(11) 2251-1531",  telNum:"1122511531",  end:"R. Jacuna, 302 – Carandiru",                 rating:4.8, count:1045, tags:["bar","restaurante","food","gastronomia"] },
-  { nome:"MANSION XV Santana",                 tel:"(11) 2308-9694",  telNum:"1123089694",  end:"R. Maria Curupaiti, 212 – Santana",           rating:4.7, count:1453, tags:["bar","restaurante","food","café","bistro"] },
-  { nome:"Pilequinhos Vila Maria",             tel:"(11) 2954-8184",  telNum:"1129548184",  end:"Pça. Santo Eduardo, 125 – Vila Maria",        rating:4.5, count:4079, tags:["bar","restaurante","food","música ao vivo","evento"] },
-  { nome:"Bar do Ade",                         tel:"(11) 91735-7042", telNum:"11917357042", end:"R. Curuçá, 849 – Vila Maria",                 rating:4.8, count:335,  tags:["bar","restaurante","food"] },
-  { nome:"Jangada Velho Chico",                tel:"(11) 96627-6533", telNum:"11966276533", end:"Av. Mazzei, 855 – Vila Mazzei",               rating:4.5, count:1820, tags:["bar","restaurante","food"] },
-  { nome:"Seu Manuel Restaurante",             tel:"(11) 99264-2587", telNum:"11992642587", end:"R. Ismael Neri, 441 – Água Fria",             rating:4.8, count:530,  tags:["restaurante","food","gastronomia","português"] },
-  { nome:"Quintal da Leoncio",                 tel:"(11) 91315-8464", telNum:"11913158464", end:"Av. Leôncio de Magalhães, 1004 – Jd. SP",    rating:4.5, count:60,   tags:["bar","restaurante","food"] },
-  { nome:"Suely Aquino – Estética",            tel:"(11) 2362-4792",  telNum:"1123624792",  end:"Av. Parada Pinto, 1940 – V.N. Cachoeirinha", rating:5.0, count:683,  tags:["beleza","estética","salão","clínica","saúde"] },
-  { nome:"Clínica Márcia Cebelle",             tel:"(11) 99020-6503", telNum:"11990206503", end:"Av. Conceição, 445 – Carandiru",              rating:4.9, count:97,   tags:["beleza","estética","clínica","saúde","botox"] },
-  { nome:"Studio Thais Uehara Clinic",         tel:"(11) 94789-3539", telNum:"11947893539", end:"R. Maria Curupaiti, 385 – Vila Ester",        rating:5.0, count:94,   tags:["beleza","estética","salão","cílios"] },
-  { nome:"Martínez Beauty",                    tel:"(11) 93007-3954", telNum:"11930073954", end:"Av. Zumkeller, 251 – Parque Mandaqui",        rating:4.9, count:42,   tags:["beleza","salão","estética","cílios","unhas"] },
-  { nome:"GZ Clínica Estética & Integrativa",  tel:"(11) 99171-5454", telNum:"11991715454", end:"R. Augusto Tolle, 771 – Alto de Santana",    rating:5.0, count:36,   tags:["beleza","estética","clínica","saúde"] },
-  { nome:"Buffet NZ Events",                   tel:"(11) 96312-4184", telNum:"11963124184", end:"Av. L.C. Gentile de Laet, 1736 – Horto",     rating:4.8, count:534,  tags:["buffet","eventos","festas","casamento","salão"] },
-  { nome:"Eclair Buffet",                      tel:"(11) 3965-3100",  telNum:"1139653100",  end:"R. Glauco Velasquez, 148 – Limão",           rating:5.0, count:99,   tags:["buffet","eventos","catering","festas"] },
-  { nome:"Arteirar Festas e Eventos",          tel:"(11) 97512-6457", telNum:"11975126457", end:"R. Marambaia, 397 – Limão",                  rating:4.8, count:269,  tags:["buffet","eventos","festas","recreação"] },
-  { nome:"Espaço Summer",                      tel:"(11) 94710-9469", telNum:"11947109469", end:"R. Ipê – Jd. Paulistano",                    rating:5.0, count:7,    tags:["eventos","espaço","festas"] },
-  { nome:"Cavallini Buffet e Eventos",         tel:"(11) 93379-3009", telNum:"11933793009", end:"R. Cel. Octávio Azeredo, 269 – V. Mazzei",   rating:4.8, count:25,   tags:["buffet","eventos","catering","churrasco"] },
-  { nome:"CNA Mandaqui",                       tel:"(11) 97185-7177", telNum:"11971857177", end:"R. Voluntários da Pátria, 4584 – Mandaqui",  rating:4.8, count:62,   tags:["escola","curso","idiomas","inglês"] },
-  { nome:"CCAA Tucuruvi/Paulicéia",            tel:"(11) 3798-5130",  telNum:"1137985130",  end:"Av. Águas de São Pedro, 71 – V. Paulicéia",  rating:4.9, count:148,  tags:["escola","curso","idiomas","inglês"] },
-  { nome:"Wizard by Pearson Imirim",           tel:"(11) 95000-3772", telNum:"11950003772", end:"Av. Imirim, 1509 – Imirim",                  rating:4.6, count:37,   tags:["escola","curso","idiomas","inglês"] },
-  { nome:"CCAA Mandaqui",                      tel:"(11) 2232-6099",  telNum:"1122326099",  end:"Av. Santa Inês, 497 – Mandaqui",             rating:5.0, count:21,   tags:["escola","curso","idiomas","inglês"] },
-  { nome:"CRS Centro de Idiomas",              tel:"(11) 98750-6998", telNum:"11987506998", end:"R. Aureliano Leal, 90 – Santana",            rating:4.7, count:47,   tags:["escola","curso","idiomas","inglês","italiano"] },
-  { nome:"Grupo Gonçalves Segurança",          tel:"(11) 99187-8896", telNum:"11991878896", end:"Av. Nova Cantareira, 2233 – Tucuruvi",       rating:4.9, count:16,   tags:["segurança","portaria","limpeza","terceirização"] },
-  { nome:"PVG Polivig Portaria e Limpeza",     tel:"(11) 2953-3830",  telNum:"1129533830",  end:"R. Cônego Ladeira, 272 – Tucuruvi",          rating:4.5, count:73,   tags:["segurança","portaria","limpeza","terceirização"] },
-  { nome:"Protevi Portaria e Limpeza",         tel:"(11) 2950-0896",  telNum:"1129500896",  end:"R. Maria Medeiros, 122 – Casa Verde",        rating:4.7, count:25,   tags:["segurança","portaria","limpeza","terceirização"] },
-  { nome:"Luxxel Tecnologia",                  tel:"(11) 2261-3110",  telNum:"1122613110",  end:"R. Dr. Natalino Righeto, 611 – Tucuruvi",    rating:4.8, count:4,    tags:["corporativo","tecnologia","empresa","ti"] },
-  { nome:"Maxidan Benefícios Corporativos",    tel:"(11) 2265-5314",  telNum:"1122655314",  end:"Av. Água Fria, 1816 – Santana",              rating:4.5, count:8,    tags:["corporativo","rh","benefícios","empresa"] },
-  { nome:"Grupo Senso Contabilidade",          tel:"(11) 2737-3166",  telNum:"1127373166",  end:"R. Cônego Ladeira, 274 – Tucuruvi",          rating:5.0, count:6,    tags:["corporativo","contabilidade","escritório"] },
-];
+/* ══ MAPA NICHO → TYPE GOOGLE PLACES ════════════════════════
+   type é o parâmetro exato aceito pela Places API Nearby Search
+   Ref: https://developers.google.com/maps/documentation/places/web-service/supported_types
+════════════════════════════════════════════════════════════ */
+const NICHO_CFG = {
+  'academia':          { keyword:'academia fitness',        type:'gym' },
+  'fitness':           { keyword:'academia fitness',        type:'gym' },
+  'musculacao':        { keyword:'academia musculação',     type:'gym' },
+  'artes marciais':    { keyword:'artes marciais academia', type:'gym' },
+  'capoeira':          { keyword:'capoeira academia',       type:'gym' },
+  'restaurante':       { keyword:'restaurante',             type:'restaurant' },
+  'churrascaria':      { keyword:'churrascaria',            type:'restaurant' },
+  'lanchonete':        { keyword:'lanchonete',              type:'meal_takeaway' },
+  'bar':               { keyword:'bar',                     type:'bar' },
+  'cafe':              { keyword:'café cafeteria',          type:'cafe' },
+  'cafeteria':         { keyword:'cafeteria café',          type:'cafe' },
+  'salao de beleza':   { keyword:'salão de beleza',         type:'beauty_salon' },
+  'salao beleza':      { keyword:'salão de beleza',         type:'beauty_salon' },
+  'beleza':            { keyword:'salão beleza',            type:'beauty_salon' },
+  'cabeleireiro':      { keyword:'cabeleireiro salão',      type:'hair_care' },
+  'estetica':          { keyword:'clínica estética',        type:'beauty_salon' },
+  'nail salon':        { keyword:'nail salon unhas',        type:'beauty_salon' },
+  'spa':               { keyword:'spa',                     type:'spa' },
+  'buffet eventos':    { keyword:'buffet eventos',          type:'event_venue' },
+  'eventos':           { keyword:'espaço para eventos',     type:'event_venue' },
+  'buffet':            { keyword:'buffet',                  type:'event_venue' },
+  'escola idiomas':    { keyword:'escola de idiomas inglês',type:'language_school' },
+  'idiomas':           { keyword:'escola idiomas inglês',   type:'language_school' },
+  'escola':            { keyword:'escola',                  type:'school' },
+  'curso':             { keyword:'curso escola',            type:'school' },
+  'clinica medica':    { keyword:'clínica médica',          type:'doctor' },
+  'clinica':           { keyword:'clínica médica',          type:'doctor' },
+  'saude':             { keyword:'clínica saúde',           type:'doctor' },
+  'dentista':          { keyword:'dentista odontologia',    type:'dentist' },
+  'fisioterapia':      { keyword:'fisioterapia clínica',    type:'physiotherapist' },
+  'empresa seguranca': { keyword:'empresa de segurança',    type:'establishment' },
+  'seguranca':         { keyword:'segurança portaria',      type:'establishment' },
+  'limpeza':           { keyword:'empresa limpeza',         type:'establishment' },
+  'portaria':          { keyword:'portaria limpeza',        type:'establishment' },
+  'contabilidade':     { keyword:'escritório contabilidade',type:'accounting' },
+  'pet shop':          { keyword:'pet shop',                type:'pet_store' },
+  'veterinario':       { keyword:'veterinário clínica pet', type:'veterinary_care' },
+  'farmacia':          { keyword:'farmácia drogaria',       type:'pharmacy' },
+  'loja roupas':       { keyword:'loja de roupas moda',     type:'clothing_store' },
+  'moda':              { keyword:'loja moda roupas',        type:'clothing_store' },
+  'padaria':           { keyword:'padaria',                 type:'bakery' },
+  'confeitaria':       { keyword:'confeitaria padaria',     type:'bakery' },
+  'supermercado':      { keyword:'supermercado mercado',    type:'supermarket' },
+  'hotel':             { keyword:'hotel pousada',           type:'lodging' },
+};
 
-/* ══ POTENCIAL ══════════════════════════════════════ */
-function calcPot(r, c) {
-  const s = (r||0) * Math.log10((c||1)+1);
-  if (s >= 6)   return 'muito';
-  if (s >= 3.2) return 'alta';
+function resolveNicho(q) {
+  const norm = q.toLowerCase().trim()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+  // Busca match exato ou parcial no mapa
+  for (const [key, cfg] of Object.entries(NICHO_CFG)) {
+    const k = key.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    if (norm === k || norm.includes(k) || k.includes(norm)) return cfg;
+  }
+  // Fallback: usa a query como keyword sem type fixo
+  return { keyword: q, type: '' };
+}
+
+/* ══ DISTÂNCIA HAVERSINE (metros) ════════════════════════════ */
+function distM(lat1,lng1,lat2,lng2){
+  const R=6371000, dLat=(lat2-lat1)*Math.PI/180, dLng=(lng2-lng1)*Math.PI/180;
+  const a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLng/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+/* ══ POTENCIAL ═══════════════════════════════════════════════ */
+function calcPot(r,c){
+  const s=(r||0)*Math.log10((c||1)+1);
+  if(s>=6) return 'muito';
+  if(s>=3.2) return 'alta';
   return 'media';
 }
-const POT_LABEL = { muito:'Muito alto', alta:'Alto', media:'Médio' };
+const POT_LABEL={muito:'Muito alto',alta:'Alto',media:'Médio'};
 
-/* ══ MENSAGEM ═══════════════════════════════════════ */
-function buildMsg(nome, nicho, rating, count) {
-  const assin = localStorage.getItem('prosp_assin') ||
-    document.getElementById('assinatura').value.trim() ||
-    'Att,\nMinha Empresa';
-  const base = localStorage.getItem('prosp_msg');
-  if (base && base.trim()) {
-    return base.replace(/\[NOME\]/g, nome) + '\n\n' + assin;
-  }
-  const stars = (rating && count) ? `${rating} ★ (${count.toLocaleString('pt-BR')} avaliações)` : '';
-  const dest  = stars ? ` — ${stars} no Google —` : '';
+/* ══ MENSAGEM ════════════════════════════════════════════════ */
+function buildMsg(nome,nicho,rating,count){
+  const assin=localStorage.getItem('prosp_assin')||
+    document.getElementById('assinatura').value.trim()||'Att,\nMinha Empresa';
+  const base=localStorage.getItem('prosp_msg');
+  if(base&&base.trim()) return base.replace(/\[NOME\]/g,nome)+'\n\n'+assin;
+  const stars=(rating&&count)?`${rating} ★ (${count.toLocaleString('pt-BR')} avaliações)`:'';
+  const dest=stars?` — ${stars} no Google —`:'';
   return [
-    `Olá! Tudo bem? 😊`,
-    ``,
-    `Somos especializados em *produtos personalizados* para empresas da região.`,
-    ``,
-    `Vi que *${nome}*${dest} se destaca na área e queria apresentar nossas soluções: *camisetas, canecas, garrafas térmicas, uniformes e kits personalizados* com a identidade da empresa.`,
-    ``,
-    `Podemos montar um orçamento sem compromisso?`,
-    ``,
-    assin
+    `Olá! Tudo bem? 😊`,``,
+    `Somos especializados em *produtos personalizados* para empresas da região.`,``,
+    `Vi que *${nome}*${dest} se destaca na área e queria apresentar nossas soluções: *camisetas, canecas, garrafas térmicas, uniformes e kits personalizados* com a identidade da empresa.`,``,
+    `Podemos montar um orçamento sem compromisso?`,``,assin
   ].join('\n');
 }
 
-/* ══ TAGS ═══════════════════════════════════════════ */
-function setTag(el, val) {
-  const input = document.getElementById('nichoInput');
-  if (el.classList.contains('on')) {
-    el.classList.remove('on');
-    input.value = '';
-  } else {
-    document.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
-    el.classList.add('on');
-    input.value = val;
+/* ══ TAGS ════════════════════════════════════════════════════ */
+function setTag(el,val){
+  const input=document.getElementById('nichoInput');
+  if(el.classList.contains('on')){el.classList.remove('on');input.value='';}
+  else{
+    document.querySelectorAll('.tag').forEach(t=>t.classList.remove('on'));
+    el.classList.add('on'); input.value=val;
   }
 }
 
-/* ══ POTENCIAL FILTER ═══════════════════════════════ */
-function setPot(val, el) {
-  potFiltro = val;
-  document.querySelectorAll('.pot-pill').forEach(b => { b.className = 'pot-pill'; });
-  el.classList.add('on-' + val);
-  if (resultados.length) renderCards();
+/* ══ POTENCIAL FILTER ════════════════════════════════════════ */
+function setPot(val,el){
+  potFiltro=val;
+  document.querySelectorAll('.pot-pill').forEach(b=>{b.className='pot-pill';});
+  el.classList.add('on-'+val);
+  if(resultados.length) renderCards();
 }
 
-/* ══ BUSCA ══════════════════════════════════════════ */
-async function buscar() {
-  const query = document.getElementById('nichoInput').value.trim();
-  if (!query) { showToast('⚠️ Digite um nicho antes de buscar!'); return; }
+/* ══ BUSCA PRINCIPAL ═════════════════════════════════════════ */
+const BASE_LAT=-23.479, BASE_LNG=-46.628;
 
-  const btn = document.getElementById('buscarBtn');
-  btn.disabled = true;
-  btn.textContent = '⏳  Buscando…';
+async function buscar(){
+  const query=document.getElementById('nichoInput').value.trim();
+  if(!query){showToast('⚠️ Digite um nicho antes de buscar!');return;}
 
-  // Muda para aba de resultados
-  switchTab('resultados', document.querySelectorAll('.tab-btn')[1]);
+  const proxyUrl=localStorage.getItem('prosp_proxy')||'';
+  if(!proxyUrl){
+    showToast('⚠️ Configure a URL do Proxy na aba Config.!');
+    switchTab('config',document.querySelectorAll('.tab-btn')[2]);
+    return;
+  }
 
-  document.getElementById('statsRow').style.display = 'none';
-  document.getElementById('resultado').innerHTML = `
+  const btn=document.getElementById('buscarBtn');
+  btn.disabled=true;
+  btn.textContent='⏳  Buscando…';
+  switchTab('resultados',document.querySelectorAll('.tab-btn')[1]);
+  document.getElementById('statsRow').style.display='none';
+  document.getElementById('resultado').innerHTML=`
     <div class="empty-state">
       <div class="spinner"></div>
-      <p style="margin-top:16px">Buscando <b>${query}</b>…</p>
+      <p style="margin-top:16px">Buscando <b>${query}</b> em <b>${document.getElementById('raioSlider').value} km</b>…</p>
     </div>`;
 
-  await new Promise(r => setTimeout(r, 700));
+  await buscarAPI(query, proxyUrl);
 
-  const apiKey = localStorage.getItem('prosp_apikey') || document.getElementById('apiKeyInput')?.value?.trim();
-
-  if (apiKey) {
-    await buscarAPI(query, apiKey);
-  } else {
-    buscarDemo(query);
-  }
-
-  btn.disabled = false;
-  btn.textContent = '🔍  Buscar Clientes';
+  btn.disabled=false;
+  btn.textContent='🔍  Buscar Clientes';
 }
 
-/* ══ BUSCA DEMO ═════════════════════════════════════ */
-function buscarDemo(query) {
-  const termos = query.toLowerCase()
-    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
-    .split(/[,;\s]+/).filter(t => t.length > 2);
+/* ══ BUSCA VIA PROXY APPS SCRIPT ═════════════════════════════ */
+async function buscarAPI(query, proxyUrl){
+  const raioKm  = parseInt(document.getElementById('raioSlider').value);
+  const raioM   = raioKm * 1000;
+  const nicho   = resolveNicho(query);
+  const seen    = new Set();
+  const raw     = [];
 
-  let matched = DEMO.filter(p => {
-    const haystack = [...p.tags, p.nome.toLowerCase()].join(' ')
-      .normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-    return termos.some(t => haystack.includes(t));
-  });
+  // ── Monta URL do proxy com todos os parâmetros corretos ──
+  const buildProxyUrl = (pagetoken='') => {
+    let u = `${proxyUrl}?endpoint=nearbysearch`
+          + `&location=${BASE_LAT},${BASE_LNG}`
+          + `&radius=${raioM}`
+          + `&keyword=${encodeURIComponent(nicho.keyword)}`;
+    if(nicho.type) u += `&type=${nicho.type}`;
+    if(pagetoken)  u += `&pagetoken=${encodeURIComponent(pagetoken)}`;
+    return u;
+  };
 
-  if (!matched.length) matched = [...DEMO];
-
-  resultados = matched.map(p => ({
-    ...p,
-    avaliacao: `${p.rating} ★ (${p.count.toLocaleString('pt-BR')})`,
-    pot: calcPot(p.rating, p.count),
-    msg: buildMsg(p.nome, query, p.rating, p.count),
-  })).sort((a,b) => {
-    const o={muito:0,alta:1,media:2};
-    return o[a.pot]-o[b.pot] || b.count-a.count;
-  });
-
-  renderCards();
-}
-
-/* ══ BUSCA API ══════════════════════════════════════ */
-const BASE_LAT = -23.479, BASE_LNG = -46.628;
-
-async function buscarAPI(query, key) {
-  const raio = parseInt(document.getElementById('raioSlider').value) * 1000;
-  const seen = new Set();
-  const raw  = [];
-  const termos = query.split(/[,;]+/).map(t=>t.trim()).filter(Boolean).slice(0,3);
-
-  for (const t of termos) {
-    try {
-      const url = `https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=${BASE_LAT},${BASE_LNG}&radius=${raio}&keyword=${encodeURIComponent(t)}&language=pt-BR&key=${key}`;
-      const res = await fetch('https://corsproxy.io/?' + encodeURIComponent(url));
+  // ── Busca até 2 páginas (40 resultados máx) ──
+  try {
+    let pagetoken='';
+    for(let page=0; page<2; page++){
+      const res  = await fetch(buildProxyUrl(pagetoken));
       const data = await res.json();
-      for (const p of (data.results||[])) {
-        if (!seen.has(p.place_id)) { seen.add(p.place_id); raw.push(p); }
+
+      if(data.status!=='OK'&&data.status!=='ZERO_RESULTS'){
+        console.warn('API status:',data.status,data.error_message);
+        break;
       }
-    } catch(e) { console.warn(e); }
-  }
 
-  const det = [];
-  for (const p of raw.slice(0,40)) {
-    try {
-      const url = `https://maps.googleapis.com/maps/api/place/details/json?place_id=${p.place_id}&fields=name,formatted_phone_number,formatted_address,rating,user_ratings_total&language=pt-BR&key=${key}`;
-      const res  = await fetch('https://corsproxy.io/?' + encodeURIComponent(url));
-      const data = await res.json();
-      const d = data.result;
-      if (d && d.formatted_phone_number) {
-        const pot = calcPot(d.rating, d.user_ratings_total);
+      for(const p of (data.results||[])){
+        if(seen.has(p.place_id)) continue;
+
+        // ── Filtro de raio por coordenada real ──
+        const pLat=p.geometry?.location?.lat;
+        const pLng=p.geometry?.location?.lng;
+        if(pLat&&pLng&&distM(BASE_LAT,BASE_LNG,pLat,pLng)>raioM) continue;
+
+        seen.add(p.place_id);
+        raw.push(p);
+      }
+
+      pagetoken=data.next_page_token||'';
+      if(!pagetoken) break;
+      await new Promise(r=>setTimeout(r,2000)); // delay obrigatório entre páginas
+    }
+  } catch(e){ console.warn('Erro busca:',e); }
+
+  // ── Busca detalhes (telefone + coord precisa) de cada resultado ──
+  const det=[];
+  for(const p of raw.slice(0,30)){
+    try{
+      const url=`${proxyUrl}?endpoint=details&place_id=${p.place_id}`;
+      const res =await fetch(url);
+      const data=await res.json();
+      const d=data.result;
+      if(!d||!d.formatted_phone_number) continue;
+
+      // Confirma raio com coordenada precisa do detalhe
+      const dLat=d.geometry?.location?.lat;
+      const dLng=d.geometry?.location?.lng;
+      if(dLat&&dLng){
+        const dist=distM(BASE_LAT,BASE_LNG,dLat,dLng);
+        if(dist>raioM) continue;
+        const distKm=(dist/1000).toFixed(1);
         det.push({
-          nome: d.name,
-          tel:  d.formatted_phone_number,
-          telNum: d.formatted_phone_number.replace(/\D/g,''),
-          avaliacao: d.rating ? `${d.rating} ★ (${(d.user_ratings_total||0).toLocaleString('pt-BR')})` : 'Sem avaliação',
-          rating: d.rating||0, count: d.user_ratings_total||0,
-          end: (d.formatted_address||'').replace(/, (Brazil|Brasil)$/,''),
-          pot,
-          msg: buildMsg(d.name, query, d.rating, d.user_ratings_total),
+          nome:     d.name,
+          tel:      d.formatted_phone_number,
+          telNum:   d.formatted_phone_number.replace(/\D/g,''),
+          avaliacao:d.rating?`${d.rating} ★ (${(d.user_ratings_total||0).toLocaleString('pt-BR')})`:'Sem avaliação',
+          rating:   d.rating||0,
+          count:    d.user_ratings_total||0,
+          end:      (d.formatted_address||'').replace(/, (Brazil|Brasil)$/,''),
+          distKm,
+          pot:      calcPot(d.rating,d.user_ratings_total),
+          msg:      buildMsg(d.name,query,d.rating,d.user_ratings_total),
         });
       }
-    } catch(e) { console.warn(e); }
+    } catch(e){ console.warn('Erro detalhe:',e); }
   }
 
-  resultados = det.sort((a,b)=>{
+  resultados=det.sort((a,b)=>{
     const o={muito:0,alta:1,media:2};
     return o[a.pot]-o[b.pot]||b.count-a.count;
   });
 
-  if (!resultados.length) buscarDemo(query);
-  else renderCards();
+  if(!resultados.length){
+    document.getElementById('resultado').innerHTML=`
+      <div class="empty-state">
+        <div class="empty-icon">📭</div>
+        <h3>Nenhuma empresa encontrada</h3>
+        <p>Não encontrei resultados para <b>"${query}"</b> em <b>${raioKm} km</b>.<br>
+        Tente aumentar o raio ou verifique o nicho.</p>
+      </div>`;
+    document.getElementById('statsRow').style.display='none';
+  } else {
+    renderCards();
+  }
 }
 
-/* ══ RENDER CARDS ═══════════════════════════════════ */
-const WA_SVG = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+/* ══ RENDER CARDS ════════════════════════════════════════════ */
+const WA_SVG=`<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
 
-function renderCards() {
-  const lista = potFiltro === 'todos'
-    ? resultados
-    : resultados.filter(r => r.pot === potFiltro);
+function renderCards(){
+  const lista=potFiltro==='todos'?resultados:resultados.filter(r=>r.pot===potFiltro);
+  const cnt={muito:0,alta:0,media:0};
+  resultados.forEach(r=>cnt[r.pot]++);
 
-  const cnt = {muito:0,alta:0,media:0};
-  resultados.forEach(r => cnt[r.pot]++);
+  document.getElementById('statsRow').style.display='grid';
+  document.getElementById('sTot').textContent  =resultados.length;
+  document.getElementById('sMuito').textContent=cnt.muito;
+  document.getElementById('sAlta').textContent =cnt.alta;
+  document.getElementById('sMedia').textContent=cnt.media;
 
-  document.getElementById('statsRow').style.display = 'grid';
-  document.getElementById('sTot').textContent   = resultados.length;
-  document.getElementById('sMuito').textContent = cnt.muito;
-  document.getElementById('sAlta').textContent  = cnt.alta;
-  document.getElementById('sMedia').textContent = cnt.media;
+  const bc=document.getElementById('badge-count');
+  bc.textContent=resultados.length; bc.style.display='inline';
 
-  // Badge no tab
-  const bc = document.getElementById('badge-count');
-  bc.textContent = resultados.length;
-  bc.style.display = 'inline';
-
-  if (!lista.length) {
-    document.getElementById('resultado').innerHTML = `
+  if(!lista.length){
+    document.getElementById('resultado').innerHTML=`
       <div class="empty-state">
         <div class="empty-icon">🔍</div>
         <h3>Sem resultados</h3>
@@ -935,9 +718,9 @@ function renderCards() {
     return;
   }
 
-  const html = lista.map((c,i) => {
-    const bc  = {muito:'b-muito',alta:'b-alta',media:'b-media'}[c.pot];
-    const wa  = `https://wa.me/55${c.telNum}?text=${encodeURIComponent(c.msg)}`;
+  const html=lista.map((c,i)=>{
+    const bc={muito:'b-muito',alta:'b-alta',media:'b-media'}[c.pot];
+    const wa=`https://wa.me/55${c.telNum}?text=${encodeURIComponent(c.msg)}`;
     return `
     <div class="result-card">
       <div class="rc-head">
@@ -947,7 +730,8 @@ function renderCards() {
       <div class="rc-info">
         <div class="rc-row">⭐ <strong>${c.avaliacao}</strong></div>
         <div class="rc-row">📞 <strong>${c.tel}</strong></div>
-        <div class="rc-row addr">📍 ${c.end}</div>
+        <div class="rc-dist">📍 ${c.distKm} km de distância</div>
+        <div class="rc-row addr">${c.end}</div>
       </div>
       <div class="rc-actions">
         <a class="btn btn-wa" href="${wa}" target="_blank">${WA_SVG} Enviar pelo WhatsApp</a>
@@ -957,65 +741,64 @@ function renderCards() {
     </div>`;
   }).join('');
 
-  document.getElementById('resultado').innerHTML = `<div class="result-grid">${html}</div>`;
+  document.getElementById('resultado').innerHTML=`<div class="result-grid">${html}</div>`;
 }
 
-/* ══ TOGGLE MSG ═════════════════════════════════════ */
-function toggleMsg(i) {
-  const box = document.getElementById('cm'+i);
-  const btn = document.getElementById('tb'+i);
-  const open = box.classList.toggle('open');
-  btn.textContent = open ? 'Ocultar' : 'Ver msg';
-  btn.classList.toggle('open', open);
+/* ══ TOGGLE MSG ══════════════════════════════════════════════ */
+function toggleMsg(i){
+  const box=document.getElementById('cm'+i);
+  const btn=document.getElementById('tb'+i);
+  const open=box.classList.toggle('open');
+  btn.textContent=open?'Ocultar':'Ver msg';
+  btn.classList.toggle('open',open);
 }
 
-/* ══ TABS ════════════════════════════════════════════ */
-function switchTab(id, el) {
-  document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+/* ══ TABS ════════════════════════════════════════════════════ */
+function switchTab(id,el){
+  document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('tab-'+id).classList.add('active');
-  if (el) el.classList.add('active');
+  if(el) el.classList.add('active');
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
-/* ══ CONFIG SAVE ════════════════════════════════════ */
-function salvarAssinatura() {
-  const v = document.getElementById('assinatura').value.trim();
-  localStorage.setItem('prosp_assin', v);
+/* ══ SAVES ═══════════════════════════════════════════════════ */
+function salvarProxy(){
+  const v=document.getElementById('proxyUrlInput').value.trim();
+  if(!v){showToast('⚠️ URL não pode ficar vazia!');return;}
+  localStorage.setItem('prosp_proxy',v);
+  showToast('✓ Proxy salvo!');
+}
+function salvarAssinatura(){
+  localStorage.setItem('prosp_assin',document.getElementById('assinatura').value.trim());
   showToast('✓ Assinatura salva!');
 }
-function salvarMsgBase() {
-  const v = document.getElementById('msgBase').value.trim();
-  localStorage.setItem('prosp_msg', v);
+function salvarMsgBase(){
+  localStorage.setItem('prosp_msg',document.getElementById('msgBase').value.trim());
   showToast('✓ Mensagem salva!');
 }
-function salvarApiKey() {
-  const v = document.getElementById('apiKeyInput').value.trim();
-  localStorage.setItem('prosp_apikey', v);
-  showToast('✓ Chave salva!');
+
+/* ══ TOAST ═══════════════════════════════════════════════════ */
+function showToast(msg){
+  const t=document.getElementById('toast');
+  t.textContent=msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'),2500);
 }
 
-/* ══ TOAST ══════════════════════════════════════════ */
-function showToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2500);
-}
-
-/* ══ BACK TO TOP ════════════════════════════════════ */
-window.addEventListener('scroll', () => {
-  const btn = document.getElementById('back-top');
-  if (btn) btn.classList.toggle('visible', window.scrollY > 300);
+/* ══ BACK TOP ════════════════════════════════════════════════ */
+window.addEventListener('scroll',()=>{
+  const b=document.getElementById('back-top');
+  if(b) b.classList.toggle('visible',window.scrollY>300);
 });
 
-/* ══ INIT ════════════════════════════════════════════ */
-const savedAssin = localStorage.getItem('prosp_assin');
-if (savedAssin) document.getElementById('assinatura').value = savedAssin;
-const savedMsg = localStorage.getItem('prosp_msg');
-if (savedMsg) document.getElementById('msgBase').value = savedMsg;
-const savedKey = localStorage.getItem('prosp_apikey');
-if (savedKey) document.getElementById('apiKeyInput').value = savedKey;
+/* ══ INIT ════════════════════════════════════════════════════ */
+['prosp_assin','prosp_msg','prosp_proxy'].forEach(k=>{
+  const v=localStorage.getItem(k);
+  if(!v) return;
+  if(k==='prosp_assin') document.getElementById('assinatura').value=v;
+  if(k==='prosp_msg')   document.getElementById('msgBase').value=v;
+  if(k==='prosp_proxy') document.getElementById('proxyUrlInput').value=v;
+});
 </script>
 </body>
 </html>
