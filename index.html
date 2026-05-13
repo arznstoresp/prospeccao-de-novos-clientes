@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Prospecção de Clientes</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,400&display=swap" rel="stylesheet" />
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:          #0e0e0e;
+  --surface:     #161616;
+  --surface2:    #1f1f1f;
+  --surface3:    #2a2a2a;
+  --border:      #2e2e2e;
+  --border2:     #3a3a3a;
+  --accent:      #f97316;
+  --accent2:     #ea6a0a;
+  --accent-dim:  rgba(249,115,22,0.12);
+  --accent-glow: rgba(249,115,22,0.28);
+  --green:       #22c55e;
+  --green-dim:   rgba(34,197,94,0.12);
+  --yellow:      #eab308;
+  --yellow-dim:  rgba(234,179,8,0.12);
+  --text:        #f0f0f0;
+  --text2:       #a0a0a0;
+  --text3:       #555;
+  --radius:      10px;
+  --radius-sm:   7px;
+  --radius-lg:   14px;
+}
+
+html { scroll-behavior: smooth; }
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+}
+
+/* HEADER */
+header {
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  padding: 14px 20px;
+  display: flex; align-items: center; gap: 12px;
+  position: sticky; top: 0; z-index: 100;
+}
+.logo-mark {
+  width: 36px; height: 36px; flex-shrink: 0;
+  background: var(--accent); border-radius: var(--radius-sm);
+  display: flex; align-items: center; justify-content: center;
+}
+.logo-mark svg { width: 19px; height: 19px; fill: #fff; }
+.hd-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 15px; font-weight: 800; letter-spacing: -.2px;
+}
+.hd-sub { font-size: 11px; color: var(--text2); margin-top: 1px; }
+
+/* LAYOUT */
+.layout { display: flex; min-height: calc(100vh - 65px); }
+
+/* SIDEBAR */
+aside {
+  width: 280px; flex-shrink: 0;
+  background: var(--surface);
+  border-right: 1px solid var(--border);
+  padding: 18px 14px;
+  display: flex; flex-direction: column; gap: 18px;
+  overflow-y: auto;
+}
+
+.sec-label {
+  font-family: 'Syne', sans-serif;
+  font-size: 10px; font-weight: 700;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--text3); margin-bottom: 7px;
+}
+
+/* SLIDER */
+.slider-top { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 10px; }
+.slider-big {
+  font-family: 'Syne', sans-serif;
+  font-size: 28px; font-weight: 800; color: var(--accent); line-height: 1;
+}
+.slider-big span { font-size: 12px; font-weight: 400; font-family: 'DM Sans',sans-serif; color: var(--text2); margin-left: 2px; }
+input[type=range] {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 3px;
+  background: var(--border2); border-radius: 4px; outline: none; cursor: pointer;
+}
+input[type=range]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 20px; height: 20px; background: var(--accent); border-radius: 50%;
+  box-shadow: 0 0 0 4px var(--accent-glow); cursor: pointer; transition: box-shadow .15s;
+}
+input[type=range]::-webkit-slider-thumb:hover { box-shadow: 0 0 0 6px var(--accent-glow); }
+.slider-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text3); margin-top: 4px; }
+
+/* NICHO INPUT */
+.nicho-input {
+  width: 100%; background: var(--surface2);
+  border: 1px solid var(--border2); border-radius: var(--radius);
+  padding: 10px 12px; color: var(--text);
+  font-size: 13px; font-family: 'DM Sans', sans-serif;
+  outline: none; transition: border-color .15s;
+  resize: none;
+}
+.nicho-input:focus { border-color: var(--accent); }
+.nicho-input::placeholder { color: var(--text3); }
+.nicho-hint { font-size: 11px; color: var(--text3); margin-top: 5px; line-height: 1.5; }
+
+/* TAGS */
+.tags-row { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 7px; }
+.tag {
+  padding: 4px 9px; background: var(--surface2);
+  border: 1px solid var(--border2); border-radius: 20px;
+  font-size: 11px; color: var(--text2);
+  cursor: pointer; transition: all .12s; user-select: none;
+  font-family: 'DM Sans', sans-serif;
+}
+.tag:hover { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+.tag.on { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); font-weight: 500; }
+
+/* POTENCIAL */
+.pot-pills { display: flex; flex-wrap: wrap; gap: 5px; }
+.pot-pill {
+  padding: 5px 10px; border-radius: 20px; font-size: 11px;
+  cursor: pointer; border: 1px solid var(--border2);
+  background: var(--surface2); color: var(--text2);
+  transition: all .12s; font-family: 'DM Sans', sans-serif;
+}
+.pot-pill:hover { border-color: var(--text2); }
+.pot-pill.on-todos  { border-color: var(--text);  color: var(--text);  background: rgba(255,255,255,.05); }
+.pot-pill.on-muito  { border-color: var(--green);  color: var(--green);  background: var(--green-dim); }
+.pot-pill.on-alta   { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+.pot-pill.on-media  { border-color: var(--yellow); color: var(--yellow); background: var(--yellow-dim); }
+
+/* ASSINATURA */
+.assin-input {
+  width: 100%; background: var(--surface2);
+  border: 1px solid var(--border2); border-radius: var(--radius);
+  padding: 9px 12px; color: var(--text);
+  font-size: 12px; font-family: 'DM Sans', sans-serif;
+  outline: none; transition: border-color .15s; resize: none;
+}
+.assin-input:focus { border-color: var(--accent); }
+
+/* BUSCAR BTN */
+.buscar-btn {
+  width: 100%; padding: 13px; background: var(--accent); color: #fff;
+  border: none; border-radius: var(--radius);
+  font-family: 'Syne', sans-serif; font-size: 14px; font-weight: 700;
+  cursor: pointer; transition: background .15s;
+  display: flex; align-items: center; justify-content: center; gap: 7px;
+}
+.buscar-btn:hover:not(:disabled) { background: var(--accent2); }
+.buscar-btn:disabled { opacity: .4; cursor: not-allowed; }
+
+/* MAIN */
+main { flex: 1; padding: 22px; overflow-y: auto; }
+
+/* STATS */
+.stats-bar { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 20px; }
+.stat-box {
+  flex: 1; min-width: 80px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius); padding: 12px 14px;
+}
+.stat-num { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 800; line-height: 1; }
+.stat-lbl { font-size: 11px; color: var(--text2); margin-top: 3px; }
+.s-tot  .stat-num { color: var(--text); }
+.s-muito .stat-num { color: var(--green); }
+.s-alta  .stat-num { color: var(--accent); }
+.s-media .stat-num { color: var(--yellow); }
+
+/* EMPTY */
+.empty-state {
+  min-height: 320px; display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 12px; text-align: center; color: var(--text2);
+}
+.empty-icon { font-size: 50px; line-height: 1; }
+.empty-state h3 { font-family: 'Syne', sans-serif; font-size: 17px; font-weight: 700; color: var(--text); }
+.empty-state p { font-size: 13px; max-width: 300px; line-height: 1.65; }
+
+/* SPINNER */
+@keyframes spin { to { transform: rotate(360deg); } }
+.spinner {
+  width: 28px; height: 28px; border: 3px solid var(--border2);
+  border-top-color: var(--accent); border-radius: 50%;
+  animation: spin .65s linear infinite;
+}
+
+/* GRID */
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(295px, 1fr)); gap: 13px; }
+
+/* CARD */
+.card {
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-lg); display: flex; flex-direction: column;
+  overflow: hidden; transition: border-color .15s, transform .15s;
+}
+.card:hover { border-color: rgba(249,115,22,.45); transform: translateY(-2px); }
+
+.card-head {
+  padding: 13px 13px 0;
+  display: flex; align-items: flex-start; justify-content: space-between; gap: 8px;
+}
+.card-name {
+  font-family: 'Syne', sans-serif;
+  font-size: 13px; font-weight: 700; line-height: 1.35; flex: 1;
+}
+.badge {
+  font-size: 10px; font-weight: 600; padding: 3px 7px; border-radius: 20px;
+  white-space: nowrap; flex-shrink: 0; letter-spacing: .04em;
+}
+.b-muito { background: var(--green-dim);   color: var(--green);  border: 1px solid rgba(34,197,94,.3); }
+.b-alta  { background: var(--accent-dim);  color: var(--accent); border: 1px solid rgba(249,115,22,.3); }
+.b-media { background: var(--yellow-dim);  color: var(--yellow); border: 1px solid rgba(234,179,8,.3); }
+
+.card-info { padding: 9px 13px 0; }
+.info-row { font-size: 12px; color: var(--text2); margin-bottom: 3px; display: flex; align-items: flex-start; gap: 5px; }
+.info-row strong { color: var(--text); font-weight: 500; }
+
+/* MSG COLLAPSE */
+.card-msg {
+  margin: 9px 13px 0; background: var(--surface2);
+  border-radius: var(--radius-sm); padding: 0 11px;
+  font-size: 12px; color: #bbb; line-height: 1.7; white-space: pre-line;
+  max-height: 0; overflow: hidden; transition: max-height .3s ease, padding .2s;
+}
+.card-msg.open { max-height: 520px; padding: 9px 11px; }
+
+/* ACTIONS — layout fixo com 2 botões */
+.card-actions {
+  padding: 11px 13px; margin-top: auto;
+  display: flex; align-items: stretch; gap: 7px;
+  border-top: 1px solid var(--border);
+}
+.btn-wa {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+  background: #25D366; color: #fff; text-decoration: none; border: none;
+  border-radius: var(--radius-sm); padding: 9px 8px;
+  font-family: 'Syne', sans-serif; font-size: 12px; font-weight: 700;
+  cursor: pointer; transition: background .15s; white-space: nowrap;
+  min-width: 0;
+}
+.btn-wa:hover { background: #1da851; }
+.btn-wa svg { width: 13px; height: 13px; fill: #fff; flex-shrink: 0; }
+
+.btn-toggle {
+  flex-shrink: 0; width: 76px;
+  background: var(--surface2); border: 1px solid var(--border2);
+  border-radius: var(--radius-sm); color: var(--text2); font-size: 11px;
+  cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all .12s;
+  display: flex; align-items: center; justify-content: center;
+  padding: 0;
+}
+.btn-toggle:hover { border-color: var(--text2); color: var(--text); }
+.btn-toggle.open { border-color: var(--accent); color: var(--accent); background: var(--accent-dim); }
+
+/* TOAST */
+#toast {
+  position: fixed; bottom: 18px; right: 18px;
+  background: var(--surface); border: 1px solid var(--accent); color: var(--accent);
+  padding: 8px 15px; border-radius: var(--radius); font-size: 13px; font-weight: 500;
+  opacity: 0; transform: translateY(6px); transition: all .2s;
+  pointer-events: none; z-index: 9999;
+}
+#toast.show { opacity: 1; transform: translateY(0); }
+
+/* RESPONSIVE */
+@media (max-width: 700px) {
+  .layout { flex-direction: column; }
+  aside { width: 100%; border-right: none; border-bottom: 1px solid var(--border); max-height: none; }
+  main { padding: 14px; }
+  .grid { grid-template-columns: 1fr; }
+  .stats-bar { gap: 7px; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo-mark">
+    <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+  </div>
+  <div>
+    <div class="hd-title">Prospecção de Clientes</div>
+    <div class="hd-sub">Busque, filtre e envie mensagens pelo WhatsApp</div>
+  </div>
+</header>
+
+<div class="layout">
+  <aside>
+
+    <!-- RAIO -->
+    <div>
+      <div class="sec-label">Raio de busca</div>
+      <div class="slider-top">
+        <div class="slider-big" id="raioDisplay">5 <span>km</span></div>
+      </div>
+      <input type="range" id="raioSlider" min="1" max="25" value="5" step="1"
+        oninput="document.getElementById('raioDisplay').innerHTML=this.value+' <span>km</span>'" />
+      <div class="slider-labels"><span>1 km</span><span>25 km</span></div>
+    </div>
+
+    <!-- NICHO LIVRE -->
+    <div>
+      <div class="sec-label">Nicho / Tipo de empresa</div>
+      <input type="text" id="nichoInput" class="nicho-input"
+        placeholder="Ex: academia, restaurante, salão…"
+        onkeydown="if(event.key==='Enter')buscar()" />
+      <div class="nicho-hint">Digite ou clique em uma sugestão:</div>
+      <div class="tags-row" id="tagsRow">
+        <span class="tag" onclick="setTag(this,'academia')">🏋️ Academia</span>
+        <span class="tag" onclick="setTag(this,'bar restaurante')">🍽️ Bar/Rest.</span>
+        <span class="tag" onclick="setTag(this,'salão beleza')">💅 Beleza</span>
+        <span class="tag" onclick="setTag(this,'buffet eventos')">🎉 Eventos</span>
+        <span class="tag" onclick="setTag(this,'escola curso idiomas')">📚 Escola</span>
+        <span class="tag" onclick="setTag(this,'clínica médica')">🏥 Clínica</span>
+        <span class="tag" onclick="setTag(this,'empresa segurança portaria')">🔒 Segurança</span>
+        <span class="tag" onclick="setTag(this,'escritório contabilidade')">🏢 Corporativo</span>
+        <span class="tag" onclick="setTag(this,'pet shop veterinário')">🐾 Pet</span>
+        <span class="tag" onclick="setTag(this,'farmácia drogaria')">💊 Farmácia</span>
+      </div>
+    </div>
+
+    <!-- POTENCIAL -->
+    <div>
+      <div class="sec-label">Filtrar por potencial</div>
+      <div class="pot-pills">
+        <button class="pot-pill on-todos" onclick="setPot('todos',this)">Todos</button>
+        <button class="pot-pill" onclick="setPot('muito',this)">🟢 Muito alto</button>
+        <button class="pot-pill" onclick="setPot('alta',this)">🟠 Alto</button>
+        <button class="pot-pill" onclick="setPot('media',this)">🟡 Médio</button>
+      </div>
+    </div>
+
+    <!-- ASSINATURA -->
+    <div>
+      <div class="sec-label">Assinatura das mensagens</div>
+      <textarea id="assinatura" class="assin-input" rows="3"
+        placeholder="Ex: Att, Minha Empresa | (11) 99999-9999">Att,
+Minha Empresa | (11) 99999-9999</textarea>
+      <div class="nicho-hint">Aparece no fim de todas as mensagens.</div>
+    </div>
+
+    <button class="buscar-btn" id="buscarBtn" onclick="buscar()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+      </svg>
+      Buscar Clientes
+    </button>
+
+  </aside>
+
+  <main>
+    <div class="stats-bar" id="statsBar" style="display:none">
+      <div class="stat-box s-tot"><div class="stat-num" id="sTot">0</div><div class="stat-lbl">Encontrados</div></div>
+      <div class="stat-box s-muito"><div class="stat-num" id="sMuito">0</div><div class="stat-lbl">Muito alto</div></div>
+      <div class="stat-box s-alta"><div class="stat-num" id="sAlta">0</div><div class="stat-lbl">Alto</div></div>
+      <div class="stat-box s-media"><div class="stat-num" id="sMedia">0</div><div class="stat-lbl">Médio</div></div>
+    </div>
+    <div id="resultado">
+      <div class="empty-state">
+        <div class="empty-icon">📍</div>
+        <h3>Pronto para prospectar</h3>
+        <p>Digite o nicho, ajuste o raio e clique em <strong>Buscar Clientes</strong>.</p>
+      </div>
+    </div>
+  </main>
+</div>
+
+<div id="toast"></div>
+
+<script>
+/* ── ESTADO ─────────────────────────────────────── */
+let resultados = [];
+let potFiltro  = 'todos';
+
+/* ── TAG ÚNICA (clique seleciona, segundo clique deseleciona) */
+function setTag(el, val) {
+  const input = document.getElementById('nichoInput');
+  if (el.classList.contains('on')) {
+    el.classList.remove('on');
+    input.value = '';
+  } else {
+    document.querySelectorAll('.tag').forEach(t => t.classList.remove('on'));
+    el.classList.add('on');
+    input.value = val;
+  }
+}
+
+/* ── POTENCIAL SCORE ─────────────────────────────── */
+function calcPot(rating, count) {
+  const s = (rating || 0) * Math.log10((count || 1) + 1);
+  if (s >= 6)   return 'muito';
+  if (s >= 3.2) return 'alta';
+  return 'media';
+}
+const POT_LABEL = { muito:'Muito alto', alta:'Alto', media:'Médio' };
+
+/* ── MENSAGEM AUTOMÁTICA ─────────────────────────── */
+function buildMsg(nome, nicho, rating, count) {
+  const assin = document.getElementById('assinatura').value.trim() || 'Att,\nMinha Empresa';
+  const stars  = (rating && count) ? `${rating} ★ (${count} avaliações no Google)` : '';
+  const destaque = stars ? ` — avaliado com ${stars} —` : '';
+  return [
+    `Olá! Tudo bem? 😊`,
+    ``,
+    `Somos especializados em *produtos personalizados* para empresas e negócios da região.`,
+    ``,
+    `Vi que *${nome}*${destaque} se destaca na área e queria apresentar nossas soluções: *camisetas, canecas, garrafas térmicas, uniformes e kits personalizados* com a identidade da empresa.`,
+    ``,
+    `Podemos montar um orçamento sem compromisso?`,
+    ``,
+    assin
+  ].join('\n');
+}
+
+/* ── BANCO DE DADOS DEMO (sem API) ───────────────── */
+const DEMO = [
+  { nome:"BW Academia | Santana",              tel:"(11) 98711-3376", telNum:"11987113376", end:"R. Mateus Leme, 114 – Santana",               rating:4.9, count:1313, tags:["academia","fitness","gym","musculação"] },
+  { nome:"Academia InShape",                   tel:"(11) 2231-5515",  telNum:"1122315515",  end:"R. Gen. Nestor Passos, 207 – Jd. Paraíso",  rating:4.5, count:421,  tags:["academia","fitness","gym"] },
+  { nome:"Black Fitness Club",                 tel:"(11) 2976-9472",  telNum:"1129769472",  end:"R. Gaspar Soares, 88 – Santana",             rating:4.7, count:202,  tags:["academia","fitness","gym"] },
+  { nome:"Silver Fitness & Spa",               tel:"(11) 97839-6044", telNum:"11978396044", end:"R. Cons. Moreira de Barros, 636 – Santana",  rating:4.8, count:112,  tags:["academia","fitness","spa"] },
+  { nome:"Academia Gaviões 24h",               tel:"(11) 94074-7584", telNum:"11940747584", end:"Av. Parada Pinto, 2513 – V. N. Cachoeirinha",rating:4.2, count:581,  tags:["academia","fitness","gym"] },
+  { nome:"Power Gym – Jd. Paulistano",         tel:"(11) 94974-0433", telNum:"11949740433", end:"R. da União, 20 – Cidade Nitro Operária",    rating:4.9, count:34,   tags:["academia","fitness","gym","artes marciais"] },
+  { nome:"Centro de Treinamento de Capoeira",  tel:"(11) 98400-7446", telNum:"11984007446", end:"R. Alfonso Lazzari, 59 – Jd. Paulistano",   rating:5.0, count:11,   tags:["academia","artes marciais","esporte","capoeira"] },
+  { nome:"Quintal do Espeto – Santana",        tel:"(11) 5095-6565",  telNum:"1150956565",  end:"Av. Gen. Ataliba Leonel, 1239 – Santana",   rating:4.6, count:7946, tags:["bar","restaurante","food","eventos"] },
+  { nome:"LeLui Bar e Cozinha",                tel:"(11) 2251-1531",  telNum:"1122511531",  end:"R. Jacuna, 302 – Carandiru",                rating:4.8, count:1045, tags:["bar","restaurante","food"] },
+  { nome:"MANSION XV Santana",                 tel:"(11) 2308-9694",  telNum:"1123089694",  end:"R. Maria Curupaiti, 212 – Santana",          rating:4.7, count:1453, tags:["bar","restaurante","food","café","bistro"] },
+  { nome:"Pilequinhos Vila Maria",             tel:"(11) 2954-8184",  telNum:"1129548184",  end:"Pça. Santo Eduardo, 125 – Vila Maria",       rating:4.5, count:4079, tags:["bar","restaurante","food","música ao vivo"] },
+  { nome:"Bar do Ade",                         tel:"(11) 91735-7042", telNum:"11917357042", end:"R. Curuçá, 849 – Vila Maria",                rating:4.8, count:335,  tags:["bar","restaurante","food"] },
+  { nome:"Jangada Velho Chico",                tel:"(11) 96627-6533", telNum:"11966276533", end:"Av. Mazzei, 855 – Vila Mazzei",              rating:4.5, count:1820, tags:["bar","restaurante","food"] },
+  { nome:"Seu Manuel Restaurante",             tel:"(11) 99264-2587", telNum:"11992642587", end:"R. Ismael Neri, 441 – Água Fria",            rating:4.8, count:530,  tags:["restaurante","food","gastronomia","português"] },
+  { nome:"Quintal da Leoncio",                 tel:"(11) 91315-8464", telNum:"11913158464", end:"Av. Leôncio de Magalhães, 1004 – Jd. SP",   rating:4.5, count:60,   tags:["bar","restaurante","food"] },
+  { nome:"Suely Aquino – Estética",            tel:"(11) 2362-4792",  telNum:"1123624792",  end:"Av. Parada Pinto, 1940 – V. N. Cachoeirinha",rating:5.0, count:683,  tags:["beleza","estética","salão","clínica"] },
+  { nome:"Clínica Márcia Cebelle",             tel:"(11) 99020-6503", telNum:"11990206503", end:"Av. Conceição, 445 – Carandiru",             rating:4.9, count:97,   tags:["beleza","estética","clínica","saúde","botox"] },
+  { nome:"Studio Thais Uehara Clinic",         tel:"(11) 94789-3539", telNum:"11947893539", end:"R. Maria Curupaiti, 385 – Vila Ester",       rating:5.0, count:94,   tags:["beleza","estética","salão","cílios"] },
+  { nome:"Martínez Beauty",                    tel:"(11) 93007-3954", telNum:"11930073954", end:"Av. Zumkeller, 251 – Parque Mandaqui",       rating:4.9, count:42,   tags:["beleza","salão","estética","cílios"] },
+  { nome:"GZ Clínica Estética & Integrativa",  tel:"(11) 99171-5454", telNum:"11991715454", end:"R. Augusto Tolle, 771 – Alto de Santana",   rating:5.0, count:36,   tags:["beleza","estética","clínica","saúde"] },
+  { nome:"Buffet NZ Events",                   tel:"(11) 96312-4184", telNum:"11963124184", end:"Av. L. C. Gentile de Laet, 1736 – Horto",   rating:4.8, count:534,  tags:["buffet","eventos","festas","casamento"] },
+  { nome:"Eclair Buffet",                      tel:"(11) 3965-3100",  telNum:"1139653100",  end:"R. Glauco Velasquez, 148 – Limão",          rating:5.0, count:99,   tags:["buffet","eventos","catering","festas"] },
+  { nome:"Arteirar Festas e Eventos",          tel:"(11) 97512-6457", telNum:"11975126457", end:"R. Marambaia, 397 – Limão",                 rating:4.8, count:269,  tags:["buffet","eventos","festas","recreação"] },
+  { nome:"Espaço Summer",                      tel:"(11) 94710-9469", telNum:"11947109469", end:"R. Ipê – Jd. Paulistano",                   rating:5.0, count:7,    tags:["eventos","espaço","festas"] },
+  { nome:"Cavallini Buffet e Eventos",         tel:"(11) 93379-3009", telNum:"11933793009", end:"R. Cel. Octávio Azeredo, 269 – Vila Mazzei",rating:4.8, count:25,   tags:["buffet","eventos","catering","churrasco"] },
+  { nome:"CNA Mandaqui",                       tel:"(11) 97185-7177", telNum:"11971857177", end:"R. Voluntários da Pátria, 4584 – Mandaqui", rating:4.8, count:62,   tags:["escola","curso","idiomas","inglês"] },
+  { nome:"CCAA Tucuruvi/Paulicéia",            tel:"(11) 3798-5130",  telNum:"1137985130",  end:"Av. Águas de São Pedro, 71 – V. Paulicéia", rating:4.9, count:148,  tags:["escola","curso","idiomas","inglês"] },
+  { nome:"Wizard by Pearson Imirim",           tel:"(11) 95000-3772", telNum:"11950003772", end:"Av. Imirim, 1509 – Imirim",                 rating:4.6, count:37,   tags:["escola","curso","idiomas","inglês"] },
+  { nome:"CCAA Mandaqui",                      tel:"(11) 2232-6099",  telNum:"1122326099",  end:"Av. Santa Inês, 497 – Mandaqui",            rating:5.0, count:21,   tags:["escola","curso","idiomas","inglês"] },
+  { nome:"CRS Centro de Idiomas",              tel:"(11) 98750-6998", telNum:"11987506998", end:"R. Aureliano Leal, 90 – Santana",           rating:4.7, count:47,   tags:["escola","curso","idiomas","inglês","italiano"] },
+  { nome:"Grupo Gonçalves Segurança",          tel:"(11) 99187-8896", telNum:"11991878896", end:"Av. Nova Cantareira, 2233 – Tucuruvi",      rating:4.9, count:16,   tags:["segurança","portaria","limpeza","terceirização"] },
+  { nome:"PVG Polivig Portaria e Limpeza",     tel:"(11) 2953-3830",  telNum:"1129533830",  end:"R. Cônego Ladeira, 272 – Tucuruvi",         rating:4.5, count:73,   tags:["segurança","portaria","limpeza","terceirização"] },
+  { nome:"Protevi Portaria e Limpeza",         tel:"(11) 2950-0896",  telNum:"1129500896",  end:"R. Maria Medeiros, 122 – Casa Verde",       rating:4.7, count:25,   tags:["segurança","portaria","limpeza","terceirização"] },
+  { nome:"Grupo JM Portaria e Limpeza",        tel:"(11) 3971-6385",  telNum:"1139716385",  end:"R. Arruda da Câmara, 17 – Vila Bonilha",    rating:4.6, count:54,   tags:["segurança","portaria","limpeza","terceirização"] },
+  { nome:"Patrimonial Serviços de Segurança",  tel:"(11) 99142-7533", telNum:"11991427533", end:"R. Luiz Gomes, 65 – Vila Prado",            rating:5.0, count:2,    tags:["segurança","portaria","limpeza"] },
+  { nome:"Luxxel Tecnologia",                  tel:"(11) 2261-3110",  telNum:"1122613110",  end:"R. Dr. Natalino Righeto, 611 – Tucuruvi",   rating:4.8, count:4,    tags:["corporativo","tecnologia","empresa","ti"] },
+  { nome:"Maxidan Benefícios Corporativos",    tel:"(11) 2265-5314",  telNum:"1122655314",  end:"Av. Água Fria, 1816 – Santana",             rating:4.5, count:8,    tags:["corporativo","rh","benefícios","empresa"] },
+  { nome:"Grupo Senso Contabilidade",          tel:"(11) 2737-3166",  telNum:"1127373166",  end:"R. Cônego Ladeira, 274 – Tucuruvi",         rating:5.0, count:6,    tags:["corporativo","contabilidade","escritório"] },
+  { nome:"Azul Corporativo",                   tel:"(11) 96985-0893", telNum:"11969850893", end:"R. Gen. José de Almeida Botelho, 381 – Tucuruvi", rating:5.0, count:3, tags:["corporativo","empresa"] },
+];
+
+/* ── BUSCA ───────────────────────────────────────── */
+async function buscar() {
+  const query = document.getElementById('nichoInput').value.trim();
+  if (!query) { showToast('⚠️ Digite um nicho antes de buscar!', true); return; }
+
+  const btn = document.getElementById('buscarBtn');
+  btn.disabled = true;
+  btn.innerHTML = '<div class="spinner" style="width:15px;height:15px;border-width:2px;margin:0;flex-shrink:0"></div> Buscando…';
+
+  document.getElementById('statsBar').style.display = 'none';
+  document.getElementById('resultado').innerHTML = `
+    <div class="empty-state">
+      <div class="spinner"></div>
+      <p style="margin-top:16px">Buscando <strong>${query}</strong>…</p>
+    </div>`;
+
+  await new Promise(r => setTimeout(r, 700));
+
+  const termos = query.toLowerCase()
+    .normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+    .split(/[,;\s]+/).filter(t => t.length > 2);
+
+  let matched = DEMO.filter(p => {
+    const allWords = [...p.tags, p.nome.toLowerCase()].join(' ')
+      .normalize('NFD').replace(/[\u0300-\u036f]/g,'');
+    return termos.some(t => allWords.includes(t));
+  });
+
+  if (matched.length === 0) matched = [...DEMO];
+
+  resultados = matched.map(p => ({
+    ...p,
+    avaliacao: `${p.rating} ★ (${p.count.toLocaleString('pt-BR')})`,
+    pot: calcPot(p.rating, p.count),
+    msg: buildMsg(p.nome, query, p.rating, p.count),
+  })).sort((a,b) => {
+    const o = {muito:0,alta:1,media:2};
+    return o[a.pot]-o[b.pot] || b.count-a.count;
+  });
+
+  renderCards();
+
+  btn.disabled = false;
+  btn.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg> Buscar Clientes`;
+}
+
+/* ── RENDER ──────────────────────────────────────── */
+const WA_ICON = `<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>`;
+
+function renderCards() {
+  const lista = potFiltro === 'todos'
+    ? resultados
+    : resultados.filter(r => r.pot === potFiltro);
+
+  const cnt = {muito:0,alta:0,media:0};
+  resultados.forEach(r => cnt[r.pot]++);
+
+  document.getElementById('statsBar').style.display = 'flex';
+  document.getElementById('sTot').textContent   = resultados.length;
+  document.getElementById('sMuito').textContent = cnt.muito;
+  document.getElementById('sAlta').textContent  = cnt.alta;
+  document.getElementById('sMedia').textContent = cnt.media;
+
+  if (!lista.length) {
+    document.getElementById('resultado').innerHTML = `
+      <div class="empty-state">
+        <div class="empty-icon">🔍</div>
+        <h3>Nenhum resultado</h3>
+        <p>Tente outro nicho ou aumente o raio de busca.</p>
+      </div>`;
+    return;
+  }
+
+  const html = lista.map((c,i) => {
+    const bc = {muito:'b-muito',alta:'b-alta',media:'b-media'}[c.pot];
+    const wa = `https://wa.me/55${c.telNum}?text=${encodeURIComponent(c.msg)}`;
+    return `
+    <div class="card">
+      <div class="card-head">
+        <div class="card-name">${c.nome}</div>
+        <span class="badge ${bc}">${POT_LABEL[c.pot]}</span>
+      </div>
+      <div class="card-info">
+        <div class="info-row">⭐ <strong>${c.avaliacao}</strong></div>
+        <div class="info-row">📞 <strong>${c.tel}</strong></div>
+        <div class="info-row" style="font-size:11px;line-height:1.4">📍 ${c.end}</div>
+      </div>
+      <div class="card-actions">
+        <a class="btn-wa" href="${wa}" target="_blank">${WA_ICON} Enviar pelo WhatsApp</a>
+        <button class="btn-toggle" id="tb${i}" onclick="toggleMsg(${i})">Ver msg</button>
+      </div>
+      <div class="card-msg" id="cm${i}">${c.msg}</div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('resultado').innerHTML = `<div class="grid">${html}</div>`;
+}
+
+/* ── TOGGLE MSG ──────────────────────────────────── */
+function toggleMsg(i) {
+  const box = document.getElementById('cm'+i);
+  const btn = document.getElementById('tb'+i);
+  const open = box.classList.toggle('open');
+  btn.textContent = open ? 'Ocultar' : 'Ver msg';
+  btn.classList.toggle('open', open);
+}
+
+/* ── FILTRO POTENCIAL ────────────────────────────── */
+function setPot(val, el) {
+  potFiltro = val;
+  document.querySelectorAll('.pot-pill').forEach(b => { b.className = 'pot-pill'; });
+  el.classList.add('on-' + val);
+  if (resultados.length) renderCards();
+}
+
+/* ── TOAST ───────────────────────────────────────── */
+function showToast(msg, warn) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.borderColor = warn ? 'var(--yellow)' : 'var(--accent)';
+  t.style.color = warn ? 'var(--yellow)' : 'var(--accent)';
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2500);
+}
+</script>
+</body>
+</html>
