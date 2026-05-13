@@ -461,40 +461,50 @@ function buildMsg(nome,nicho,rating,count){
     `Podemos montar um orçamento sem compromisso?`,``,assin].join('\n');
 }
 
-/* ══ GEOCODING (endereço → lat/lng) ══════════════════════════
-   Tenta via proxy se configurado, senão chama a API diretamente.
-   A Geocoding API aceita chamadas diretas do navegador (sem CORS).
+/* ══ GEOCODING ════════════════════════════════════════════════
+   Usa o proxy Apps Script como única fonte — sem CORS, sem SDK.
+   O proxy já tem geocode, nearbysearch e details.
 ════════════════════════════════════════════════════════════ */
 async function geocodificarEndereco(endereco){
   const proxyUrl = localStorage.getItem('prosp_proxy')||'';
   const apiKey   = localStorage.getItem('prosp_apikey')||'';
 
-  // 1) Via proxy (preferred)
+  // ── 1. Via proxy (preferido, sem CORS) ──
   if(proxyUrl){
     try{
       const res  = await fetch(`${proxyUrl}?endpoint=geocode&address=${encodeURIComponent(endereco)}`);
+      if(!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
-      if(data.status==='OK'&&data.results?.[0]){
-        const loc = data.results[0].geometry.location;
-        return {lat:loc.lat, lng:loc.lng, formatted:data.results[0].formatted_address};
+      if(data.status==='OK' && data.results && data.results.length > 0){
+        const r   = data.results[0];
+        const loc = r.geometry.location;
+        return { lat: loc.lat, lng: loc.lng, formatted: r.formatted_address };
       }
-    }catch(e){ console.warn('Geocode via proxy falhou:',e); }
+      console.warn('Geocode proxy status:', data.status, data.error_message||'');
+    }catch(e){ console.warn('Geocode proxy erro:', e); }
   }
 
-  // 2) Direto na API (fallback, precisa da chave salva)
+  // ── 2. Via corsproxy.io + API direta (fallback) ──
   if(apiKey){
     try{
-      const url  = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(endereco)}&region=br&language=pt-BR&key=${apiKey}`;
-      const res  = await fetch(url);
+      const apiUrl = `https://maps.googleapis.com/maps/api/geocode/json`
+                   + `?address=${encodeURIComponent(endereco)}`
+                   + `&region=br&language=pt-BR&key=${apiKey}`;
+      const res  = await fetch('https://corsproxy.io/?' + encodeURIComponent(apiUrl));
+      if(!res.ok) throw new Error('HTTP ' + res.status);
       const data = await res.json();
-      if(data.status==='OK'&&data.results?.[0]){
-        const loc = data.results[0].geometry.location;
-        return {lat:loc.lat, lng:loc.lng, formatted:data.results[0].formatted_address};
+      if(data.status==='OK' && data.results && data.results.length > 0){
+        const r   = data.results[0];
+        const loc = r.geometry.location;
+        return { lat: loc.lat, lng: loc.lng, formatted: r.formatted_address };
       }
-    }catch(e){ console.warn('Geocode direto falhou:',e); }
+      console.warn('Geocode fallback status:', data.status, data.error_message||'');
+    }catch(e){ console.warn('Geocode fallback erro:', e); }
   }
 
   return null;
+}
+
 }
 
 /* ══ GERENCIAR ENDEREÇOS ══════════════════════════════════ */
@@ -516,10 +526,18 @@ async function adicionarEndereco(){
   box.className='loc-box';
   box.innerHTML='🔄 Localizando endereço…';
 
-  const geo = await geocodificarEndereco(addr);
+  // Timeout de 10s para não travar na tela de "Localizando"
+  let geo = null;
+  try{
+    const timeout = new Promise((_,rej) => setTimeout(()=>rej(new Error('timeout')), 10000));
+    geo = await Promise.race([geocodificarEndereco(addr), timeout]);
+  }catch(e){
+    console.warn('Geocode timeout ou erro:', e);
+  }
+
   if(!geo){
     box.className='loc-box err';
-    box.innerHTML='❌ Endereço não encontrado. Tente incluir cidade e estado (ex: Rua X, 123, São Paulo, SP).';
+    box.innerHTML='❌ Endereço não encontrado. Verifique se o Proxy está atualizado e a Chave de API está salva.';
     return;
   }
 
