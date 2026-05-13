@@ -311,13 +311,19 @@ input[type=range]::-webkit-slider-thumb:hover{box-shadow:0 0 0 7px rgba(255,106,
       <div id="locChips"></div>
     </div>
 
-    <!-- PROXY -->
+    <!-- PROXY + API KEY -->
     <div class="panel">
-      <div class="panel-title">🔗 URL do Proxy (Apps Script)</div>
+      <div class="panel-title">🔑 Chave de API &amp; Proxy</div>
       <div class="field-group">
-        <label>URL da implantação</label>
+        <label>Chave do Google Places API</label>
+        <input type="text" id="apiKeyInput" placeholder="AIzaSy…" />
+        <div class="hint-text">Necessária para geocoding de endereços e busca. Obtenha em <b>console.cloud.google.com</b>.</div>
+      </div>
+      <button class="btn btn-primary" style="margin-bottom:12px" onclick="salvarApiKey()">💾 &nbsp;Salvar Chave de API</button>
+      <div class="field-group">
+        <label>URL do Proxy Apps Script (recomendado)</label>
         <input type="text" id="proxyUrlInput" placeholder="https://script.google.com/macros/s/…/exec" />
-        <div class="hint-text">Garante raio e nicho 100% precisos na busca.</div>
+        <div class="hint-text">Garante raio e nicho 100% precisos. Sem ele usa a chave acima diretamente.</div>
       </div>
       <button class="btn btn-primary" onclick="salvarProxy()">💾 &nbsp;Salvar URL do Proxy</button>
     </div>
@@ -455,45 +461,65 @@ function buildMsg(nome,nicho,rating,count){
     `Podemos montar um orçamento sem compromisso?`,``,assin].join('\n');
 }
 
-/* ══ GEOCODING (endereço → lat/lng via proxy) ═════════════ */
+/* ══ GEOCODING (endereço → lat/lng) ══════════════════════════
+   Tenta via proxy se configurado, senão chama a API diretamente.
+   A Geocoding API aceita chamadas diretas do navegador (sem CORS).
+════════════════════════════════════════════════════════════ */
 async function geocodificarEndereco(endereco){
-  const proxyUrl=localStorage.getItem('prosp_proxy')||'';
-  if(!proxyUrl) return null;
-  try{
-    const url=`${proxyUrl}?endpoint=geocode&address=${encodeURIComponent(endereco)}`;
-    const res=await fetch(url);
-    const data=await res.json();
-    if(data.status==='OK'&&data.results&&data.results[0]){
-      const loc=data.results[0].geometry.location;
-      const formatted=data.results[0].formatted_address;
-      return {lat:loc.lat, lng:loc.lng, formatted};
-    }
-    return null;
-  }catch(e){console.warn('Geocode erro:',e);return null;}
+  const proxyUrl = localStorage.getItem('prosp_proxy')||'';
+  const apiKey   = localStorage.getItem('prosp_apikey')||'';
+
+  // 1) Via proxy (preferred)
+  if(proxyUrl){
+    try{
+      const res  = await fetch(`${proxyUrl}?endpoint=geocode&address=${encodeURIComponent(endereco)}`);
+      const data = await res.json();
+      if(data.status==='OK'&&data.results?.[0]){
+        const loc = data.results[0].geometry.location;
+        return {lat:loc.lat, lng:loc.lng, formatted:data.results[0].formatted_address};
+      }
+    }catch(e){ console.warn('Geocode via proxy falhou:',e); }
+  }
+
+  // 2) Direto na API (fallback, precisa da chave salva)
+  if(apiKey){
+    try{
+      const url  = `https://maps.googleapis.com/maps/api/geocode/json?address=${encodeURIComponent(endereco)}&region=br&language=pt-BR&key=${apiKey}`;
+      const res  = await fetch(url);
+      const data = await res.json();
+      if(data.status==='OK'&&data.results?.[0]){
+        const loc = data.results[0].geometry.location;
+        return {lat:loc.lat, lng:loc.lng, formatted:data.results[0].formatted_address};
+      }
+    }catch(e){ console.warn('Geocode direto falhou:',e); }
+  }
+
+  return null;
 }
 
 /* ══ GERENCIAR ENDEREÇOS ══════════════════════════════════ */
 async function adicionarEndereco(){
-  const nome=document.getElementById('nomeEndInput').value.trim();
-  const addr=document.getElementById('enderecoInput').value.trim();
-  if(!nome){showToast('⚠️ Digite um nome para o endereço!');return;}
-  if(!addr){showToast('⚠️ Digite o endereço!');return;}
+  const nome = document.getElementById('nomeEndInput').value.trim();
+  const addr = document.getElementById('enderecoInput').value.trim();
+  if(!nome){ showToast('⚠️ Digite um nome para o endereço!'); return; }
+  if(!addr){ showToast('⚠️ Digite o endereço!'); return; }
 
-  const proxyUrl=localStorage.getItem('prosp_proxy')||'';
-  if(!proxyUrl){
-    showToast('⚠️ Configure a URL do Proxy primeiro!');
+  const proxyUrl = localStorage.getItem('prosp_proxy')||'';
+  const apiKey   = localStorage.getItem('prosp_apikey')||'';
+  if(!proxyUrl && !apiKey){
+    showToast('⚠️ Configure a Chave de API ou o Proxy primeiro!');
     return;
   }
 
-  const box=document.getElementById('locStatusBox');
+  const box = document.getElementById('locStatusBox');
   box.style.display='block';
   box.className='loc-box';
   box.innerHTML='🔄 Localizando endereço…';
 
-  const geo=await geocodificarEndereco(addr);
+  const geo = await geocodificarEndereco(addr);
   if(!geo){
     box.className='loc-box err';
-    box.innerHTML='❌ Endereço não encontrado. Tente ser mais específico.';
+    box.innerHTML='❌ Endereço não encontrado. Tente incluir cidade e estado (ex: Rua X, 123, São Paulo, SP).';
     return;
   }
 
@@ -504,22 +530,20 @@ async function adicionarEndereco(){
   document.getElementById('enderecoInput').value='';
   box.className='loc-box ok';
   box.innerHTML=`✅ <b>${nome}</b> — ${geo.formatted}`;
-  setTimeout(()=>{box.style.display='none';},3000);
+  setTimeout(()=>{ box.style.display='none'; }, 3000);
 
-  // Ativa o novo endereço automaticamente se for o primeiro
   const novoIdx = ENDERECOS.length - 1;
-  if(ATIVO_IDX < 0) {
-    // Sem ativo ainda — ativa o recém-adicionado
+  if(ATIVO_IDX < 0){
     ATIVO_IDX = novoIdx;
     USER_LAT  = ENDERECOS[novoIdx].lat;
     USER_LNG  = ENDERECOS[novoIdx].lng;
     localStorage.setItem('prosp_ativo', ATIVO_IDX);
   }
 
-  // Atualiza UI — ordem importa: primeiro estado, depois render
   atualizarLocAtiva();
   renderChips();
 }
+
 
 function ativarEndereco(idx){
   ATIVO_IDX=idx;
@@ -768,6 +792,12 @@ function salvarProxy(){
   localStorage.setItem('prosp_proxy',v);
   showToast('✓ Proxy salvo!');
 }
+function salvarApiKey(){
+  const v=document.getElementById('apiKeyInput').value.trim();
+  if(!v){showToast('⚠️ Chave não pode ficar vazia!');return;}
+  localStorage.setItem('prosp_apikey',v);
+  showToast('✓ Chave de API salva!');
+}
 function salvarAssinatura(){
   localStorage.setItem('prosp_assin',document.getElementById('assinatura').value.trim());
   showToast('✓ Assinatura salva!');
@@ -843,6 +873,8 @@ window.addEventListener('scroll',()=>{
   if(assin) document.getElementById('assinatura').value = assin;
   if(msg)   document.getElementById('msgBase').value    = msg;
   if(proxy) document.getElementById('proxyUrlInput').value = proxy;
+  const apiKey = localStorage.getItem('prosp_apikey');
+  if(apiKey) { const el=document.getElementById('apiKeyInput'); if(el) el.value=apiKey; }
 
   // Carrega endereços salvos
   if(ends){
