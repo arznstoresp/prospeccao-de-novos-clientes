@@ -9,7 +9,6 @@
 <style>
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  /* ── Paleta Orçamento Pro — Dark Theme ── */
   --bg:#0C0C10; --surface:#13131A; --card:#1A1A24; --raised:#20202E;
   --line:rgba(255,255,255,.07); --line2:rgba(255,255,255,.12);
   --neon:#FF6B00; --neon2:#CC5500; --neon-l:#FF8C33; --glow:rgba(255,107,0,.25);
@@ -32,7 +31,7 @@ body { font-family:'Inter',sans-serif; background:var(--bg); color:var(--text); 
 @media(min-width:480px){.logo{font-size:24px;}}
 .tabs-nav{display:flex;overflow-x:auto;-webkit-overflow-scrolling:touch;scrollbar-width:none;margin:0 calc(-1*var(--pad));padding:0 var(--pad);}
 .tabs-nav::-webkit-scrollbar{display:none;}
-.tab-btn{flex:0 0 auto;background:transparent;border:none;border-bottom:3px solid transparent;margin-bottom:-1px;color:var(--sub);font-family:'Inter',sans-serif;font-size:12px;font-weight:700;letter-spacing:.3px;padding:12px 14px 10px;cursor:pointer;transition:color .15s,border-color .15s;display:flex;align-items:center;gap:5px;white-space:nowrap;}
+.tab-btn{flex:0 0 auto;background:transparent;border:none;border-bottom:3px solid transparent;margin-bottom:-1px;color:var(--sub);font-family:'Inter',sans-serif;font-size:12px;font-weight:700;letter-spacing:.3px;padding:12px 14px 10px;cursor:pointer;transition:color .15s,border-color .15s,background .15s;display:flex;align-items:center;gap:5px;white-space:nowrap;}
 .tab-btn:hover{color:var(--text);} .tab-btn.active{color:var(--neon);border-bottom-color:var(--neon);background:rgba(255,107,0,.08);}
 .tab-icon{font-size:15px;line-height:1;}
 @media(min-width:600px){.tabs-nav{justify-content:center;}.tab-btn{flex:1;justify-content:center;font-size:13px;padding:13px 10px 11px;}}
@@ -80,17 +79,28 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 .pot-pill.on-todos{border-color:var(--text);color:var(--text);background:rgba(245,240,235,.06);}
 .pot-pill.on-muito{border-color:var(--neon);color:var(--neon);background:rgba(255,107,0,.1);}
 .pot-pill.on-alta{border-color:var(--amber);color:var(--amber);background:rgba(245,158,11,.1);}
-.pot-pill.on-media{border-color:var(--sub);color:var(--sub);background:rgba(255,255,255,.1);}
+.pot-pill.on-media{border-color:var(--sub);color:var(--sub);background:rgba(255,255,255,.08);}
 
 /* BTNS */
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:none;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .15s,background .15s;padding:0 16px;height:var(--input-h);letter-spacing:.3px;white-space:nowrap;}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;border:none;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:13px;font-weight:700;cursor:pointer;transition:opacity .15s,background .15s,filter .15s;padding:0 16px;height:var(--input-h);letter-spacing:.3px;white-space:nowrap;}
 .btn:active{opacity:.75;} .btn:disabled{opacity:.35;cursor:not-allowed;}
 .btn-primary{background:linear-gradient(135deg,var(--neon),var(--neon2));color:#fff;width:100%;box-shadow:0 2px 12px var(--glow);} .btn-primary:hover:not(:disabled){filter:brightness(1.1);}
-.btn-ghost{background:rgba(255,255,255,.06);border:1.5px solid var(--line2);color:var(--sub);width:100%;} .btn-ghost:hover{background:rgba(255,255,255,.1);border-color:var(--line2);color:var(--text);}
+.btn-ghost{background:rgba(255,255,255,.06);border:1.5px solid var(--line2);color:var(--sub);width:100%;} .btn-ghost:hover{background:rgba(255,255,255,.1);color:var(--text);}
 .btn-wa{background:#25D366;color:#fff;flex:1;font-size:12px;box-shadow:0 2px 8px rgba(37,211,102,.25);} .btn-wa:hover{filter:brightness(1.1);}
 .btn-wa svg{width:13px;height:13px;fill:#fff;flex-shrink:0;}
+.btn-call{flex-shrink:0;width:42px;background:rgba(59,130,246,.12);border:1px solid rgba(59,130,246,.3);color:var(--blue);font-size:15px;padding:0;}
+.btn-call:hover{background:rgba(59,130,246,.2);}
 .btn-sm{height:32px;font-size:11px;padding:0 12px;width:auto;}
 .btn-blue{background:var(--blue);color:#0a0a0a;} .btn-blue:hover{opacity:.85;}
+
+/* QUICK ACTIONS (substitui o <select> que causava bug) */
+.qa-row{display:flex;flex-wrap:wrap;gap:5px;padding:8px 14px 0;}
+.qa-btn{flex:1 1 calc(50% - 5px);min-width:90px;background:var(--raised);border:1.5px solid var(--line2);border-radius:var(--radius-sm);color:var(--sub);font-size:11px;font-weight:700;padding:6px 8px;cursor:pointer;transition:all .12s;font-family:'Inter',sans-serif;text-align:center;}
+.qa-btn:hover{filter:brightness(1.15);}
+.qa-btn.qa-green{border-color:rgba(34,197,94,.35);color:var(--green);} .qa-btn.qa-green:hover{background:rgba(34,197,94,.12);}
+.qa-btn.qa-fire{border-color:rgba(255,107,0,.35);color:var(--neon);} .qa-btn.qa-fire:hover{background:rgba(255,107,0,.12);}
+.qa-btn.qa-red{border-color:rgba(239,68,68,.35);color:var(--red);} .qa-btn.qa-red:hover{background:rgba(239,68,68,.12);}
+.qa-btn.qa-grey{border-color:rgba(255,255,255,.2);color:var(--hint);} .qa-btn.qa-grey:hover{background:rgba(255,255,255,.08);}
 
 /* STATUS BADGE */
 .status-badge{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:20px;font-size:10px;font-weight:700;letter-spacing:.4px;white-space:nowrap;}
@@ -99,6 +109,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 .s-interesse{background:rgba(34,197,94,.12);color:var(--green);border:1px solid rgba(34,197,94,.3);}
 .s-fechado{background:rgba(255,107,0,.15);color:var(--neon);border:1px solid rgba(255,107,0,.3);}
 .s-nao{background:rgba(239,68,68,.12);color:var(--red);border:1px solid rgba(239,68,68,.3);}
+.s-invalido{background:rgba(255,255,255,.08);color:var(--hint);border:1px solid rgba(255,255,255,.18);}
 
 /* LOC */
 .loc-box{font-size:12px;padding:10px 12px;background:var(--raised);border:1.5px solid var(--line2);border-radius:var(--radius-sm);line-height:1.6;color:var(--sub);}
@@ -130,9 +141,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 .meta-edit-row input{height:32px;width:70px;font-size:13px;}
 .meta-edit-row .btn{height:32px;font-size:11px;}
 
-/* FOLLOWUP BANNER */
+/* BANNERS */
 .followup-banner{background:rgba(59,130,246,.08);border:1px solid rgba(59,130,246,.35);border-radius:var(--radius);padding:12px 14px;margin-bottom:var(--gap);font-size:12px;color:var(--blue);cursor:pointer;display:flex;align-items:center;gap:8px;transition:opacity .15s;}
 .followup-banner:hover{opacity:.85;}
+.stagnant-banner{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.35);border-radius:var(--radius);padding:12px 14px;margin-bottom:var(--gap);font-size:12px;color:var(--amber);}
 
 /* BULK BAR */
 .bulk-bar{background:var(--card);border:1.5px solid var(--neon);border-radius:var(--radius);padding:10px 14px;margin-bottom:var(--gap);display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-size:12px;color:var(--sub);}
@@ -152,19 +164,18 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 .badge{font-size:9px;font-weight:800;letter-spacing:.8px;padding:3px 7px;border-radius:20px;text-transform:uppercase;white-space:nowrap;flex-shrink:0;}
 .b-muito{background:rgba(255,107,0,.15);color:var(--neon);border:1px solid rgba(255,107,0,.3);}
 .b-alta{background:rgba(245,158,11,.12);color:var(--amber);border:1px solid rgba(245,158,11,.3);}
-.b-media{background:rgba(255,255,255,.12);color:var(--sub);border:1px solid rgba(255,255,255,.3);}
+.b-media{background:rgba(255,255,255,.08);color:var(--sub);border:1px solid rgba(255,255,255,.18);}
 .b-corp{background:rgba(59,130,246,.15);color:var(--blue);border:1px solid rgba(59,130,246,.3);margin-right:4px;}
 .rc-info{padding:8px 14px 0;}
 .rc-row{font-size:11px;color:var(--sub);margin-bottom:3px;display:flex;align-items:flex-start;gap:5px;}
 .rc-row strong{color:var(--text);font-weight:600;}
 .rc-row.addr{font-size:10px;line-height:1.4;}
 .rc-dist{font-size:10px;color:var(--neon);font-weight:700;margin-bottom:3px;}
-.rc-status-row{padding:8px 14px 0;display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
 .rc-msg{margin:8px 14px 0;background:var(--raised);border:1px solid var(--line);border-radius:var(--radius-sm);padding:0 12px;font-size:12px;color:var(--sub);line-height:1.7;white-space:pre-line;max-height:0;overflow:hidden;transition:max-height .3s ease,padding .2s;}
 .rc-msg.open{max-height:600px;padding:10px 12px;}
 .rc-actions{padding:10px 14px;margin-top:auto;display:flex;align-items:stretch;gap:7px;border-top:1px solid var(--line);}
-.btn-toggle-msg{flex-shrink:0;width:72px;background:var(--raised);border:1.5px solid var(--line2);border-radius:var(--radius-sm);color:var(--sub);font-size:11px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .12s;display:flex;align-items:center;justify-content:center;}
-.btn-toggle-msg:hover{border-color:var(--sub);color:var(--text);}
+.btn-toggle-msg{flex-shrink:0;width:64px;background:rgba(255,255,255,.06);border:1.5px solid var(--line2);border-radius:var(--radius-sm);color:var(--sub);font-size:10px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:all .12s;display:flex;align-items:center;justify-content:center;}
+.btn-toggle-msg:hover{color:var(--text);}
 .btn-toggle-msg.open{border-color:var(--neon);color:var(--neon);background:rgba(255,107,0,.08);}
 
 /* HISTORICO */
@@ -181,9 +192,12 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 .hist-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:3px;}
 .hist-meta{font-size:11px;color:var(--sub);}
 .hist-actions{display:flex;flex-direction:column;gap:5px;align-items:flex-end;flex-shrink:0;}
+.hist-actions-row{display:flex;gap:5px;}
 .hist-del{font-size:11px;color:var(--sub);cursor:pointer;background:none;border:none;font-family:'Inter',sans-serif;transition:color .12s;}
 .hist-del:hover{color:var(--red);}
 .hist-empty{text-align:center;padding:40px 20px;color:var(--sub);font-size:13px;}
+.hist-qa-row{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px;}
+.hist-qa-row .qa-btn{flex:1 1 calc(25% - 5px);min-width:80px;}
 .hist-extra-row{display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center;}
 .hist-extra-row label{margin:0;font-size:10px;}
 .hist-followup-input{height:32px;font-size:11px;width:140px;}
@@ -195,20 +209,38 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 
 /* KANBAN */
 .kanban-board{display:flex;gap:10px;overflow-x:auto;padding-bottom:10px;-webkit-overflow-scrolling:touch;}
+@media(min-width:860px){
+  .kanban-board{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));overflow-x:visible;}
+  .kanban-col{min-width:0;max-width:none;}
+}
 .kanban-col{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);min-width:230px;max-width:260px;flex-shrink:0;display:flex;flex-direction:column;transition:border-color .15s,background .15s;}
 .kanban-col.dragover{border-color:var(--neon);background:rgba(255,107,0,.04);}
-.kanban-col-head{padding:10px 12px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;}
-.kanban-count{background:var(--raised);border-radius:20px;padding:1px 8px;font-size:10px;font-weight:700;color:var(--sub);}
-.kanban-body{padding:8px;display:flex;flex-direction:column;gap:8px;min-height:120px;flex:1;}
+.kanban-col-head{padding:10px 12px;font-size:11px;font-weight:800;text-transform:uppercase;letter-spacing:.5px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:6px;}
+.kanban-count{background:var(--raised);border-radius:20px;padding:1px 8px;font-size:10px;font-weight:700;color:var(--sub);flex-shrink:0;}
+.kanban-body{padding:8px;display:flex;flex-direction:column;gap:8px;min-height:120px;flex:1;max-height:560px;overflow-y:auto;}
 .kanban-card{background:var(--raised);border:1px solid var(--line2);border-radius:var(--radius-sm);padding:8px 10px;cursor:grab;}
 .kanban-card.dragging{opacity:.35;}
 .kanban-card-name{font-size:12px;font-weight:700;margin-bottom:4px;color:var(--text);}
 .kanban-card-meta{font-size:10px;color:var(--sub);margin-bottom:6px;line-height:1.5;}
 .kanban-card-actions{display:flex;gap:4px;}
-.kanban-mini-btn{flex:1;background:var(--card);border:1px solid var(--line2);border-radius:6px;font-size:10px;padding:5px 4px;cursor:pointer;color:var(--sub);transition:all .12s;}
+.kanban-mini-btn{flex:1;background:var(--card);border:1px solid var(--line2);border-radius:6px;font-size:10px;padding:5px 4px;cursor:pointer;color:var(--sub);transition:all .12s;text-align:center;text-decoration:none;}
 .kanban-mini-btn:hover{border-color:var(--neon);color:var(--neon);}
+.kanban-mini-btn.icon-only{flex:0 0 30px;}
 .kanban-empty-col{font-size:11px;color:var(--hint);text-align:center;padding:16px 8px;}
 .kanban-hint{font-size:11px;color:var(--hint);margin-bottom:10px;}
+
+/* HOJE */
+.hoje-section-title{font-size:12px;font-weight:800;color:var(--text);margin:18px 0 8px;display:flex;align-items:center;gap:6px;}
+.hoje-section-title:first-child{margin-top:0;}
+.hoje-card{background:var(--raised);border:1px solid var(--line2);border-radius:var(--radius-sm);padding:10px 12px;margin-bottom:8px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+.hoje-card:last-child{margin-bottom:0;}
+.hoje-card-info{flex:1;min-width:140px;}
+.hoje-card-name{font-size:12px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.hoje-card-meta{font-size:10px;color:var(--sub);}
+.hoje-card-actions{display:flex;gap:6px;flex-shrink:0;}
+.hoje-card-actions .btn{height:32px;font-size:11px;}
+.hoje-empty{font-size:12px;color:var(--hint);text-align:center;padding:16px;}
+.hoje-vermais{font-size:11px;color:var(--neon);cursor:pointer;text-decoration:underline;display:inline-block;margin-top:6px;}
 
 /* EMPTY */
 .empty-state{min-height:280px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;color:var(--sub);padding:24px;}
@@ -237,10 +269,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
   <div class="header">
     <div class="logo">
       <span class="brand">PROSPECÇÃO</span><span class="sep">|</span>CLIENTES
-      <span class="sub">Busca · CRM · Funil · WhatsApp</span>
+      <span class="sub">Hoje · CRM · Funil · WhatsApp</span>
     </div>
     <div class="tabs-nav">
-      <button id="tabbtn-busca" class="tab-btn active" onclick="switchTab('busca',this)"><span class="tab-icon">🔍</span> Buscar</button>
+      <button id="tabbtn-hoje" class="tab-btn active" onclick="switchTab('hoje',this)"><span class="tab-icon">🌅</span> Hoje</button>
+      <button id="tabbtn-busca" class="tab-btn" onclick="switchTab('busca',this)"><span class="tab-icon">🔍</span> Buscar</button>
       <button id="tabbtn-resultados" class="tab-btn" onclick="switchTab('resultados',this)">
         <span class="tab-icon">📋</span> Resultados
         <span id="badge-count" style="display:none;background:var(--neon);color:#fff;border-radius:10px;font-size:10px;padding:1px 6px;margin-left:2px"></span>
@@ -254,8 +287,8 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
     </div>
   </div>
 
-  <!-- ══ BUSCAR ══ -->
-  <div id="tab-busca" class="tab-content active">
+  <!-- ══ HOJE (painel do dia) ══ -->
+  <div id="tab-hoje" class="tab-content active">
 
     <div class="meta-box">
       <div class="meta-top">
@@ -270,7 +303,28 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
       <span class="hint-text" style="cursor:pointer;text-decoration:underline" onclick="toggleMetaEdit()">Alterar meta diária</span>
     </div>
 
-    <div id="followupBannerBusca"></div>
+    <div id="followupBannerHoje"></div>
+    <div id="stagnantBannerHoje"></div>
+
+    <div class="panel">
+      <div class="panel-title">📤 Fila de hoje — leads para contatar</div>
+      <div id="hojeFilaList"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">🔔 Follow-ups para hoje</div>
+      <div id="hojeFollowList"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">⏰ Leads parados (sem retorno)</div>
+      <div id="hojeStagnantList"></div>
+    </div>
+
+  </div>
+
+  <!-- ══ BUSCAR ══ -->
+  <div id="tab-busca" class="tab-content">
 
     <div class="panel">
       <div class="panel-title">📍 Origem da Busca</div>
@@ -347,7 +401,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
   <!-- ══ RESULTADOS ══ -->
   <div id="tab-resultados" class="tab-content">
     <div class="stats-row" id="statsRow" style="display:none">
-      <div class="stat-card s-tot"><div class="stat-num" id="sTot">0</div><div class="stat-lbl">Encontrados</div></div>
+      <div class="stat-card s-tot"><div class="stat-num" id="sTot">0</div><div class="stat-lbl">Na fila</div></div>
       <div class="stat-card s-muito"><div class="stat-num" id="sMuito">0</div><div class="stat-lbl">Muito alto</div></div>
       <div class="stat-card s-alta"><div class="stat-num" id="sAlta">0</div><div class="stat-lbl">Alto</div></div>
       <div class="stat-card s-media"><div class="stat-num" id="sMedia">0</div><div class="stat-lbl">Médio</div></div>
@@ -362,7 +416,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
   <div id="tab-funil" class="tab-content">
     <div class="panel">
       <div class="panel-title">🗂️ Funil de Vendas</div>
-      <div class="kanban-hint">Arraste os cards entre colunas no desktop, ou use os botões ▶ no celular para avançar a etapa.</div>
+      <div class="kanban-hint">No desktop largo, todas as colunas cabem na tela. No celular, arraste para o lado para ver mais, ou use ▶ Avançar.</div>
       <div class="kanban-board" id="kanbanBoard"></div>
     </div>
   </div>
@@ -382,6 +436,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
         <button class="hist-filter" onclick="filtrarHist('interesse',this)">🟢 Interessado</button>
         <button class="hist-filter" onclick="filtrarHist('fechado',this)">🔥 Fechado</button>
         <button class="hist-filter" onclick="filtrarHist('nao',this)">🔴 Sem interesse</button>
+        <button class="hist-filter" onclick="filtrarHist('invalido',this)">🚫 Núm. errado</button>
         <button class="hist-filter blue" onclick="filtrarHist('venceu',this)">🔔 Follow-up hoje</button>
       </div>
       <div id="histLista"></div>
@@ -422,16 +477,19 @@ Minha Empresa | (11) 99999-9999</textarea>
     </div>
 
     <div class="panel">
-      <div class="panel-title">📝 Mensagem Personalizada</div>
-      <div class="field-group"><label>Use [NOME] para o nome da empresa</label>
-        <textarea id="msgBase" rows="6" placeholder="Deixe em branco para usar a mensagem padrão…"></textarea>
+      <div class="panel-title">📝 Mensagens (rotação automática)</div>
+      <div class="hint-text" style="margin-bottom:12px">
+        Preencha quantas variações quiser (mínimo 1). O sistema alterna entre elas a cada novo lead — evita parecer spam e ajuda a descobrir qual texto converte mais. Use <b>[NOME]</b> para o nome da empresa. Deixe todas em branco para usar a mensagem automática padrão.
       </div>
-      <button class="btn btn-primary" onclick="salvarMsgBase()">💾 &nbsp;Salvar</button>
+      <div class="field-group"><label>Variação 1</label><textarea id="msgVar1" rows="4" placeholder="Olá! Vi que a [NOME]…"></textarea></div>
+      <div class="field-group"><label>Variação 2 (opcional)</label><textarea id="msgVar2" rows="4" placeholder="Opcional — segunda variação…"></textarea></div>
+      <div class="field-group"><label>Variação 3 (opcional)</label><textarea id="msgVar3" rows="4" placeholder="Opcional — terceira variação…"></textarea></div>
+      <button class="btn btn-primary" onclick="salvarMsgsRotacao()">💾 &nbsp;Salvar Mensagens</button>
     </div>
 
     <div class="panel">
       <div class="panel-title">💾 Backup</div>
-      <div style="font-size:12px;color:var(--sub);margin-bottom:12px;line-height:1.6">Salve todos os seus dados, incluindo histórico, notas e funil.</div>
+      <div style="font-size:12px;color:var(--sub);margin-bottom:12px;line-height:1.6">Salve todos os seus dados, incluindo histórico, notas, fila e funil.</div>
       <div style="display:flex;gap:8px;flex-wrap:wrap">
         <button class="btn btn-primary" style="flex:1;min-width:130px" onclick="exportarBackup()">⬇️ &nbsp;Exportar</button>
         <button class="btn btn-ghost" style="flex:1;min-width:130px" onclick="importarBackup()">⬆️ &nbsp;Importar</button>
@@ -466,15 +524,12 @@ const STATUS_CFG = {
   interesse: { label:'Interessado',   cls:'s-interesse', emoji:'🟢' },
   fechado:   { label:'Fechado',       cls:'s-fechado',    emoji:'🔥' },
   nao:       { label:'Sem interesse', cls:'s-nao',        emoji:'🔴' },
+  invalido:  { label:'Número errado', cls:'s-invalido',   emoji:'🚫' },
 };
 function statusBadge(s){ const c=STATUS_CFG[s]||STATUS_CFG.novo; return '<span class="status-badge '+c.cls+'">'+c.emoji+' '+c.label+'</span>'; }
 function nextStatus(s){ const i=ORDER.indexOf(s); return (i>=0&&i<ORDER.length-1)?ORDER[i+1]:null; }
 
-/* ══ NICHOS ═══════════════════════════════════════
-   corp:true => nicho B2B, recebe bônus na pontuação
-   pois empresas corporativas raramente têm muitas
-   avaliações no Google, mas têm alto valor de pedido.
-══════════════════════════════════════════════════ */
+/* ══ NICHOS ═══════════════════════════════════════ */
 const NICHO_CFG = {
   'contabilidade':            { keyword:'contabilidade escritório',     type:'accounting',           corp:true },
   'advocacia escritorio':     { keyword:'advocacia escritório',         type:'lawyer',               corp:true },
@@ -562,11 +617,49 @@ const POT_LABEL={ muito:'Muito alto', alta:'Alto', media:'Médio' };
 /* ══ ALEATORIZAR ══════════════════════════════════ */
 function shuffle(arr){ for(let i=arr.length-1;i>0;i--){ const j=Math.floor(Math.random()*(i+1)); [arr[i],arr[j]]=[arr[j],arr[i]]; } return arr; }
 
-/* ══ MENSAGEM ═════════════════════════════════════ */
+/* ══ DATAS ════════════════════════════════════════ */
+function hojeISO(){ return new Date().toISOString().slice(0,10); }
+function diasDesde(isoStr){
+  if(!isoStr) return 999;
+  const d1=new Date(isoStr+'T00:00:00');
+  const d2=new Date(hojeISO()+'T00:00:00');
+  return Math.round((d2-d1)/86400000);
+}
+
+/* ══ TELEFONE ═════════════════════════════════════ */
+function waLink(telNum,msg){ return 'https://wa.me/55'+telNum+'?text='+encodeURIComponent(msg||''); }
+function telLink(telNum){ return 'tel:+55'+telNum; }
+
+/* ══ MENSAGEM COM ROTAÇÃO ═════════════════════════
+   Lê até 3 variações cadastradas em Config. e alterna
+   entre elas a cada lead, evitando padrão repetitivo.
+   Se nenhuma variação for cadastrada, usa mensagem
+   automática padrão (com dados do Google quando houver).
+══════════════════════════════════════════════════ */
+function lerVariantes(){
+  try{
+    const arr=JSON.parse(localStorage.getItem('prosp_msgs')||'[]');
+    if(Array.isArray(arr)){
+      const filtradas=arr.filter(v=>v&&v.trim());
+      if(filtradas.length) return filtradas;
+    }
+  }catch(e){}
+  // migração de versão antiga (mensagem única)
+  const legacy=localStorage.getItem('prosp_msg');
+  if(legacy&&legacy.trim()) return [legacy];
+  return [];
+}
 function buildMsg(nome,nicho,rating,count){
   const assin=localStorage.getItem('prosp_assin')||document.getElementById('assinatura').value.trim()||'Att,\nMinha Empresa';
-  const base=localStorage.getItem('prosp_msg');
-  if(base&&base.trim()) return base.replace(/\[NOME\]/g,nome)+'\n\n'+assin;
+  const variantes=lerVariantes();
+
+  if(variantes.length){
+    let idx=parseInt(localStorage.getItem('prosp_msgRotIdx')||'0');
+    const template=variantes[idx%variantes.length];
+    localStorage.setItem('prosp_msgRotIdx',String(idx+1));
+    return template.replace(/\[NOME\]/g,nome)+'\n\n'+assin;
+  }
+
   const stars=(rating&&count)?rating+' ★ ('+(count).toLocaleString('pt-BR')+' aval.)':'';
   const dest=stars?' — '+stars+' no Google —':'';
   return 'Olá! Tudo bem? 😊\n\nSomos especializados em *produtos personalizados* para empresas da região.\n\nVi que *'+nome+'*'+dest+' se destaca na área e queria apresentar nossas soluções: *camisetas, canecas, garrafas térmicas, uniformes e kits personalizados* com a identidade da empresa.\n\nPodemos montar um orçamento sem compromisso?\n\n'+assin;
@@ -619,25 +712,63 @@ function renderChips(){
   c.innerHTML=ENDERECOS.map((e,i)=>'<div class="loc-chip '+(i===ATIVO_IDX?'active':'')+'" onclick="ativarEndereco('+i+')"><div class="loc-chip-name">'+e.nome+'</div><div class="loc-chip-addr">'+e.endereco+'</div>'+(i===ATIVO_IDX?'<span class="loc-chip-badge">ATIVO</span>':'')+'<span class="loc-chip-del" onclick="deletarEndereco('+i+',event)">✕</span></div>').join('');
 }
 
+/* ══ FILA PERSISTENTE ═════════════════════════════
+   A fila (resultados pendentes) é salva no localStorage
+   para sobreviver ao fechar o navegador. Some da fila
+   automaticamente quando o lead é contatado/classificado.
+══════════════════════════════════════════════════ */
+function salvarFila(){
+  // só persiste quem ainda não foi para o histórico (ainda pendente de ação)
+  const pendentes=resultados.filter(r=>!HISTORICO[r.telNum]);
+  localStorage.setItem('prosp_fila',JSON.stringify(pendentes));
+}
+function removerDaFila(telNum){
+  resultados=resultados.filter(r=>r.telNum!==telNum);
+  salvarFila();
+}
+
 /* ══ HISTÓRICO / CRM ══════════════════════════════ */
 function salvarHist(){ localStorage.setItem('prosp_historico',JSON.stringify(HISTORICO)); }
 
-function addToHist(item){
+function addToHist(item, statusInicial){
   if(!HISTORICO[item.telNum]){
-    HISTORICO[item.telNum]={ ...item, status:'novo', data:new Date().toLocaleDateString('pt-BR'), notas:'', followUp:'' };
+    HISTORICO[item.telNum]={ ...item, status:statusInicial||'novo', data:new Date().toLocaleDateString('pt-BR'), atualizadoEm:hojeISO(), notas:'', followUp:'' };
     salvarHist();
     atualizarBadgeHist();
   }
+  removerDaFila(item.telNum);
 }
+
+/* setStatus: usado pelo Kanban (avançar/drag) — isolado por telNum exato */
 function setStatus(telNum,status){
-  if(HISTORICO[telNum]) HISTORICO[telNum].status=status;
-  salvarHist(); renderCards(); renderHist(); renderKanban(); renderFollowupBanners();
+  if(!HISTORICO[telNum]) return;
+  HISTORICO[telNum].status=status;
+  HISTORICO[telNum].atualizadoEm=hojeISO();
+  salvarHist(); renderCards(); renderHist(); renderKanban(); renderFollowupBanners(); renderHoje();
 }
+
+/* setQuickStatus: usado pelos botões de ação rápida nos cards
+   (substitui o <select> antigo que causava confusão visual) */
+function setQuickStatus(telNum, status){
+  if(!HISTORICO[telNum]){
+    const c=resultados.find(r=>r.telNum===telNum);
+    if(c) addToHist(c, status);
+  }
+  if(HISTORICO[telNum]){
+    HISTORICO[telNum].status=status;
+    HISTORICO[telNum].atualizadoEm=hojeISO();
+    salvarHist();
+  }
+  removerDaFila(telNum);
+  renderCards(); renderHist(); atualizarBadgeHist(); renderKanban(); renderFollowupBanners(); renderHoje();
+  showToast('✓ Status atualizado: '+(STATUS_CFG[status]?.label||status));
+}
+
 function setNotas(telNum,val){
   if(HISTORICO[telNum]){ HISTORICO[telNum].notas=val; salvarHist(); }
 }
 function setFollowUp(telNum,val){
-  if(HISTORICO[telNum]){ HISTORICO[telNum].followUp=val; salvarHist(); renderHist(); renderFollowupBanners(); showToast('✓ Follow-up agendado!'); }
+  if(HISTORICO[telNum]){ HISTORICO[telNum].followUp=val; salvarHist(); renderHist(); renderFollowupBanners(); renderHoje(); showToast('✓ Follow-up agendado!'); }
 }
 function toggleNotas(telNum){
   const box=document.getElementById('notas-'+telNum);
@@ -647,7 +778,7 @@ function toggleNotas(telNum){
 }
 function removerHist(telNum){
   delete HISTORICO[telNum];
-  salvarHist(); renderHist(); renderKanban(); atualizarBadgeHist(); renderFollowupBanners();
+  salvarHist(); renderHist(); renderKanban(); atualizarBadgeHist(); renderFollowupBanners(); renderHoje();
   showToast('Removido do histórico.');
 }
 function atualizarBadgeHist(){
@@ -656,18 +787,25 @@ function atualizarBadgeHist(){
   b.textContent=n; b.style.display=n>0?'inline':'none';
 }
 
-function hojeISO(){ const d=new Date(); return d.toISOString().slice(0,10); }
+/* ── Follow-ups e leads estagnados ── */
 function followUpsVencidosHoje(){
   const hoje=hojeISO();
-  return Object.values(HISTORICO).filter(h=>h.followUp && h.followUp<=hoje && h.status!=='fechado' && h.status!=='nao');
+  return Object.entries(HISTORICO).filter(([tel,h])=>h.followUp && h.followUp<=hoje && h.status!=='fechado' && h.status!=='nao' && h.status!=='invalido');
+}
+function leadsEstagnados(){
+  return Object.entries(HISTORICO).filter(([tel,h])=>
+    (h.status==='contatado'||h.status==='interesse') &&
+    !h.followUp &&
+    diasDesde(h.atualizadoEm)>=4
+  );
 }
 function renderFollowupBanners(){
   const vencidos=followUpsVencidosHoje();
   const html = vencidos.length
     ? '<div class="followup-banner" onclick="abrirFollowupsHistorico()">🔔 <b>'+vencidos.length+' lead'+(vencidos.length>1?'s':'')+'</b> com retorno agendado para hoje ou antes. Clique para ver.</div>'
     : '';
-  document.getElementById('followupBannerBusca').innerHTML = html;
-  document.getElementById('followupBannerHist').innerHTML  = html;
+  const elH=document.getElementById('followupBannerHoje'); if(elH) elH.innerHTML=html;
+  const elL=document.getElementById('followupBannerHist'); if(elL) elL.innerHTML=html;
 }
 function abrirFollowupsHistorico(){
   switchTab('historico', document.getElementById('tabbtn-historico'));
@@ -681,22 +819,33 @@ function filtrarHist(f,el){
   renderHist();
 }
 
+/* Linha de botões rápidos reaproveitada no Histórico e nos Resultados */
+function buildQARow(telNum, compact){
+  const cls = compact ? 'qa-row' : 'hist-qa-row';
+  return '<div class="'+cls+'">'
+    +'<button class="qa-btn qa-green" onclick="setQuickStatus(\''+telNum+'\',\'interesse\')">🟢 Interessado</button>'
+    +'<button class="qa-btn qa-fire" onclick="setQuickStatus(\''+telNum+'\',\'fechado\')">🔥 Fechado</button>'
+    +'<button class="qa-btn qa-red" onclick="setQuickStatus(\''+telNum+'\',\'nao\')">🔴 Sem interesse</button>'
+    +'<button class="qa-btn qa-grey" onclick="setQuickStatus(\''+telNum+'\',\'invalido\')">🚫 Núm. errado</button>'
+  +'</div>';
+}
+
 function renderHist(){
   const hoje=hojeISO();
-  let lista=Object.values(HISTORICO);
+  let lista=Object.entries(HISTORICO);
   if(histFiltro==='venceu'){
-    lista=lista.filter(h=>h.followUp && h.followUp<=hoje && h.status!=='fechado' && h.status!=='nao');
+    lista=lista.filter(([tel,h])=>h.followUp && h.followUp<=hoje && h.status!=='fechado' && h.status!=='nao' && h.status!=='invalido');
   } else if(histFiltro!=='todos'){
-    lista=lista.filter(h=>h.status===histFiltro);
+    lista=lista.filter(([tel,h])=>h.status===histFiltro);
   }
-  lista=lista.sort((a,b)=>{ const o={novo:0,contatado:1,interesse:2,fechado:3,nao:4}; return (o[a.status]||0)-(o[b.status]||0); });
+  lista=lista.sort((a,b)=>{ const o={novo:0,contatado:1,interesse:2,fechado:3,nao:4,invalido:5}; return (o[a[1].status]||0)-(o[b[1].status]||0); });
 
   const el=document.getElementById('histLista');
   if(!lista.length){ el.innerHTML='<div class="hist-empty">Nenhum prospect nesta categoria.</div>'; return; }
 
-  el.innerHTML=lista.map(h=>{
-    const wa='https://wa.me/55'+h.telNum+'?text='+encodeURIComponent(h.msg||'');
-    const due = h.followUp && h.followUp<=hoje && h.status!=='fechado' && h.status!=='nao';
+  el.innerHTML=lista.map(([tel,h])=>{
+    const wa=waLink(tel,h.msg);
+    const due = h.followUp && h.followUp<=hoje && h.status!=='fechado' && h.status!=='nao' && h.status!=='invalido';
     const corpBadge = h.corp ? '<span class="badge b-corp" style="margin-right:6px">B2B</span>' : '';
     return '<div class="hist-card '+(due?'due':'')+'">'
       +'<div class="hist-top">'
@@ -704,25 +853,20 @@ function renderHist(){
           +'<div class="hist-name">'+corpBadge+h.nome+(due?' 🔔':'')+'</div>'
           +'<div class="hist-meta">📞 '+h.tel+' · 📍 '+(h.distKm||'?')+' km · adicionado em '+h.data+'</div>'
           +'<div style="margin-top:6px;font-size:11px;color:var(--sub)">'+h.end+'</div>'
+          +statusBadge(h.status)
         +'</div>'
         +'<div class="hist-actions">'
-          +'<select onchange="setStatus(\''+h.telNum+'\',this.value)" style="height:32px;font-size:11px;width:150px">'
-            +'<option value="novo" '+(h.status==='novo'?'selected':'')+'>🔵 Não contatado</option>'
-            +'<option value="contatado" '+(h.status==='contatado'?'selected':'')+'>🟡 Contatado</option>'
-            +'<option value="interesse" '+(h.status==='interesse'?'selected':'')+'>🟢 Interessado</option>'
-            +'<option value="fechado" '+(h.status==='fechado'?'selected':'')+'>🔥 Fechado</option>'
-            +'<option value="nao" '+(h.status==='nao'?'selected':'')+'>🔴 Sem interesse</option>'
-          +'</select>'
-          +'<a class="btn btn-wa btn-sm" href="'+wa+'" target="_blank" style="width:150px">'+WA_SVG+' WhatsApp</a>'
-          +'<button class="hist-del" onclick="removerHist(\''+h.telNum+'\')">✕ Remover</button>'
+          +'<div class="hist-actions-row"><a class="btn btn-wa btn-sm" href="'+wa+'" target="_blank" style="width:110px">'+WA_SVG+' Zap</a><a class="btn btn-call btn-sm" style="width:42px" href="'+telLink(tel)+'">📞</a></div>'
+          +'<button class="hist-del" onclick="removerHist(\''+tel+'\')">✕ Remover</button>'
         +'</div>'
       +'</div>'
+      +buildQARow(tel,false)
       +'<div class="hist-extra-row">'
-        +'<div><label style="margin-bottom:3px">Retornar em</label><input type="date" class="hist-followup-input" value="'+(h.followUp||'')+'" onchange="setFollowUp(\''+h.telNum+'\',this.value)" /></div>'
-        +'<span class="hist-notes-toggle '+(h.notas?'has':'')+'" id="notasbtn-'+h.telNum+'" onclick="toggleNotas(\''+h.telNum+'\')">📝 '+(h.notas?'Ver notas':'Notas')+'</span>'
+        +'<div><label style="margin-bottom:3px">Retornar em</label><input type="date" class="hist-followup-input" value="'+(h.followUp||'')+'" onchange="setFollowUp(\''+tel+'\',this.value)" /></div>'
+        +'<span class="hist-notes-toggle '+(h.notas?'has':'')+'" id="notasbtn-'+tel+'" onclick="toggleNotas(\''+tel+'\')">📝 '+(h.notas?'Ver notas':'Notas')+'</span>'
       +'</div>'
-      +'<div class="hist-notes-box" id="notas-'+h.telNum+'">'
-        +'<textarea placeholder="Ex: Falei com o João, sócio. Decide até dia 15…" onblur="setNotas(\''+h.telNum+'\',this.value)">'+(h.notas||'')+'</textarea>'
+      +'<div class="hist-notes-box" id="notas-'+tel+'">'
+        +'<textarea placeholder="Ex: Falei com o João, sócio. Decide até dia 15…" onblur="setNotas(\''+tel+'\',this.value)">'+(h.notas||'')+'</textarea>'
       +'</div>'
     +'</div>';
   }).join('');
@@ -801,7 +945,7 @@ async function buscarAPI(query,proxyUrl){
   const raioM=raioKm*1000;
   const nicho=resolveNicho(query);
   const LAT=USER_LAT, LNG=USER_LNG;
-  const seen=new Set(), raw=[];
+  const seenPlace=new Set(), raw=[];
 
   const mkUrl=pt=>{
     let u=proxyUrl+'?endpoint=nearbysearch&location='+LAT+','+LNG+'&radius='+raioM+'&keyword='+encodeURIComponent(nicho.keyword);
@@ -817,16 +961,19 @@ async function buscarAPI(query,proxyUrl){
       const data=await res.json();
       if(data.status!=='OK'&&data.status!=='ZERO_RESULTS') break;
       for(const p of (data.results||[])){
-        if(seen.has(p.place_id)) continue;
+        if(seenPlace.has(p.place_id)) continue;
         const pLat=p.geometry?.location?.lat, pLng=p.geometry?.location?.lng;
         if(pLat&&pLng&&distM(LAT,LNG,pLat,pLng)>raioM) continue;
-        seen.add(p.place_id); raw.push(p);
+        seenPlace.add(p.place_id); raw.push(p);
       }
       pt=data.next_page_token||''; if(!pt) break;
       await new Promise(r=>setTimeout(r,2000));
     }
   }catch(e){console.warn(e);}
 
+  // ── DEDUPE POR TELEFONE: evita que filiais com central
+  //    compartilhada apareçam como contatos "diferentes" ──
+  const seenTel=new Set();
   const det=[];
   for(const p of raw.slice(0,40)){
     try{
@@ -840,7 +987,9 @@ async function buscarAPI(query,proxyUrl){
       if(dist>raioM) continue;
 
       const telNum=d.formatted_phone_number.replace(/\D/g,'');
-      if(HISTORICO[telNum]) continue;
+      if(HISTORICO[telNum]) continue;   // já no histórico (qualquer busca anterior)
+      if(seenTel.has(telNum)) continue; // mesmo telefone já encontrado nesta busca
+      seenTel.add(telNum);
 
       det.push({
         nome:d.name, tel:d.formatted_phone_number, telNum,
@@ -855,19 +1004,26 @@ async function buscarAPI(query,proxyUrl){
     }catch(e){console.warn(e);}
   }
 
-  const muito=shuffle(det.filter(d=>d.pot==='muito'));
-  const alta =shuffle(det.filter(d=>d.pot==='alta'));
-  const media=shuffle(det.filter(d=>d.pot==='media'));
+  // ── MESCLA com a fila já existente (persistida), sem duplicar por telefone ──
+  const telsExistentes=new Set(resultados.map(r=>r.telNum));
+  const novosUnicos=det.filter(d=>!telsExistentes.has(d.telNum));
+  const combinados=[...resultados, ...novosUnicos];
+
+  const muito=shuffle(combinados.filter(d=>d.pot==='muito'));
+  const alta =shuffle(combinados.filter(d=>d.pot==='alta'));
+  const media=shuffle(combinados.filter(d=>d.pot==='media'));
   resultados=[...muito,...alta,...media];
+  salvarFila();
 
   if(!resultados.length){
     const jaProsp=Object.keys(HISTORICO).length;
     document.getElementById('resultado').innerHTML='<div class="empty-state"><div class="empty-icon">📭</div><h3>Nada encontrado</h3><p>'+(jaProsp>0?'Todos os prospects desta área já foram prospectados ('+jaProsp+' no histórico). Tente outro nicho ou aumente o raio.':'Sem resultados para <b>"'+query+'"</b> em <b>'+raioKm+'km</b>.')+'</p></div>';
     document.getElementById('statsRow').style.display='none';
   } else renderCards();
+  renderHoje();
 }
 
-/* ══ SELEÇÃO MÚLTIPLA / FILA ══════════════════════ */
+/* ══ SELEÇÃO MÚLTIPLA / FILA EM LOTE ══════════════ */
 function toggleSelecao(telNum, checked){
   if(checked) SELECIONADOS.add(telNum); else SELECIONADOS.delete(telNum);
   renderBulkBar();
@@ -908,51 +1064,49 @@ function renderCards(){
   document.getElementById('sAlta').textContent=cnt.alta;
   document.getElementById('sMedia').textContent=cnt.media;
   const bc=document.getElementById('badge-count');
-  bc.textContent=resultados.length; bc.style.display='inline';
+  bc.textContent=resultados.length; bc.style.display=resultados.length>0?'inline':'none';
 
   renderBulkBar();
 
   if(!lista.length){
-    document.getElementById('resultado').innerHTML='<div class="empty-state"><div class="empty-icon">🔍</div><h3>Sem resultados</h3><p>Tente outro filtro.</p></div>';
+    document.getElementById('resultado').innerHTML='<div class="empty-state"><div class="empty-icon">🔍</div><h3>Fila vazia</h3><p>Busque um nicho na aba <b>Buscar</b> ou ajuste o filtro de potencial.</p></div>';
     return;
   }
 
   document.getElementById('resultado').innerHTML='<div class="result-grid">'+lista.map((c)=>{
-    const bc={muito:'b-muito',alta:'b-alta',media:'b-media'}[c.pot];
-    const wa='https://wa.me/55'+c.telNum+'?text='+encodeURIComponent(c.msg);
+    const bcCls={muito:'b-muito',alta:'b-alta',media:'b-media'}[c.pot];
+    const wa=waLink(c.telNum,c.msg);
     const checked=SELECIONADOS.has(c.telNum)?'checked':'';
     const corpBadge=c.corp?'<span class="badge b-corp">B2B</span>':'';
     const idx=resultados.indexOf(c);
     return '<div class="result-card">'
       +(!MODO_FILA?'<input type="checkbox" class="rc-select" '+checked+' onchange="toggleSelecao(\''+c.telNum+'\',this.checked)" />':'')
-      +'<div class="rc-head"><div class="rc-name">'+corpBadge+' '+c.nome+'</div><span class="badge '+bc+'">'+POT_LABEL[c.pot]+'</span></div>'
+      +'<div class="rc-head"><div class="rc-name">'+corpBadge+' '+c.nome+'</div><span class="badge '+bcCls+'">'+POT_LABEL[c.pot]+'</span></div>'
       +'<div class="rc-info"><div class="rc-row">⭐ <strong>'+c.avaliacao+'</strong></div><div class="rc-row">📞 <strong>'+c.tel+'</strong></div><div class="rc-dist">📍 '+c.distKm+' km</div><div class="rc-row addr">'+c.end+'</div></div>'
-      +'<div class="rc-status-row">'+statusBadge(HISTORICO[c.telNum]?.status||'novo')+'<select onchange="mudarStatus(\''+c.telNum+'\',this)" style="height:28px;font-size:11px;flex:1;max-width:160px"><option value="">Atualizar status…</option><option value="contatado">🟡 Contatado</option><option value="interesse">🟢 Interessado</option><option value="fechado">🔥 Fechado</option><option value="nao">🔴 Sem interesse</option></select></div>'
-      +'<div class="rc-actions"><a class="btn btn-wa" href="'+wa+'" target="_blank" onclick="registrarContato('+idx+')">'+WA_SVG+' Enviar WhatsApp</a><button class="btn-toggle-msg" id="tb'+idx+'" onclick="toggleMsg('+idx+')">Ver msg</button></div>'
+      +'<div class="rc-actions"><a class="btn btn-wa" href="'+wa+'" target="_blank" onclick="registrarContato(\''+c.telNum+'\')">'+WA_SVG+' WhatsApp</a><a class="btn btn-call" href="'+telLink(c.telNum)+'">📞</a><button class="btn-toggle-msg" id="tb'+idx+'" onclick="toggleMsg('+idx+')">Ver msg</button></div>'
       +'<div class="rc-msg" id="cm'+idx+'">'+c.msg+'</div>'
+      +buildQARow(c.telNum,true)
     +'</div>';
   }).join('')+'</div>';
 }
 
-function registrarContato(idx){
-  const c=resultados[idx]; if(!c) return;
-  addToHist(c);
-  if(HISTORICO[c.telNum].status==='novo'){
-    HISTORICO[c.telNum].status='contatado';
+/* registrarContato: chamado ao clicar em "WhatsApp" — define
+   status 'contatado' automaticamente (só se ainda era 'novo',
+   nunca rebaixa um status mais avançado já existente) */
+function registrarContato(telNum){
+  const c=resultados.find(r=>r.telNum===telNum);
+  if(c) addToHist(c); // se ainda não existir no histórico, cria como 'novo'
+  if(HISTORICO[telNum] && HISTORICO[telNum].status==='novo'){
+    HISTORICO[telNum].status='contatado';
+    HISTORICO[telNum].atualizadoEm=hojeISO();
     salvarHist();
     incrementarContadorHoje();
+  } else if(HISTORICO[telNum]){
+    HISTORICO[telNum].atualizadoEm=hojeISO();
+    salvarHist();
   }
-  renderHist(); atualizarBadgeHist(); renderKanban();
-}
-
-function mudarStatus(telNum, sel){
-  const val=sel.value; if(!val){return;}
-  if(!HISTORICO[telNum]){
-    const c=resultados.find(r=>r.telNum===telNum);
-    if(c) addToHist(c);
-  }
-  if(HISTORICO[telNum]){ HISTORICO[telNum].status=val; salvarHist(); renderHist(); atualizarBadgeHist(); renderCards(); renderKanban(); showToast('✓ Status atualizado!'); }
-  sel.value='';
+  removerDaFila(telNum);
+  renderCards(); renderHist(); atualizarBadgeHist(); renderKanban(); renderHoje();
 }
 
 function toggleMsg(i){
@@ -1008,8 +1162,9 @@ function renderKanban(){
             +'<div class="kanban-card-name">'+corpBadge+h.nome+'</div>'
             +'<div class="kanban-card-meta">📞 '+h.tel+' · 📍 '+(h.distKm||'?')+'km</div>'
             +'<div class="kanban-card-actions">'
-              +(next?'<button class="kanban-mini-btn" onclick="setStatus(\''+tel+'\',\''+next+'\')">▶ Avançar</button>':'')
-              +'<a class="kanban-mini-btn" style="text-align:center;text-decoration:none;color:var(--green)" href="https://wa.me/55'+tel+'?text='+encodeURIComponent(h.msg||'')+'" target="_blank">💬 Zap</a>'
+              +(next?'<button class="kanban-mini-btn" onclick="setStatus(\''+tel+'\',\''+next+'\')">▶ Avançar</button>':'<span class="kanban-mini-btn" style="flex:1;opacity:.4">fim</span>')
+              +'<a class="kanban-mini-btn icon-only" style="color:var(--green)" href="'+waLink(tel,h.msg)+'" target="_blank" title="WhatsApp">💬</a>'
+              +'<a class="kanban-mini-btn icon-only" style="color:var(--blue)" href="'+telLink(tel)+'" title="Ligar">📞</a>'
             +'</div>'
           +'</div>';
         }).join('')
@@ -1033,6 +1188,63 @@ function onDrop(e, statusKey){
   dragTelNum=null;
 }
 
+/* ══ PAINEL "HOJE" ════════════════════════════════ */
+function renderHoje(){
+  const filaEl=document.getElementById('hojeFilaList');
+  const followEl=document.getElementById('hojeFollowList');
+  const stagEl=document.getElementById('hojeStagnantList');
+  if(!filaEl) return; // tab ainda não montada
+
+  // ── Fila pendente (topo 6 por potencial) ──
+  if(!resultados.length){
+    filaEl.innerHTML='<div class="hoje-empty">Nenhum lead na fila. Vá em <b>Buscar</b> para encontrar novos clientes.</div>';
+  } else {
+    const top=resultados.slice(0,6);
+    filaEl.innerHTML=top.map(c=>{
+      const bcCls={muito:'b-muito',alta:'b-alta',media:'b-media'}[c.pot];
+      return '<div class="hoje-card">'
+        +'<div class="hoje-card-info"><div class="hoje-card-name">'+(c.corp?'<span class="badge b-corp">B2B</span> ':'')+c.nome+' <span class="badge '+bcCls+'">'+POT_LABEL[c.pot]+'</span></div><div class="hoje-card-meta">📞 '+c.tel+' · 📍 '+c.distKm+'km</div></div>'
+        +'<div class="hoje-card-actions"><a class="btn btn-wa btn-sm" href="'+waLink(c.telNum,c.msg)+'" target="_blank" onclick="registrarContato(\''+c.telNum+'\')">'+WA_SVG+' Zap</a><a class="btn btn-call btn-sm" href="'+telLink(c.telNum)+'">📞</a></div>'
+      +'</div>';
+    }).join('') + (resultados.length>6?'<span class="hoje-vermais" onclick="switchTab(\'resultados\',document.getElementById(\'tabbtn-resultados\'))">Ver todos os '+resultados.length+' na fila →</span>':'');
+  }
+
+  // ── Follow-ups de hoje ──
+  const dueList=followUpsVencidosHoje();
+  if(!dueList.length){
+    followEl.innerHTML='<div class="hoje-empty">Nenhum follow-up agendado para hoje. 🎉</div>';
+  } else {
+    followEl.innerHTML=dueList.map(([tel,h])=>{
+      return '<div class="hoje-card">'
+        +'<div class="hoje-card-info"><div class="hoje-card-name">'+h.nome+'</div><div class="hoje-card-meta">📞 '+h.tel+' · vence: '+h.followUp+'</div></div>'
+        +'<div class="hoje-card-actions"><a class="btn btn-wa btn-sm" href="'+waLink(tel,h.msg)+'" target="_blank">'+WA_SVG+' Zap</a><a class="btn btn-call btn-sm" href="'+telLink(tel)+'">📞</a></div>'
+      +'</div>';
+    }).join('');
+  }
+
+  // ── Leads estagnados ──
+  const stagList=leadsEstagnados();
+  if(!stagList.length){
+    stagEl.innerHTML='<div class="hoje-empty">Nenhum lead parado. Tudo em dia! ✅</div>';
+  } else {
+    stagEl.innerHTML=stagList.map(([tel,h])=>{
+      const dias=diasDesde(h.atualizadoEm);
+      return '<div class="hoje-card">'
+        +'<div class="hoje-card-info"><div class="hoje-card-name">'+h.nome+'</div><div class="hoje-card-meta">📞 '+h.tel+' · '+dias+' dias sem atualização</div></div>'
+        +'<div class="hoje-card-actions"><a class="btn btn-wa btn-sm" href="'+waLink(tel,h.msg)+'" target="_blank">'+WA_SVG+' Zap</a><a class="btn btn-call btn-sm" href="'+telLink(tel)+'">📞</a></div>'
+      +'</div>';
+    }).join('');
+  }
+
+  // ── Banner de estagnados no topo (resumo) ──
+  const bannerEl=document.getElementById('stagnantBannerHoje');
+  if(bannerEl){
+    bannerEl.innerHTML = stagList.length
+      ? '<div class="stagnant-banner">⏰ <b>'+stagList.length+'</b> lead'+(stagList.length>1?'s':'')+' sem retorno há mais de 4 dias — role para baixo para ver.</div>'
+      : '';
+  }
+}
+
 /* ══ TABS ═════════════════════════════════════════ */
 function switchTab(id,el){
   document.querySelectorAll('.tab-content').forEach(t=>t.classList.remove('active'));
@@ -1041,7 +1253,7 @@ function switchTab(id,el){
   if(el) el.classList.add('active');
   if(id==='historico') renderHist();
   if(id==='funil') renderKanban();
-  if(id==='busca') renderMetaBar();
+  if(id==='hoje') renderHoje();
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -1049,18 +1261,27 @@ function switchTab(id,el){
 function salvarProxy(){ const v=document.getElementById('proxyUrlInput').value.trim(); if(!v){showToast('⚠️ URL vazia!');return;} localStorage.setItem('prosp_proxy',v); showToast('✓ Proxy salvo!'); }
 function salvarApiKey(){ const v=document.getElementById('apiKeyInput').value.trim(); if(!v){showToast('⚠️ Chave vazia!');return;} localStorage.setItem('prosp_apikey',v); showToast('✓ Chave salva!'); }
 function salvarAssinatura(){ localStorage.setItem('prosp_assin',document.getElementById('assinatura').value.trim()); showToast('✓ Assinatura salva!'); }
-function salvarMsgBase(){ localStorage.setItem('prosp_msg',document.getElementById('msgBase').value.trim()); showToast('✓ Mensagem salva!'); }
+function salvarMsgsRotacao(){
+  const v1=document.getElementById('msgVar1').value.trim();
+  const v2=document.getElementById('msgVar2').value.trim();
+  const v3=document.getElementById('msgVar3').value.trim();
+  const arr=[v1,v2,v3].filter(v=>v);
+  localStorage.setItem('prosp_msgs',JSON.stringify(arr));
+  localStorage.setItem('prosp_msgRotIdx','0');
+  showToast(arr.length?'✓ '+arr.length+' mensagem(ns) salva(s)!':'✓ Removidas — usando mensagem automática.');
+}
 
 /* ══ BACKUP ═══════════════════════════════════════ */
 function exportarBackup(){
-  const data={ v:4, exportado:new Date().toLocaleString('pt-BR'),
+  const data={ v:5, exportado:new Date().toLocaleString('pt-BR'),
     prosp_proxy:localStorage.getItem('prosp_proxy')||'',
     prosp_apikey:localStorage.getItem('prosp_apikey')||'',
     prosp_assin:localStorage.getItem('prosp_assin')||'',
-    prosp_msg:localStorage.getItem('prosp_msg')||'',
+    prosp_msgs:localStorage.getItem('prosp_msgs')||'[]',
     prosp_enderecos:localStorage.getItem('prosp_enderecos')||'[]',
     prosp_ativo:localStorage.getItem('prosp_ativo')||'0',
     prosp_historico:localStorage.getItem('prosp_historico')||'{}',
+    prosp_fila:localStorage.getItem('prosp_fila')||'[]',
     prosp_meta:localStorage.getItem('prosp_meta')||'20',
     prosp_contador:localStorage.getItem('prosp_contador')||'{}'
   };
@@ -1068,7 +1289,7 @@ function exportarBackup(){
 }
 function importarBackup(){
   const inp=document.createElement('input'); inp.type='file'; inp.accept='.json';
-  inp.onchange=e=>{ const r=new FileReader(); r.onload=ev=>{ try{ const d=JSON.parse(ev.target.result); if(!d.v){showToast('⚠️ Arquivo inválido!');return;} ['prosp_proxy','prosp_apikey','prosp_assin','prosp_msg','prosp_enderecos','prosp_ativo','prosp_historico','prosp_meta','prosp_contador'].forEach(k=>{ if(d[k]!==undefined) localStorage.setItem(k,d[k]); }); showToast('✓ Restaurado! Recarregando…'); setTimeout(()=>location.reload(),1200); }catch(e){showToast('⚠️ Erro!');} }; r.readAsText(e.target.files[0]); }; inp.click();
+  inp.onchange=e=>{ const r=new FileReader(); r.onload=ev=>{ try{ const d=JSON.parse(ev.target.result); if(!d.v){showToast('⚠️ Arquivo inválido!');return;} ['prosp_proxy','prosp_apikey','prosp_assin','prosp_msgs','prosp_enderecos','prosp_ativo','prosp_historico','prosp_fila','prosp_meta','prosp_contador'].forEach(k=>{ if(d[k]!==undefined) localStorage.setItem(k,d[k]); }); showToast('✓ Restaurado! Recarregando…'); setTimeout(()=>location.reload(),1200); }catch(e){showToast('⚠️ Erro!');} }; r.readAsText(e.target.files[0]); }; inp.click();
 }
 
 /* ══ TOAST ════════════════════════════════════════ */
@@ -1078,23 +1299,41 @@ window.addEventListener('scroll',()=>{ const b=document.getElementById('back-top
 /* ══ INIT ═════════════════════════════════════════ */
 (function(){
   const assin=localStorage.getItem('prosp_assin');
-  const msg=localStorage.getItem('prosp_msg');
   const proxy=localStorage.getItem('prosp_proxy');
   const apiKey=localStorage.getItem('prosp_apikey');
   const ends=localStorage.getItem('prosp_enderecos');
   const ativo=localStorage.getItem('prosp_ativo');
   const hist=localStorage.getItem('prosp_historico');
+  const fila=localStorage.getItem('prosp_fila');
 
-  if(assin) document.getElementById('assinatura').value=assin;
-  if(msg)   document.getElementById('msgBase').value=msg;
-  if(proxy) document.getElementById('proxyUrlInput').value=proxy;
-  if(apiKey)document.getElementById('apiKeyInput').value=apiKey;
+  if(assin)  document.getElementById('assinatura').value=assin;
+  if(proxy)  document.getElementById('proxyUrlInput').value=proxy;
+  if(apiKey) document.getElementById('apiKeyInput').value=apiKey;
+
+  // migração/carregamento das variações de mensagem
+  try{
+    const arr=JSON.parse(localStorage.getItem('prosp_msgs')||'[]');
+    if(Array.isArray(arr)){
+      if(arr[0]) document.getElementById('msgVar1').value=arr[0];
+      if(arr[1]) document.getElementById('msgVar2').value=arr[1];
+      if(arr[2]) document.getElementById('msgVar3').value=arr[2];
+    }
+  }catch(e){}
+  const legacyMsg=localStorage.getItem('prosp_msg');
+  if(legacyMsg && !localStorage.getItem('prosp_msgs')){
+    document.getElementById('msgVar1').value=legacyMsg;
+  }
 
   try{ if(ends) ENDERECOS=JSON.parse(ends); }catch(e){ ENDERECOS=[]; }
   if(!Array.isArray(ENDERECOS)) ENDERECOS=[];
 
   try{ if(hist) HISTORICO=JSON.parse(hist); }catch(e){ HISTORICO={}; }
   if(typeof HISTORICO!=='object'||Array.isArray(HISTORICO)) HISTORICO={};
+
+  try{ if(fila) resultados=JSON.parse(fila); }catch(e){ resultados=[]; }
+  if(!Array.isArray(resultados)) resultados=[];
+  // segurança: remove da fila qualquer um que já tenha ido para o histórico
+  resultados=resultados.filter(r=>r && r.telNum && !HISTORICO[r.telNum]);
 
   if(ENDERECOS.length>0){
     const idx=parseInt(ativo||'0');
@@ -1108,6 +1347,8 @@ window.addEventListener('scroll',()=>{ const b=document.getElementById('back-top
   atualizarBadgeHist();
   renderMetaBar();
   renderFollowupBanners();
+  renderCards();
+  renderHoje();
 })();
 </script>
 </body>
