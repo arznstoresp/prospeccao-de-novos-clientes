@@ -256,6 +256,41 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 .hint-text{font-size:11px;color:var(--hint);margin-top:5px;line-height:1.5;}
 .hint-text b{color:var(--sub);}
 
+/* GUIA TAB */
+.checklist-item{display:flex;align-items:flex-start;gap:10px;padding:10px 12px;background:var(--raised);border:1.5px solid var(--line2);border-radius:var(--radius-sm);margin-bottom:6px;cursor:pointer;transition:all .12s;}
+.checklist-item:hover{border-color:var(--sub);}
+.checklist-item.done{background:rgba(34,197,94,.07);border-color:rgba(34,197,94,.3);}
+.checklist-cb{width:18px;height:18px;accent-color:var(--green);flex-shrink:0;margin-top:1px;cursor:pointer;}
+.checklist-text{font-size:12px;font-weight:600;color:var(--text);line-height:1.5;flex:1;}
+.checklist-item.done .checklist-text{text-decoration:line-through;color:var(--hint);}
+.script-card{background:var(--raised);border:1px solid var(--line2);border-radius:var(--radius);padding:12px 14px;margin-bottom:8px;}
+.script-label{font-size:10px;font-weight:800;color:var(--neon);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;}
+.script-body{font-size:12px;color:var(--sub);line-height:1.75;white-space:pre-line;margin-bottom:8px;}
+.btn-copy{background:rgba(255,107,0,.1);border:1px solid rgba(255,107,0,.3);border-radius:var(--radius-sm);color:var(--neon);font-size:11px;font-weight:700;padding:5px 12px;cursor:pointer;font-family:'Inter',sans-serif;transition:all .12s;}
+.btn-copy:hover{background:rgba(255,107,0,.2);}
+.btn-copy.copiado{background:rgba(34,197,94,.12);border-color:var(--green);color:var(--green);}
+.niche-table{width:100%;border-collapse:collapse;font-size:12px;}
+.niche-table th{text-align:left;font-size:10px;font-weight:800;color:var(--sub);text-transform:uppercase;letter-spacing:.8px;padding:8px 10px;border-bottom:1px solid var(--line2);}
+.niche-table td{padding:9px 10px;border-bottom:1px solid var(--line);color:var(--text);vertical-align:top;line-height:1.5;}
+.niche-table tr:last-child td{border-bottom:none;}
+.niche-table .priority{color:var(--neon);font-weight:700;}
+.obj-item{border:1px solid var(--line2);border-radius:var(--radius-sm);margin-bottom:6px;overflow:hidden;}
+.obj-head{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;cursor:pointer;background:var(--raised);font-size:12px;font-weight:700;color:var(--text);gap:8px;}
+.obj-head:hover{background:rgba(255,255,255,.06);}
+.obj-body{display:none;padding:10px 12px;font-size:12px;color:var(--sub);line-height:1.7;background:var(--card);}
+.obj-body.open{display:block;}
+.obj-head .arrow{font-size:10px;color:var(--hint);flex-shrink:0;transition:transform .15s;}
+.obj-item.open .arrow{transform:rotate(180deg);}
+.limit-table{width:100%;border-collapse:collapse;font-size:12px;}
+.limit-table th{text-align:left;font-size:10px;font-weight:800;color:var(--sub);text-transform:uppercase;letter-spacing:.8px;padding:6px 10px;border-bottom:1px solid var(--line2);}
+.limit-table td{padding:7px 10px;border-bottom:1px solid var(--line);vertical-align:top;line-height:1.5;}
+.limit-table tr:last-child td{border-bottom:none;}
+.limit-ok{color:var(--green);font-size:13px;font-weight:700;}
+.limit-esc{color:var(--amber);font-size:13px;font-weight:700;}
+.limit-no{color:var(--red);font-size:13px;font-weight:700;}
+.relatorio-btn{background:linear-gradient(135deg,#25D366,#128C7E);color:#fff;border:none;border-radius:var(--radius-sm);font-family:'Inter',sans-serif;font-size:12px;font-weight:700;padding:9px 16px;cursor:pointer;display:flex;align-items:center;gap:6px;margin-top:10px;transition:opacity .15s;}
+.relatorio-btn:hover{opacity:.88;}
+
 /* TOAST */
 #toast{position:fixed;bottom:20px;right:20px;background:var(--card);border:1px solid var(--neon);color:var(--neon);padding:9px 16px;border-radius:var(--radius);font-size:12px;font-weight:700;opacity:0;transform:translateY(6px);transition:all .2s;pointer-events:none;z-index:9999;max-width:280px;}
 #toast.show{opacity:1;transform:translateY(0);}
@@ -269,7 +304,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
   <div class="header">
     <div class="logo">
       <span class="brand">PROSPECÇÃO</span><span class="sep">|</span>CLIENTES
-      <span class="sub">Hoje · CRM · Funil · WhatsApp</span>
+      <span class="sub">Hoje · Guia · CRM · Funil · WhatsApp</span>
     </div>
     <div class="tabs-nav">
       <button id="tabbtn-hoje" class="tab-btn active" onclick="switchTab('hoje',this)"><span class="tab-icon">🌅</span> Hoje</button>
@@ -283,6 +318,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
         <span class="tab-icon">📊</span> Histórico
         <span id="badge-hist" style="display:none;background:var(--blue);color:#fff;border-radius:10px;font-size:10px;padding:1px 6px;margin-left:2px"></span>
       </button>
+      <button id="tabbtn-guia" class="tab-btn" onclick="switchTab('guia',this)"><span class="tab-icon">📖</span> Guia</button>
       <button id="tabbtn-config" class="tab-btn" onclick="switchTab('config',this)"><span class="tab-icon">⚙️</span> Config.</button>
     </div>
   </div>
@@ -305,6 +341,10 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 
     <div id="followupBannerHoje"></div>
     <div id="stagnantBannerHoje"></div>
+
+    <div style="margin-bottom:var(--gap)">
+      <button class="relatorio-btn" onclick="gerarRelatorio()" style="width:100%">📤 &nbsp;Gerar Relatório do Dia para Alan</button>
+    </div>
 
     <div class="panel">
       <div class="panel-title">📤 Fila de hoje — leads para contatar</div>
@@ -443,6 +483,89 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
     </div>
   </div>
 
+  <!-- ══ GUIA / PLAYBOOK ══ -->
+  <div id="tab-guia" class="tab-content">
+
+    <div class="panel">
+      <div class="panel-title">☀️ Checklist da Manhã — <span id="checklistDate" style="font-weight:400;color:var(--hint)"></span></div>
+      <div id="checklistBody"></div>
+      <button class="btn btn-ghost btn-sm" style="margin-top:10px;width:auto;padding:0 14px" onclick="resetChecklist()">↺ &nbsp;Reiniciar checklist</button>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">✉️ Scripts de Mensagem</div>
+      <div class="script-card">
+        <div class="script-label">1º Contato (WhatsApp)</div>
+        <div class="script-body" id="script0">Olá, [NOME]! Aqui é [SEU NOME], da ArznStoreSP, na Zona Norte. Vi que a [EMPRESA] se destaca na área.
+A gente faz brindes personalizados e pensei em um kit para vocês.
+Posso te mandar 2 sugestões com a marca de vocês?
+Se não fizer sentido agora, é só avisar.
+
+[SEU NOME] | ArznStoreSP | (11) 98801-1285 | @arznstoresp</div>
+        <button class="btn-copy" onclick="copiarScript(0)">📋 Copiar</button>
+      </div>
+      <div class="script-card">
+        <div class="script-label">Follow-up Dia 3 — Mockup</div>
+        <div class="script-body" id="script1">Oi, [NOME]! Montei um exemplo de como ficaria um item com a marca da [EMPRESA].
+Se fizer sentido, ajusto cores ou posição do logo.
+
+[SEU NOME] | ArznStoreSP | (11) 98801-1285</div>
+        <button class="btn-copy" onclick="copiarScript(1)">📋 Copiar</button>
+      </div>
+      <div class="script-card">
+        <div class="script-label">Follow-up Dia 7 — Qualificação</div>
+        <div class="script-body" id="script2">[NOME], para eu não tomar seu tempo: de 1 a 3, o que está mais próximo do que precisam?
+1) Kit de boas-vindas para novos clientes
+2) Presente personalizado para clientes antigos
+3) Item para evento ou data comemorativa</div>
+        <button class="btn-copy" onclick="copiarScript(2)">📋 Copiar</button>
+      </div>
+      <div class="script-card">
+        <div class="script-label">Encerramento Dia 12</div>
+        <div class="script-body" id="script3">Oi, [NOME]! Não quero ser inconveniente, então vou deixar esse assunto de lado por enquanto.
+Se surgir uma ocasião de brindes, pode me chamar aqui. Até mais!</div>
+        <button class="btn-copy" onclick="copiarScript(3)">📋 Copiar</button>
+      </div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">🏆 Nichos Prioritários — Primeiros 30 dias</div>
+      <table class="niche-table">
+        <thead><tr><th>#</th><th>Nicho</th><th>Produto sugerido</th><th>Por quê?</th></tr></thead>
+        <tbody>
+          <tr><td class="priority">1</td><td><b>🏠 Imobiliárias</b></td><td>Chaveiro + caneta kit</td><td>Baixa complexidade, alta recorrência (lançamentos)</td></tr>
+          <tr><td class="priority">2</td><td><b>📑 Escritórios Contábeis</b></td><td>Caneca + caderneta</td><td>Alta recorrência, decisor fácil de alcançar</td></tr>
+          <tr><td class="priority">3</td><td><b>🏋️ Academias</b></td><td>Squeeze + camiseta</td><td>Fácil acesso, público grande, produto visual</td></tr>
+        </tbody>
+      </table>
+      <div class="hint-text" style="margin-top:10px">Depois dos primeiros 30 dias: expanda para clínicas, escolas, escritórios de advocacia e empresas de eventos.</div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">🛡️ Guia de Objeções</div>
+      <div id="objList"></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">⚖️ O que você pode decidir sozinha</div>
+      <table class="limit-table">
+        <thead><tr><th>Ação</th><th>Pode?</th></tr></thead>
+        <tbody>
+          <tr><td>Prospectar, contatar, qualificar leads</td><td class="limit-ok">✓ Sim</td></tr>
+          <tr><td>Enviar mockups e propostas padrão</td><td class="limit-ok">✓ Sim</td></tr>
+          <tr><td>Agendar follow-up e negociar prazo de entrega normal</td><td class="limit-ok">✓ Sim</td></tr>
+          <tr><td>Dar qualquer desconto</td><td class="limit-esc">→ Chame Alan</td></tr>
+          <tr><td>Prazo de entrega diferente do padrão</td><td class="limit-esc">→ Chame Alan</td></tr>
+          <tr><td>Pagamento diferente do padrão</td><td class="limit-esc">→ Chame Alan</td></tr>
+          <tr><td>Enviar amostra física</td><td class="limit-esc">→ Chame Alan</td></tr>
+          <tr><td>Inventar preços ou prazos</td><td class="limit-no">✗ Nunca</td></tr>
+          <tr><td>Insistir após recusa explícita</td><td class="limit-no">✗ Nunca</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+  </div>
+
   <!-- ══ CONFIG ══ -->
   <div id="tab-config" class="tab-content">
 
@@ -485,6 +608,13 @@ Minha Empresa | (11) 99999-9999</textarea>
       <div class="field-group"><label>Variação 2 (opcional)</label><textarea id="msgVar2" rows="4" placeholder="Opcional — segunda variação…"></textarea></div>
       <div class="field-group"><label>Variação 3 (opcional)</label><textarea id="msgVar3" rows="4" placeholder="Opcional — terceira variação…"></textarea></div>
       <button class="btn btn-primary" onclick="salvarMsgsRotacao()">💾 &nbsp;Salvar Mensagens</button>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">👤 Funcionária & Gestor</div>
+      <div class="field-group"><label>Nome da Funcionária</label><input type="text" id="funcNomeInput" placeholder="Ex: Maria" /><div class="hint-text">Aparece nos scripts do Guia e no relatório diário.</div></div>
+      <div class="field-group"><label>WhatsApp do Alan (gestor)</label><input type="text" id="alanWaInput" placeholder="11988011285" /><div class="hint-text">Somente números, com DDD. Ex: 11988011285</div></div>
+      <button class="btn btn-primary" onclick="salvarFuncConfig()">💾 &nbsp;Salvar</button>
     </div>
 
     <div class="panel">
@@ -1254,6 +1384,7 @@ function switchTab(id,el){
   if(id==='historico') renderHist();
   if(id==='funil') renderKanban();
   if(id==='hoje') renderHoje();
+  if(id==='guia'){ renderChecklist(); renderObjecoes(); }
   window.scrollTo({top:0,behavior:'smooth'});
 }
 
@@ -1283,13 +1414,153 @@ function exportarBackup(){
     prosp_historico:localStorage.getItem('prosp_historico')||'{}',
     prosp_fila:localStorage.getItem('prosp_fila')||'[]',
     prosp_meta:localStorage.getItem('prosp_meta')||'20',
-    prosp_contador:localStorage.getItem('prosp_contador')||'{}'
+    prosp_contador:localStorage.getItem('prosp_contador')||'{}',
+    prosp_func_nome:localStorage.getItem('prosp_func_nome')||'',
+    prosp_alan_wa:localStorage.getItem('prosp_alan_wa')||''
   };
   const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'})); a.download='backup-prospeccao-'+new Date().toISOString().slice(0,10)+'.json'; a.click(); showToast('✓ Backup exportado!');
 }
 function importarBackup(){
   const inp=document.createElement('input'); inp.type='file'; inp.accept='.json';
-  inp.onchange=e=>{ const r=new FileReader(); r.onload=ev=>{ try{ const d=JSON.parse(ev.target.result); if(!d.v){showToast('⚠️ Arquivo inválido!');return;} ['prosp_proxy','prosp_apikey','prosp_assin','prosp_msgs','prosp_enderecos','prosp_ativo','prosp_historico','prosp_fila','prosp_meta','prosp_contador'].forEach(k=>{ if(d[k]!==undefined) localStorage.setItem(k,d[k]); }); showToast('✓ Restaurado! Recarregando…'); setTimeout(()=>location.reload(),1200); }catch(e){showToast('⚠️ Erro!');} }; r.readAsText(e.target.files[0]); }; inp.click();
+  inp.onchange=e=>{ const r=new FileReader(); r.onload=ev=>{ try{ const d=JSON.parse(ev.target.result); if(!d.v){showToast('⚠️ Arquivo inválido!');return;} ['prosp_proxy','prosp_apikey','prosp_assin','prosp_msgs','prosp_enderecos','prosp_ativo','prosp_historico','prosp_fila','prosp_meta','prosp_contador','prosp_func_nome','prosp_alan_wa'].forEach(k=>{ if(d[k]!==undefined) localStorage.setItem(k,d[k]); }); showToast('✓ Restaurado! Recarregando…'); setTimeout(()=>location.reload(),1200); }catch(e){showToast('⚠️ Erro!');} }; r.readAsText(e.target.files[0]); }; inp.click();
+}
+
+/* ══ GUIA — CHECKLIST ═════════════════════════════ */
+const CHECKLIST_ITEMS = [
+  { key:'revisar',   text:'Revisar follow-ups do dia (aba Hoje → Follow-ups)' },
+  { key:'fila',      text:'Verificar fila de novos leads (aba Hoje → Fila)' },
+  { key:'buscar',    text:'Buscar novos clientes se a fila estiver vazia (aba Buscar)' },
+  { key:'contatos',  text:'Realizar pelo menos 10 contatos via WhatsApp' },
+  { key:'atualizar', text:'Atualizar status dos leads no Funil após cada resposta' },
+  { key:'notas',     text:'Registrar notas importantes nas conversas (aba Histórico)' },
+  { key:'relatorio', text:'Enviar relatório do dia para Alan ao final do expediente' },
+];
+function renderChecklist(){
+  const hoje=hojeISO();
+  const saved=JSON.parse(localStorage.getItem('prosp_checklist')||'{}');
+  const savedDate=localStorage.getItem('prosp_checklist_date')||'';
+  const data = savedDate===hoje ? saved : {};
+  document.getElementById('checklistDate').textContent=hoje;
+  document.getElementById('checklistBody').innerHTML = CHECKLIST_ITEMS.map(it=>{
+    const done=!!data[it.key];
+    return '<div class="checklist-item '+(done?'done':'')+'" onclick="marcarChecklist(\''+it.key+'\',event)">'
+      +'<input type="checkbox" class="checklist-cb" '+(done?'checked':'')+' onclick="event.stopPropagation();marcarChecklist(\''+it.key+'\',event)" />'
+      +'<span class="checklist-text">'+it.text+'</span>'
+    +'</div>';
+  }).join('');
+}
+function marcarChecklist(key, e){
+  const hoje=hojeISO();
+  const savedDate=localStorage.getItem('prosp_checklist_date')||'';
+  let data = savedDate===hoje ? JSON.parse(localStorage.getItem('prosp_checklist')||'{}') : {};
+  data[key]=!data[key];
+  localStorage.setItem('prosp_checklist',JSON.stringify(data));
+  localStorage.setItem('prosp_checklist_date',hoje);
+  renderChecklist();
+}
+function resetChecklist(){
+  localStorage.removeItem('prosp_checklist');
+  localStorage.setItem('prosp_checklist_date',hojeISO());
+  renderChecklist();
+  showToast('✓ Checklist reiniciada!');
+}
+
+/* ══ GUIA — OBJEÇÕES ══════════════════════════════ */
+const OBJECOES = [
+  { q:'Está caro', r:'Reduza o escopo: diminua a quantidade, troque para um item mais simples ou retire a embalagem premium. Nunca dê desconto automaticamente — qualifique o budget antes.' },
+  { q:'Já tenho fornecedor', r:'Ofereça ser o segundo fornecedor: "Sem problema! Pode me guardar para quando surgir urgência ou quando quiser comparar uma segunda opção?"' },
+  { q:'Vou pensar', r:'Envie um mockup com a marca deles e um one-pager simples. Mostre prazo de produção para criar urgência natural.' },
+  { q:'Não temos verba agora', r:'Apresente um kit econômico com 1 ou 2 itens básicos. Pergunte quando a verba é liberada e agende follow-up para essa data.' },
+  { q:'Preciso para amanhã', r:'Seja honesta sobre o prazo viável. Nunca prometa o que não consegue entregar — isso destrói a confiança.' },
+  { q:'Quero pouca quantidade', r:'Explique o custo unitário maior em pequenas tiragens. Sugira um pedido recorrente menor (ex: 20 peças/mês) que diluí o custo.' },
+  { q:'Outro fornecedor faz mais barato', r:'Peça para comparar item por item: material, acabamento, prazo, suporte. Preço igual com qualidade diferente não é o mesmo produto.' },
+  { q:'Só compro com prazo de pagamento', r:'Apresente as condições disponíveis e ofereça um combo especial no primeiro pedido à vista para ganhar a confiança.' },
+  { q:'Preciso de uma amostra', r:'Comece com um mockup digital da marca deles — é gratuito e imediato. Amostra física vem depois com interesse confirmado (chame Alan).' },
+  { q:'Não sei qual produto escolher', r:'Qualifique primeiro: "Qual é o objetivo? Presentear cliente, uniformizar equipe ou usar em evento?" A resposta direciona o produto certo.' },
+];
+function renderObjecoes(){
+  document.getElementById('objList').innerHTML = OBJECOES.map((o,i)=>
+    '<div class="obj-item" id="objitem'+i+'">'
+    +'<div class="obj-head" onclick="toggleObjSection('+i+')">'
+    +'<span>🚧 "'+o.q+'"</span><span class="arrow">▼</span>'
+    +'</div>'
+    +'<div class="obj-body" id="objbody'+i+'">'+o.r+'</div>'
+    +'</div>'
+  ).join('');
+}
+function toggleObjSection(i){
+  const body=document.getElementById('objbody'+i);
+  const item=document.getElementById('objitem'+i);
+  const open=body.classList.toggle('open');
+  item.classList.toggle('open',open);
+}
+
+/* ══ GUIA — COPIAR SCRIPT ═════════════════════════ */
+function copiarScript(idx){
+  const funcNome=localStorage.getItem('prosp_func_nome')||'[SEU NOME]';
+  const el=document.getElementById('script'+idx);
+  if(!el) return;
+  let txt=el.textContent.replace('[SEU NOME]',funcNome);
+  navigator.clipboard.writeText(txt).then(()=>{
+    const btn=el.nextElementSibling;
+    btn.textContent='✓ Copiado!'; btn.classList.add('copiado');
+    setTimeout(()=>{btn.textContent='📋 Copiar';btn.classList.remove('copiado');},2000);
+  }).catch(()=>showToast('⚠️ Copie manualmente'));
+}
+
+/* ══ CONFIG — FUNCIONÁRIA & GESTOR ════════════════ */
+function salvarFuncConfig(){
+  const nome=document.getElementById('funcNomeInput').value.trim();
+  const alan=document.getElementById('alanWaInput').value.trim().replace(/\D/g,'');
+  if(nome) localStorage.setItem('prosp_func_nome',nome);
+  if(alan) localStorage.setItem('prosp_alan_wa',alan);
+  showToast('✓ Dados salvos!');
+}
+
+/* ══ RELATÓRIO PARA ALAN ══════════════════════════ */
+function gerarRelatorio(){
+  const funcNome=localStorage.getItem('prosp_func_nome')||'Funcionária';
+  const alanWa=localStorage.getItem('prosp_alan_wa')||'';
+  const hoje=hojeISO();
+  const c=lerContadorHoje();
+  const meta=lerMeta();
+  const pct=Math.min(100,Math.round((c.count/meta)*100));
+
+  const totalHist=Object.keys(HISTORICO).length;
+  const fechados=Object.values(HISTORICO).filter(h=>h.status==='fechado').length;
+  const interesses=Object.values(HISTORICO).filter(h=>h.status==='interesse').length;
+  const contatados=Object.values(HISTORICO).filter(h=>h.status==='contatado').length;
+  const followsHoje=followUpsVencidosHoje().length;
+  const stagnados=leadsEstagnados().length;
+
+  const hojeFormatado=new Date(hoje+'T12:00:00').toLocaleDateString('pt-BR',{weekday:'long',day:'2-digit',month:'2-digit'});
+
+  const msg=
+`📊 *Relatório Diário de Prospecção*
+👤 Funcionária: ${funcNome}
+📅 ${hojeFormatado}
+
+*Meta do dia:* ${c.count} / ${meta} contatos (${pct}%)
+${pct>=100?'✅ Meta batida! 🎉':pct>=50?'🔶 Acima de 50%':'🔴 Abaixo de 50%'}
+
+*Funil completo:*
+🔥 Fechados: ${fechados}
+🟢 Com interesse: ${interesses}
+🟡 Contatados: ${contatados}
+📋 Total no CRM: ${totalHist}
+
+*Alertas:*
+🔔 Follow-ups vencidos: ${followsHoje}
+⏰ Leads parados: ${stagnados}
+
+_Enviado pelo app de prospecção ArznStoreSP_`;
+
+  if(alanWa){
+    window.open('https://wa.me/55'+alanWa+'?text='+encodeURIComponent(msg),'_blank');
+  } else {
+    navigator.clipboard.writeText(msg).then(()=>showToast('✓ Relatório copiado! Cole no WhatsApp do Alan.')).catch(()=>{});
+    showToast('⚠️ Configure o WhatsApp do Alan em Config → Funcionária & Gestor. Relatório copiado!');
+  }
 }
 
 /* ══ TOAST ════════════════════════════════════════ */
@@ -1309,6 +1580,10 @@ window.addEventListener('scroll',()=>{ const b=document.getElementById('back-top
   if(assin)  document.getElementById('assinatura').value=assin;
   if(proxy)  document.getElementById('proxyUrlInput').value=proxy;
   if(apiKey) document.getElementById('apiKeyInput').value=apiKey;
+  const funcNome=localStorage.getItem('prosp_func_nome');
+  const alanWa=localStorage.getItem('prosp_alan_wa');
+  if(funcNome) document.getElementById('funcNomeInput').value=funcNome;
+  if(alanWa)   document.getElementById('alanWaInput').value=alanWa;
 
   // migração/carregamento das variações de mensagem
   try{
