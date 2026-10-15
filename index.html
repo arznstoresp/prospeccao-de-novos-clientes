@@ -435,11 +435,11 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
       </div>
     </div>
 
-    <button class="btn btn-primary" id="buscarBtn" onclick="buscar()">🔍 &nbsp;Buscar Clientes</button>
+    <button class="btn btn-primary" id="buscarBtn" onclick="buscar()">🔍 &nbsp;Buscar Clientes</button><div class="panel" style="margin-top:12px"><div class="panel-title">Adicionar contato manualmente</div><p style="color:var(--sub);margin-bottom:12px">Encontrou uma empresa no Maps, Instagram ou por indicação? Inclua na fila sem depender da busca.</p><form onsubmit="cadastrarLeadManual(event)"><label for="manualNome">Empresa</label><input id="manualNome" name="nome" type="text" maxlength="120" required><label for="manualTelefone" style="margin-top:10px">Telefone com DDD</label><input id="manualTelefone" name="telefone" type="text" inputmode="tel" maxlength="22" required placeholder="(11) 99999-9999"><label for="manualSegmento" style="margin-top:10px">Segmento</label><input id="manualSegmento" name="segmento" type="text" maxlength="80" placeholder="Ex.: academia"><button class="btn btn-primary" type="submit" style="margin-top:12px">Adicionar à fila</button></form></div>
   </div>
 
   <!-- ══ RESULTADOS ══ -->
-  <div id="tab-resultados" class="tab-content">
+  <div id="tab-resultados" class="tab-content"><div id="buscaStatus" class="panel" role="status" aria-live="polite" hidden></div><div id="pesquisaComplementar" class="panel" style="margin-bottom:12px"></div>
     <div class="stats-row" id="statsRow" style="display:none">
       <div class="stat-card s-tot"><div class="stat-num" id="sTot">0</div><div class="stat-lbl">Na fila</div></div>
       <div class="stat-card s-muito"><div class="stat-num" id="sMuito">0</div><div class="stat-lbl">Muito alto</div></div>
@@ -589,7 +589,7 @@ Se surgir uma ocasião de brindes, pode me chamar aqui. Até mais!</div>
       <div class="field-group"><label>Chave Google Places API</label><input type="text" id="apiKeyInput" placeholder="AIzaSy…" /><div class="hint-text">Obtida em <b>console.cloud.google.com</b></div></div>
       <button class="btn btn-primary" style="margin-bottom:12px" onclick="salvarApiKey()">💾 &nbsp;Salvar Chave</button>
       <div class="field-group"><label>URL do Proxy Apps Script</label><input type="text" id="proxyUrlInput" placeholder="https://script.google.com/macros/s/…/exec" /></div>
-      <button class="btn btn-primary" onclick="salvarProxy()">💾 &nbsp;Salvar Proxy</button>
+      <button class="btn btn-primary" onclick="salvarProxy()">💾 &nbsp;Salvar Proxy</button><button id="testeConexaoBtn" class="btn btn-ghost" onclick="testarConexao()" style="margin-top:10px">Testar conexão</button><p id="testeConexaoStatus" role="status" aria-live="polite" style="margin-top:10px;color:var(--sub)"></p><p style="font-size:12px;color:var(--sub)">A busca usa a chave configurada no Apps Script. O campo de chave acima não ativa a integração.</p>
     </div>
 
     <div class="panel">
@@ -757,8 +757,8 @@ function diasDesde(isoStr){
 }
 
 /* ══ TELEFONE ═════════════════════════════════════ */
-function waLink(telNum,msg){ return 'https://wa.me/55'+telNum+'?text='+encodeURIComponent(msg||''); }
-function telLink(telNum){ return 'tel:+55'+telNum; }
+function waLink(telNum,msg){ return 'https://wa.me/55'+(normalizarTelefone(telNum)||telNum)+'?text='+encodeURIComponent(msg||''); }
+function telLink(telNum){ return 'tel:+55'+(normalizarTelefone(telNum)||telNum); }
 
 /* ══ MENSAGEM COM ROTAÇÃO ═════════════════════════
    Lê até 3 variações cadastradas em Config. e alterna
@@ -1066,91 +1066,117 @@ async function buscar(){
   document.getElementById('bulkBarWrap').innerHTML='';
   document.getElementById('resultado').innerHTML='<div class="empty-state"><div class="spinner"></div><p style="margin-top:16px">Buscando <b>'+query+'</b> em <b>'+document.getElementById('raioSlider').value+'km</b>…</p></div>';
 
-  await buscarAPI(query,proxy);
-  btn.disabled=false; btn.textContent='🔍  Buscar Clientes';
+  try{await buscarAPI(query,proxy);}catch(e){mostrarBuscaStatus('Falha na busca: '+e.message,true);}finally{btn.disabled=false;} btn.textContent='🔍  Buscar Clientes';
 }
 
+function escapeText(value){return String(value??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function normalizarTelefone(value){
+  let n=String(value||'').replace(/\D/g,'');
+  if((n.length===12||n.length===13)&&n.startsWith('55')) n=n.slice(2);
+  return /^(\d{10}|\d{11})$/.test(n)?n:'';
+}
+function erroPlaces(data){
+  const dicas={REQUEST_DENIED:'Confira no Google Cloud a chave, as restrições, a API Places e o faturamento.',OVER_QUERY_LIMIT:'Limite de consultas atingido. Confira cotas e faturamento no Google Cloud.',INVALID_REQUEST:'O Google recusou os parâmetros da pesquisa.',UNKNOWN_ERROR:'Falha temporária do Google. Tente novamente mais tarde.'};
+  return (dicas[data.status]||'Resposta inválida do serviço.')+(data.error_message?' Detalhe: '+data.error_message:'');
+}
+async function consultarProxy(base,params){
+  const url=new URL(base);
+  if(url.protocol!=='https:') throw new Error('Use uma URL HTTPS do proxy.');
+  Object.entries(params).forEach(([k,v])=>{if(v!==undefined&&v!=='')url.searchParams.set(k,String(v));});
+  const controller=new AbortController();
+  const timeout=setTimeout(()=>controller.abort(),25000);
+  try{
+    const res=await fetch(url.toString(),{signal:controller.signal});
+    if(!res.ok) throw new Error('O proxy respondeu HTTP '+res.status+'. Confira a implantação e o acesso.');
+    const body=await res.text(); let data;
+    try{data=JSON.parse(body);}catch{throw new Error('O proxy não retornou JSON. Confira se a URL termina em /exec e a implantação permite acesso.');}
+    if(!data||typeof data!=='object'||Array.isArray(data))throw new Error('Resposta inválida do proxy.');
+    if(!['OK','ZERO_RESULTS'].includes(data.status))throw new Error(erroPlaces(data));
+    return data;
+  }catch(e){
+    if(e.name==='AbortError')throw new Error('A consulta demorou mais de 25 segundos. Tente novamente.');
+    if(e instanceof TypeError)throw new Error('Não foi possível conectar ao proxy. Confira a URL, o acesso público da implantação e sua conexão.');
+    throw e;
+  }finally{clearTimeout(timeout);}
+}
+function mostrarBuscaStatus(msg,error=false){
+  const el=document.getElementById('buscaStatus');
+  el.hidden=false;el.textContent=msg;el.style.borderColor=error?'var(--red)':'var(--neon)';
+}
+async function testarConexao(){
+  const btn=document.getElementById('testeConexaoBtn'),el=document.getElementById('testeConexaoStatus');
+  const url=document.getElementById('proxyUrlInput').value.trim();
+  btn.disabled=true;el.textContent='Testando o proxy…';
+  try{await consultarProxy(url,{});el.textContent='Proxy acessível. Faça uma busca para validar também a chave e a API do Google.';}
+  catch(e){el.textContent=e.message;}
+  finally{btn.disabled=false;}
+}
 async function buscarAPI(query,proxyUrl){
-  const raioKm=parseInt(document.getElementById('raioSlider').value);
-  const raioM=raioKm*1000;
-  const nicho=resolveNicho(query);
-  const LAT=USER_LAT, LNG=USER_LNG;
-  const seenPlace=new Set(), raw=[];
-
-  const mkUrl=pt=>{
-    let u=proxyUrl+'?endpoint=nearbysearch&location='+LAT+','+LNG+'&radius='+raioM+'&keyword='+encodeURIComponent(nicho.keyword);
-    if(nicho.type) u+='&type='+nicho.type;
-    if(pt) u+='&pagetoken='+encodeURIComponent(pt);
-    return u;
-  };
-
+  const raioKm=parseInt(document.getElementById('raioSlider').value),raioM=raioKm*1000;
+  const nicho=resolveNicho(query),LAT=USER_LAT,LNG=USER_LNG;
+  const seenPlace=new Set(),raw=[],det=[],semTelefone=[],falhas=[];
+  mostrarBuscaStatus('Buscando empresas…');
   try{
     let pt='';
     for(let pg=0;pg<2;pg++){
-      const res=await fetch(mkUrl(pt));
-      const data=await res.json();
-      if(data.status!=='OK'&&data.status!=='ZERO_RESULTS') break;
-      for(const p of (data.results||[])){
-        if(seenPlace.has(p.place_id)) continue;
-        const pLat=p.geometry?.location?.lat, pLng=p.geometry?.location?.lng;
-        if(pLat&&pLng&&distM(LAT,LNG,pLat,pLng)>raioM) continue;
-        seenPlace.add(p.place_id); raw.push(p);
+      const data=await consultarProxy(proxyUrl,{endpoint:'nearbysearch',location:LAT+','+LNG,radius:raioM,keyword:nicho.keyword,type:nicho.type,pagetoken:pt});
+      for(const p of(data.results||[])){
+        if(!p.place_id||seenPlace.has(p.place_id))continue;
+        const lat=p.geometry?.location?.lat,lng=p.geometry?.location?.lng;
+        if(Number.isFinite(lat)&&Number.isFinite(lng)&&distM(LAT,LNG,lat,lng)>raioM)continue;
+        seenPlace.add(p.place_id);raw.push(p);
       }
-      pt=data.next_page_token||''; if(!pt) break;
-      await new Promise(r=>setTimeout(r,2000));
+      pt=data.next_page_token||'';if(!pt)break;
+      await new Promise(r=>setTimeout(r,2200));
     }
-  }catch(e){console.warn(e);}
-
-  // ── DEDUPE POR TELEFONE: evita que filiais com central
-  //    compartilhada apareçam como contatos "diferentes" ──
-  const seenTel=new Set();
-  const det=[];
+  }catch(e){falhas.push(e.message);}
+  const historico=Object.values(HISTORICO),existentes=[...resultados,...historico];
+  const seenTel=new Set(existentes.map(r=>normalizarTelefone(r.telNum||r.tel)).filter(Boolean));
+  const seenId=new Set(existentes.map(r=>r.placeId).filter(Boolean));
+  let duplicados=0,concluidos=0;
+  // Sequencial: mantém o limite de 40 detalhes e evita rajadas de consultas.
   for(const p of raw.slice(0,40)){
+    if(seenId.has(p.place_id)){duplicados++;continue;}
     try{
-      const res=await fetch(proxyUrl+'?endpoint=details&place_id='+p.place_id);
-      const data=await res.json();
-      const d=data.result;
-      if(!d||!d.formatted_phone_number) continue;
-      const dLat=d.geometry?.location?.lat, dLng=d.geometry?.location?.lng;
-      if(!dLat||!dLng) continue;
-      const dist=distM(LAT,LNG,dLat,dLng);
-      if(dist>raioM) continue;
-
-      const telNum=d.formatted_phone_number.replace(/\D/g,'');
-      if(HISTORICO[telNum]) continue;   // já no histórico (qualquer busca anterior)
-      if(seenTel.has(telNum)) continue; // mesmo telefone já encontrado nesta busca
-      seenTel.add(telNum);
-
-      det.push({
-        nome:d.name, tel:d.formatted_phone_number, telNum,
+      const data=await consultarProxy(proxyUrl,{endpoint:'details',place_id:p.place_id});
+      const d=data.result;if(!d)throw new Error('O Google retornou detalhes incompletos.');
+      const lat=d.geometry?.location?.lat??p.geometry?.location?.lat,lng=d.geometry?.location?.lng??p.geometry?.location?.lng;
+      if(!Number.isFinite(lat)||!Number.isFinite(lng))continue;
+      const dist=distM(LAT,LNG,lat,lng);if(dist>raioM)continue;
+      const telNum=normalizarTelefone(d.formatted_phone_number||d.international_phone_number);
+      const maps='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(d.name||p.name||'Empresa')+'&query_place_id='+encodeURIComponent(p.place_id);
+      if(!telNum){semTelefone.push({nome:d.name||p.name,maps});continue;}
+      if(seenTel.has(telNum)){duplicados++;continue;}
+      seenTel.add(telNum);seenId.add(p.place_id);
+      det.push({nome:d.name||p.name,tel:d.formatted_phone_number||d.international_phone_number,telNum,placeId:p.place_id,maps,
+        website:/^https?:\/\//i.test(d.website||'')?d.website:'',
         avaliacao:d.rating?d.rating+' ★ ('+(d.user_ratings_total||0).toLocaleString('pt-BR')+')':'Sem avaliação',
-        rating:d.rating||0, count:d.user_ratings_total||0,
-        end:(d.formatted_address||'').replace(/, (Brazil|Brasil)$/,''),
-        distKm:(dist/1000).toFixed(1),
-        pot:calcPot(d.rating,d.user_ratings_total,nicho.corp),
-        msg:buildMsg(d.name,query,d.rating,d.user_ratings_total),
-        nicho:query, corp:!!nicho.corp,
-      });
-    }catch(e){console.warn(e);}
+        rating:d.rating||0,count:d.user_ratings_total||0,end:(d.formatted_address||p.vicinity||'').replace(/, (Brazil|Brasil)$/,''),
+        distKm:(dist/1000).toFixed(1),pot:calcPot(d.rating,d.user_ratings_total,nicho.corp),
+        msg:buildMsg(d.name||p.name,query,d.rating,d.user_ratings_total),nicho:query,corp:!!nicho.corp});
+    }catch(e){falhas.push(e.message);if(/chave|Limite|conectar|25 segundos|HTTP/.test(e.message))break;}
+    concluidos++;mostrarBuscaStatus('Conferindo contatos: '+concluidos+'/'+Math.min(raw.length,40));
   }
-
-  // ── MESCLA com a fila já existente (persistida), sem duplicar por telefone ──
-  const telsExistentes=new Set(resultados.map(r=>r.telNum));
-  const novosUnicos=det.filter(d=>!telsExistentes.has(d.telNum));
-  const combinados=[...resultados, ...novosUnicos];
-
-  const muito=shuffle(combinados.filter(d=>d.pot==='muito'));
-  const alta =shuffle(combinados.filter(d=>d.pot==='alta'));
-  const media=shuffle(combinados.filter(d=>d.pot==='media'));
-  resultados=[...muito,...alta,...media];
-  salvarFila();
-
-  if(!resultados.length){
-    const jaProsp=Object.keys(HISTORICO).length;
-    document.getElementById('resultado').innerHTML='<div class="empty-state"><div class="empty-icon">📭</div><h3>Nada encontrado</h3><p>'+(jaProsp>0?'Todos os prospects desta área já foram prospectados ('+jaProsp+' no histórico). Tente outro nicho ou aumente o raio.':'Sem resultados para <b>"'+query+'"</b> em <b>'+raioKm+'km</b>.')+'</p></div>';
-    document.getElementById('statsRow').style.display='none';
-  } else renderCards();
-  renderHoje();
+  resultados=[...resultados,...det].sort((a,b)=>({muito:0,alta:1,media:2}[a.pot]??3)-({muito:0,alta:1,media:2}[b.pot]??3)||Number(a.distKm||0)-Number(b.distKm||0));
+  salvarFila();renderCards();renderHoje();
+  mostrarBuscaStatus(det.length+' novos contatos • '+duplicados+' duplicados evitados • '+semTelefone.length+' sem telefone nesta pesquisa.'+(falhas.length?' Atenção: '+falhas[0]:'')+(raw.length>40?' Foram encontradas '+raw.length+' empresas; detalhes limitados a 40 por busca.':''),!!falhas.length);
+  const extras=document.getElementById('pesquisaComplementar');extras.replaceChildren();
+  if(semTelefone.length){
+    const title=document.createElement('p');title.textContent='Sem telefone no Google: confira o site ou o perfil da empresa antes de cadastrar manualmente.';extras.append(title);
+    semTelefone.forEach(p=>{const a=document.createElement('a');a.textContent=p.nome+' ↗';a.href=p.maps;a.target='_blank';a.rel='noopener noreferrer';a.style.cssText='display:block;color:var(--neon);margin-top:8px';extras.append(a);});
+  }
+  if(!resultados.length&&!falhas.length){document.getElementById('resultado').innerHTML='<div class="empty-state"><h3>Nenhum contato novo com telefone</h3><p>Tente outro segmento ou raio. Confira também as empresas sem telefone listadas acima.</p></div>';}
+}
+function cadastrarLeadManual(event){
+  event.preventDefault();
+  const form=event.currentTarget,rawNome=form.elements.nome.value.trim(),telNum=normalizarTelefone(form.elements.telefone.value);
+  if(!rawNome||!telNum){showToast('Informe empresa e telefone com DDD (10 ou 11 dígitos).');return;}
+  const existing=[...resultados,...Object.values(HISTORICO)].some(r=>normalizarTelefone(r.telNum||r.tel)===telNum);
+  if(existing){showToast('Este telefone já está na fila ou no histórico.');return;}
+  // Campos entram como texto em todas as telas legadas do CRM.
+  const nome=escapeText(rawNome),nicho=escapeText(form.elements.segmento.value.trim()||'Manual');
+  resultados.unshift({nome,tel:telNum,telNum,nicho,corp:true,pot:'alta',rating:0,count:0,avaliacao:'Cadastro manual',end:'Informado manualmente',distKm:'—',msg:buildMsg(nome,nicho,0,0)});
+  salvarFila();renderCards();renderHoje();form.reset();showToast('Contato adicionado à fila.');
 }
 
 /* ══ SELEÇÃO MÚLTIPLA / FILA EM LOTE ══════════════ */
@@ -1213,6 +1239,8 @@ function renderCards(){
       +(!MODO_FILA?'<input type="checkbox" class="rc-select" '+checked+' onchange="toggleSelecao(\''+c.telNum+'\',this.checked)" />':'')
       +'<div class="rc-head"><div class="rc-name">'+corpBadge+' '+c.nome+'</div><span class="badge '+bcCls+'">'+POT_LABEL[c.pot]+'</span></div>'
       +'<div class="rc-info"><div class="rc-row">⭐ <strong>'+c.avaliacao+'</strong></div><div class="rc-row">📞 <strong>'+c.tel+'</strong></div><div class="rc-dist">📍 '+c.distKm+' km</div><div class="rc-row addr">'+c.end+'</div></div>'
+      +(c.maps?'<div class="rc-info"><a style="color:var(--neon)" target="_blank" rel="noopener noreferrer" href="'+escapeText(c.maps)+'">Conferir no Maps ↗</a></div>':'')
+      +'<div class="rc-info" style="font-size:10px;color:var(--sub)">WhatsApp não verificado. Confira o contato antes de abordar.</div>'
       +'<div class="rc-actions"><a class="btn btn-wa" href="'+wa+'" target="_blank" onclick="registrarContato(\''+c.telNum+'\')">'+WA_SVG+' WhatsApp</a><a class="btn btn-call" href="'+telLink(c.telNum)+'">📞</a><button class="btn-toggle-msg" id="tb'+idx+'" onclick="toggleMsg('+idx+')">Ver msg</button></div>'
       +'<div class="rc-msg" id="cm'+idx+'">'+c.msg+'</div>'
       +buildQARow(c.telNum,true)
@@ -1628,3 +1656,4 @@ window.addEventListener('scroll',()=>{ const b=document.getElementById('back-top
 </script>
 </body>
 </html>
+
