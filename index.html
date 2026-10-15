@@ -1077,7 +1077,7 @@ function normalizarTelefone(value){
 }
 function erroPlaces(data){
   const dicas={REQUEST_DENIED:'Confira no Google Cloud a chave, as restrições, a API Places e o faturamento.',OVER_QUERY_LIMIT:'Limite de consultas atingido. Confira cotas e faturamento no Google Cloud.',INVALID_REQUEST:'O Google recusou os parâmetros da pesquisa.',UNKNOWN_ERROR:'Falha temporária do Google. Tente novamente mais tarde.'};
-  return (dicas[data.status]||'Resposta inválida do serviço.')+(data.error_message?' Detalhe: '+data.error_message:'');
+  return (dicas[data.status]||'O serviço retornou '+(data.status||'um status desconhecido')+'.')+((data.error_message||data.error)?' Detalhe: '+(data.error_message||data.error):'');
 }
 async function consultarProxy(base,params){
   const url=new URL(base);
