@@ -298,8 +298,26 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 #back-top.visible{display:flex;} #back-top:hover{border-color:var(--neon);color:var(--neon);}
 </style>
 </head>
-<body>
-<div class="wrap">
+<body><style>
+[hidden]{display:none!important}.cloud-gate{max-width:440px;margin:8vh auto;padding:28px;background:#181820;border:1px solid #36363e;border-radius:18px}.cloud-gate h1{font-size:25px;margin:0 0 10px}.cloud-gate p{color:#b7b7bf;margin:12px 0;line-height:1.6}.cloud-gate label{margin-top:18px}.cloud-gate input,.cloud-form input{display:block;width:100%;height:46px;background:#24242d;color:white;border:1px solid #505059;border-radius:8px;padding:10px;font:inherit}.cloud-gate button{margin-top:14px}.cloud-gate .brand{color:#ff6b00}.cloud-top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border-bottom:1px solid #35353e;flex-wrap:wrap}.cloud-top small{display:block;margin-top:3px}.cloud-top .btn{width:auto}.cloud-top-actions{display:flex;gap:6px;flex-wrap:wrap}.cloud-form{display:grid;gap:9px}.cloud-team-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}.cloud-note{font-size:12px;color:var(--sub);line-height:1.6;margin:10px 0}.cloud-message{font-size:13px;margin:12px 0;white-space:pre-wrap;color:#ffbb88}.cloud-gate a{color:#ff9448}.cloud-gate .btn{font-size:14px}
+</style>
+<section id="cloudGate" class="cloud-gate" aria-label="Acesso à prospecção">
+ <h1><span class="brand">ArznStoreSP</span><br>Prospecção em equipe</h1>
+ <p>Seus contatos, histórico e retornos no notebook e no celular.</p>
+ <form id="cloudAuthForm">
+  <label for="cloudEmail">E-mail</label><input id="cloudEmail" name="email" type="email" autocomplete="username" required placeholder="seu@email.com">
+  <label for="cloudPassword">Senha</label><input id="cloudPassword" name="password" type="password" autocomplete="current-password" required>
+  <button id="cloudLoginBtn" class="btn btn-primary" type="submit">Entrar</button>
+ </form>
+ <p id="cloudAuthMessage" role="status" aria-live="polite">Carregando conexão segura…</p>
+ <p class="cloud-note">Acesso exclusivo à equipe autorizada. O número de WhatsApp não interfere no login. Se você já tem conta na Central de Vendas, use a mesma senha.</p>
+ <button id="cloudReloadAuth" class="btn btn-ghost" type="button">Tentar abrir minha sessão</button>
+ <button id="cloudAccountSwitch" class="btn btn-ghost" type="button">Usar outra conta</button>
+ <noscript>Ative o JavaScript para entrar.</noscript>
+</section>
+
+<div class="wrap" id="prospApp" hidden>
+<div class="cloud-top"><div><strong id="cloudUser">Equipe</strong><small id="cloudStatus" role="status" aria-live="polite">Conectando…</small></div><div class="cloud-top-actions"><button id="cloudRetry" type="button" class="btn btn-ghost btn-sm">Sincronizar</button><button id="cloudShare" type="button" class="btn btn-ghost btn-sm">Copiar link</button><button id="cloudLogout" type="button" class="btn btn-ghost btn-sm">Sair</button></div></div>
 
   <div class="header">
     <div class="logo">
@@ -567,7 +585,8 @@ Se surgir uma ocasião de brindes, pode me chamar aqui. Até mais!</div>
   </div>
 
   <!-- ══ CONFIG ══ -->
-  <div id="tab-config" class="tab-content">
+  <div id="tab-config" class="tab-content"><section class="panel"><div class="panel-title">Minha conta</div><p class="cloud-note">No primeiro acesso da funcionária, troque a senha inicial por uma senha pessoal. O login é o mesmo no notebook e no celular.</p><form id="myPasswordForm" class="cloud-form"><label for="myCurrentPassword">Senha atual</label><input id="myCurrentPassword" type="password" autocomplete="current-password" required><label for="myNewPassword">Nova senha</label><input id="myNewPassword" type="password" autocomplete="new-password" minlength="12" maxlength="128" required><label for="myConfirmPassword">Repita a nova senha</label><input id="myConfirmPassword" type="password" autocomplete="new-password" minlength="12" maxlength="128" required><button id="myPasswordBtn" class="btn btn-ghost" type="submit">Trocar minha senha</button></form><p id="myPasswordMessage" class="cloud-message" role="status"></p></section><section id="migrationPanel" class="panel" hidden><div class="panel-title">Trazer seus dados anteriores</div><p id="migrationSummary" class="cloud-note"></p><button id="migrateLocalBtn" type="button" class="btn btn-primary">Mesclar dados deste navegador com a nuvem</button><p id="migrationMessage" class="cloud-message" role="status"></p><p class="cloud-note">Faça isso no navegador onde você usava o sistema. Os dados originais ficam preservados. A opção Importar Backup também mescla contatos, sem substituir toda a base.</p></section>
+<section id="teamPanel" class="panel" hidden><div class="panel-title">Acessos da equipe</div><p class="cloud-note">Crie um acesso individual para a funcionária. Depois envie o mesmo link para o notebook e o celular dela. No notebook, conecte o WhatsApp Web ao número de prospecção.</p><form id="teamForm" class="cloud-form"><label for="teamName">Nome</label><input id="teamName" type="text" maxlength="100" required><label for="teamEmail">E-mail da funcionária</label><input id="teamEmail" type="email" autocomplete="off" required><label for="teamPassword">Senha inicial (mínimo 12 caracteres)</label><input id="teamPassword" type="password" autocomplete="new-password" minlength="12" maxlength="128" required><button id="teamCreateBtn" class="btn btn-primary" type="submit">Criar acesso da funcionária</button></form><p id="teamMessage" class="cloud-message" role="status"></p><div id="teamList"></div></section>
 
     <div class="panel">
       <div class="panel-title">📍 Endereço de Origem</div>
@@ -586,7 +605,7 @@ Se surgir uma ocasião de brindes, pode me chamar aqui. Até mais!</div>
 
     <div class="panel">
       <div class="panel-title">🔑 Chave de API & Proxy</div>
-      <div class="field-group"><label>Chave Google Places API</label><input type="text" id="apiKeyInput" placeholder="AIzaSy…" /><div class="hint-text">Obtida em <b>console.cloud.google.com</b></div></div>
+      <div class="field-group"><label>Chave Google Places API (não utilizada pelo aplicativo)</label><input type="text" id="apiKeyInput" placeholder="AIzaSy…" /><div class="hint-text">Obtida em <b>console.cloud.google.com</b></div></div>
       <button class="btn btn-primary" style="margin-bottom:12px" onclick="salvarApiKey()">💾 &nbsp;Salvar Chave</button>
       <div class="field-group"><label>URL do Proxy Apps Script</label><input type="text" id="proxyUrlInput" placeholder="https://script.google.com/macros/s/…/exec" /></div>
       <button class="btn btn-primary" onclick="salvarProxy()">💾 &nbsp;Salvar Proxy</button><button id="testeConexaoBtn" class="btn btn-ghost" onclick="testarConexao()" style="margin-top:10px">Testar conexão</button><p style="font-size:12px;color:var(--sub);margin-top:8px">O teste faz uma consulta de empresas no centro de São Paulo, sem solicitar detalhes.</p><p id="testeConexaoStatus" role="status" aria-live="polite" style="margin-top:10px;color:var(--sub)"></p><p style="font-size:12px;color:var(--sub)">A busca usa a chave configurada no Apps Script. O campo de chave acima não ativa a integração.</p>
@@ -632,6 +651,7 @@ Minha Empresa | (11) 99999-9999</textarea>
 <button id="back-top" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
 <div id="toast"></div>
 
+<script src="cloud/cloud-storage.js?v=1"></script>
 <script>
 /* ══ ESTADO ══════════════════════════════════════ */
 let resultados   = [];
@@ -768,25 +788,25 @@ function telLink(telNum){ return 'tel:+55'+(normalizarTelefone(telNum)||telNum);
 ══════════════════════════════════════════════════ */
 function lerVariantes(){
   try{
-    const arr=JSON.parse(localStorage.getItem('prosp_msgs')||'[]');
+    const arr=JSON.parse(prospStorage.getItem('prosp_msgs')||'[]');
     if(Array.isArray(arr)){
       const filtradas=arr.filter(v=>v&&v.trim());
       if(filtradas.length) return filtradas;
     }
   }catch(e){}
   // migração de versão antiga (mensagem única)
-  const legacy=localStorage.getItem('prosp_msg');
+  const legacy=prospStorage.getItem('prosp_msg');
   if(legacy&&legacy.trim()) return [legacy];
   return [];
 }
 function buildMsg(nome,nicho,rating,count){
-  const assin=localStorage.getItem('prosp_assin')||document.getElementById('assinatura').value.trim()||'Att,\nMinha Empresa';
+  const assin=prospStorage.getItem('prosp_assin')||document.getElementById('assinatura').value.trim()||'Att,\nMinha Empresa';
   const variantes=lerVariantes();
 
   if(variantes.length){
-    let idx=parseInt(localStorage.getItem('prosp_msgRotIdx')||'0');
+    let idx=parseInt(prospStorage.getItem('prosp_msgRotIdx')||'0');
     const template=variantes[idx%variantes.length];
-    localStorage.setItem('prosp_msgRotIdx',String(idx+1));
+    prospStorage.setItem('prosp_msgRotIdx',String(idx+1));
     return template.replace(/\[NOME\]/g,nome)+'\n\n'+assin;
   }
 
@@ -809,28 +829,28 @@ function adicionarEndereco(){
   document.getElementById('enderecoInput').value='';
   document.getElementById('latInput').value='';
   document.getElementById('lngInput').value='';
-  if(ATIVO_IDX<0){ ATIVO_IDX=0; USER_LAT=ENDERECOS[0].lat; USER_LNG=ENDERECOS[0].lng; localStorage.setItem('prosp_ativo','0'); }
+  if(ATIVO_IDX<0){ ATIVO_IDX=0; USER_LAT=ENDERECOS[0].lat; USER_LNG=ENDERECOS[0].lng; prospStorage.setItem('prosp_ativo','0'); }
   atualizarLocAtiva(); renderChips(); showToast('✓ Endereço salvo!');
 }
 function ativarEndereco(idx){
   ATIVO_IDX=idx; USER_LAT=ENDERECOS[idx].lat; USER_LNG=ENDERECOS[idx].lng;
-  localStorage.setItem('prosp_ativo',String(idx));
+  prospStorage.setItem('prosp_ativo',String(idx));
   atualizarLocAtiva(); renderChips(); showToast('✓ Ativo: '+ENDERECOS[idx].nome);
 }
 function deletarEndereco(idx,e){
   e.stopPropagation(); ENDERECOS.splice(idx,1); salvarEnderecos();
   if(ENDERECOS.length===0){ATIVO_IDX=-1;USER_LAT=null;USER_LNG=null;}
   else{ ATIVO_IDX=Math.min(ATIVO_IDX,ENDERECOS.length-1); USER_LAT=ENDERECOS[ATIVO_IDX].lat; USER_LNG=ENDERECOS[ATIVO_IDX].lng; }
-  localStorage.setItem('prosp_ativo',String(ATIVO_IDX));
+  prospStorage.setItem('prosp_ativo',String(ATIVO_IDX));
   atualizarLocAtiva(); renderChips();
 }
-function salvarEnderecos(){ localStorage.setItem('prosp_enderecos',JSON.stringify(ENDERECOS)); }
+function salvarEnderecos(){ prospStorage.setItem('prosp_enderecos',JSON.stringify(ENDERECOS)); }
 function atualizarLocAtiva(){
   const el=document.getElementById('locAtiva');
   if(ATIVO_IDX>=0&&ENDERECOS[ATIVO_IDX]){
     const e=ENDERECOS[ATIVO_IDX];
     el.className='loc-box ok';
-    el.innerHTML='📍 <b style="color:var(--neon)">'+e.nome+'</b><br><span style="font-size:11px">'+e.endereco+'</span>';
+    el.innerHTML='📍 <b style="color:var(--neon)">'+escapeText(e.nome)+'</b><br><span style="font-size:11px">'+escapeText(e.endereco)+'</span>';
   } else {
     el.className='loc-box';
     el.innerHTML='Nenhum endereço — configure em <b>Config.</b>';
@@ -839,18 +859,18 @@ function atualizarLocAtiva(){
 function renderChips(){
   const c=document.getElementById('locChips');
   if(!ENDERECOS.length){c.innerHTML='<div style="font-size:12px;color:var(--hint);text-align:center;padding:10px">Nenhum endereço cadastrado.</div>';return;}
-  c.innerHTML=ENDERECOS.map((e,i)=>'<div class="loc-chip '+(i===ATIVO_IDX?'active':'')+'" onclick="ativarEndereco('+i+')"><div class="loc-chip-name">'+e.nome+'</div><div class="loc-chip-addr">'+e.endereco+'</div>'+(i===ATIVO_IDX?'<span class="loc-chip-badge">ATIVO</span>':'')+'<span class="loc-chip-del" onclick="deletarEndereco('+i+',event)">✕</span></div>').join('');
+  c.innerHTML=ENDERECOS.map((e,i)=>'<div class="loc-chip '+(i===ATIVO_IDX?'active':'')+'" onclick="ativarEndereco('+i+')"><div class="loc-chip-name">'+escapeText(e.nome)+'</div><div class="loc-chip-addr">'+escapeText(e.endereco)+'</div>'+(i===ATIVO_IDX?'<span class="loc-chip-badge">ATIVO</span>':'')+'<span class="loc-chip-del" onclick="deletarEndereco('+i+',event)">✕</span></div>').join('');
 }
 
 /* ══ FILA PERSISTENTE ═════════════════════════════
-   A fila (resultados pendentes) é salva no localStorage
+   A fila (resultados pendentes) é salva no prospStorage
    para sobreviver ao fechar o navegador. Some da fila
    automaticamente quando o lead é contatado/classificado.
 ══════════════════════════════════════════════════ */
 function salvarFila(){
   // só persiste quem ainda não foi para o histórico (ainda pendente de ação)
   const pendentes=resultados.filter(r=>!HISTORICO[r.telNum]);
-  localStorage.setItem('prosp_fila',JSON.stringify(pendentes));
+  prospStorage.setItem('prosp_fila',JSON.stringify(pendentes));
 }
 function removerDaFila(telNum){
   resultados=resultados.filter(r=>r.telNum!==telNum);
@@ -858,7 +878,7 @@ function removerDaFila(telNum){
 }
 
 /* ══ HISTÓRICO / CRM ══════════════════════════════ */
-function salvarHist(){ localStorage.setItem('prosp_historico',JSON.stringify(HISTORICO)); }
+function salvarHist(){ prospStorage.setItem('prosp_historico',JSON.stringify(HISTORICO)); }
 
 function addToHist(item, statusInicial){
   if(!HISTORICO[item.telNum]){
@@ -980,9 +1000,9 @@ function renderHist(){
     return '<div class="hist-card '+(due?'due':'')+'">'
       +'<div class="hist-top">'
         +'<div class="hist-info">'
-          +'<div class="hist-name">'+corpBadge+h.nome+(due?' 🔔':'')+'</div>'
-          +'<div class="hist-meta">📞 '+h.tel+' · 📍 '+(h.distKm||'?')+' km · adicionado em '+h.data+'</div>'
-          +'<div style="margin-top:6px;font-size:11px;color:var(--sub)">'+h.end+'</div>'
+          +'<div class="hist-name">'+corpBadge+escapeText(h.nome)+(due?' 🔔':'')+'</div>'
+          +'<div class="hist-meta">📞 '+escapeText(h.tel)+' · 📍 '+(h.distKm||'?')+' km · adicionado em '+escapeText(h.data)+'</div>'
+          +'<div style="margin-top:6px;font-size:11px;color:var(--sub)">'+escapeText(h.end)+'</div>'
           +statusBadge(h.status)
         +'</div>'
         +'<div class="hist-actions">'
@@ -996,7 +1016,7 @@ function renderHist(){
         +'<span class="hist-notes-toggle '+(h.notas?'has':'')+'" id="notasbtn-'+tel+'" onclick="toggleNotas(\''+tel+'\')">📝 '+(h.notas?'Ver notas':'Notas')+'</span>'
       +'</div>'
       +'<div class="hist-notes-box" id="notas-'+tel+'">'
-        +'<textarea placeholder="Ex: Falei com o João, sócio. Decide até dia 15…" onblur="setNotas(\''+tel+'\',this.value)">'+(h.notas||'')+'</textarea>'
+        +'<textarea placeholder="Ex: Falei com o João, sócio. Decide até dia 15…" onblur="setNotas(\''+tel+'\',this.value)">'+escapeText(h.notas||'')+'</textarea>'
       +'</div>'
     +'</div>';
   }).join('');
@@ -1016,17 +1036,17 @@ function setPot(val,el){
 }
 
 /* ══ META DIÁRIA ══════════════════════════════════ */
-function lerMeta(){ return parseInt(localStorage.getItem('prosp_meta')||'20'); }
+function lerMeta(){ return parseInt(prospStorage.getItem('prosp_meta')||'20'); }
 function lerContadorHoje(){
   const hoje=hojeISO();
   let c={date:hoje,count:0};
-  try{ const saved=JSON.parse(localStorage.getItem('prosp_contador')||'{}'); if(saved.date===hoje) c=saved; }catch(e){}
+  try{ const saved=JSON.parse(prospStorage.getItem('prosp_contador')||'{}'); if(saved.date===hoje) c=saved; }catch(e){}
   return c;
 }
 function incrementarContadorHoje(){
   const c=lerContadorHoje();
   c.count++;
-  localStorage.setItem('prosp_contador',JSON.stringify(c));
+  prospStorage.setItem('prosp_contador',JSON.stringify(c));
   renderMetaBar();
 }
 function renderMetaBar(){
@@ -1044,7 +1064,7 @@ function toggleMetaEdit(){
 function salvarMeta(){
   const v=parseInt(document.getElementById('metaInput').value);
   if(!v||v<1){showToast('⚠️ Meta inválida!');return;}
-  localStorage.setItem('prosp_meta',String(v));
+  prospStorage.setItem('prosp_meta',String(v));
   document.getElementById('metaEditRow').style.display='none';
   renderMetaBar();
   showToast('✓ Meta atualizada!');
@@ -1055,7 +1075,7 @@ async function buscar(){
   const query=document.getElementById('nichoInput').value.trim();
   if(!query){showToast('⚠️ Selecione um nicho!');return;}
   if(USER_LAT===null){showToast('⚠️ Configure o endereço!');switchTab('config',document.getElementById('tabbtn-config'));return;}
-  const proxy=localStorage.getItem('prosp_proxy')||'https://script.google.com/macros/s/AKfycbzBOBq9qcoycBi86GDQP77tyj_kBRNKxIL6R5ld7bOYet0sFhugqDifq_tbz6Zp8sY/exec';
+  const proxy=prospStorage.getItem('prosp_proxy')||'https://script.google.com/macros/s/AKfycbzBOBq9qcoycBi86GDQP77tyj_kBRNKxIL6R5ld7bOYet0sFhugqDifq_tbz6Zp8sY/exec';
   if(!proxy){showToast('⚠️ Configure o Proxy!');switchTab('config',document.getElementById('tabbtn-config'));return;}
 
   const btn=document.getElementById('buscarBtn');
@@ -1174,7 +1194,7 @@ function cadastrarLeadManual(event){
   const existing=[...resultados,...Object.values(HISTORICO)].some(r=>normalizarTelefone(r.telNum||r.tel)===telNum);
   if(existing){showToast('Este telefone já está na fila ou no histórico.');return;}
   // Campos entram como texto em todas as telas legadas do CRM.
-  const nome=escapeText(rawNome),nicho=escapeText(form.elements.segmento.value.trim()||'Manual');
+  const nome=rawNome,nicho=form.elements.segmento.value.trim()||'Manual';
   resultados.unshift({nome,tel:telNum,telNum,nicho,corp:true,pot:'alta',rating:0,count:0,avaliacao:'Cadastro manual',end:'Informado manualmente',distKm:'—',msg:buildMsg(nome,nicho,0,0)});
   salvarFila();renderCards();renderHoje();form.reset();showToast('Contato adicionado à fila.');
 }
@@ -1237,12 +1257,12 @@ function renderCards(){
     const idx=resultados.indexOf(c);
     return '<div class="result-card">'
       +(!MODO_FILA?'<input type="checkbox" class="rc-select" '+checked+' onchange="toggleSelecao(\''+c.telNum+'\',this.checked)" />':'')
-      +'<div class="rc-head"><div class="rc-name">'+corpBadge+' '+c.nome+'</div><span class="badge '+bcCls+'">'+POT_LABEL[c.pot]+'</span></div>'
-      +'<div class="rc-info"><div class="rc-row">⭐ <strong>'+c.avaliacao+'</strong></div><div class="rc-row">📞 <strong>'+c.tel+'</strong></div><div class="rc-dist">📍 '+c.distKm+' km</div><div class="rc-row addr">'+c.end+'</div></div>'
+      +'<div class="rc-head"><div class="rc-name">'+corpBadge+' '+escapeText(c.nome)+'</div><span class="badge '+bcCls+'">'+POT_LABEL[c.pot]+'</span></div>'
+      +'<div class="rc-info"><div class="rc-row">⭐ <strong>'+escapeText(c.avaliacao)+'</strong></div><div class="rc-row">📞 <strong>'+escapeText(c.tel)+'</strong></div><div class="rc-dist">📍 '+escapeText(c.distKm)+' km</div><div class="rc-row addr">'+escapeText(c.end)+'</div></div>'
       +(c.maps?'<div class="rc-info"><a style="color:var(--neon)" target="_blank" rel="noopener noreferrer" href="'+escapeText(c.maps)+'">Conferir no Maps ↗</a></div>':'')
-      +'<div class="rc-info" style="font-size:10px;color:var(--sub)">WhatsApp não verificado. Confira o contato antes de abordar.</div>'
+      +'<div class="rc-info" style="font-size:10px;color:var(--sub)">WhatsApp não verificado. Confira o contato e registre o resultado após a conversa.</div>'
       +'<div class="rc-actions"><a class="btn btn-wa" href="'+wa+'" target="_blank" onclick="registrarContato(\''+c.telNum+'\')">'+WA_SVG+' WhatsApp</a><a class="btn btn-call" href="'+telLink(c.telNum)+'">📞</a><button class="btn-toggle-msg" id="tb'+idx+'" onclick="toggleMsg('+idx+')">Ver msg</button></div>'
-      +'<div class="rc-msg" id="cm'+idx+'">'+c.msg+'</div>'
+      +'<div class="rc-msg" id="cm'+idx+'">'+escapeText(c.msg)+'</div>'
       +buildQARow(c.telNum,true)
     +'</div>';
   }).join('')+'</div>';
@@ -1317,8 +1337,8 @@ function renderKanban(){
           const next=nextStatus(h.status);
           const corpBadge = h.corp ? '<span class="badge b-corp" style="margin-right:4px">B2B</span>' : '';
           return '<div class="kanban-card" draggable="true" ondragstart="dragStart(event,\''+tel+'\')">'
-            +'<div class="kanban-card-name">'+corpBadge+h.nome+'</div>'
-            +'<div class="kanban-card-meta">📞 '+h.tel+' · 📍 '+(h.distKm||'?')+'km</div>'
+            +'<div class="kanban-card-name">'+corpBadge+escapeText(h.nome)+'</div>'
+            +'<div class="kanban-card-meta">📞 '+escapeText(h.tel)+' · 📍 '+(h.distKm||'?')+'km</div>'
             +'<div class="kanban-card-actions">'
               +(next?'<button class="kanban-mini-btn" onclick="setStatus(\''+tel+'\',\''+next+'\')">▶ Avançar</button>':'<span class="kanban-mini-btn" style="flex:1;opacity:.4">fim</span>')
               +'<a class="kanban-mini-btn icon-only" style="color:var(--green)" href="'+waLink(tel,h.msg)+'" target="_blank" title="WhatsApp">💬</a>'
@@ -1361,7 +1381,7 @@ function renderHoje(){
     filaEl.innerHTML=top.map(c=>{
       const bcCls={muito:'b-muito',alta:'b-alta',media:'b-media'}[c.pot];
       return '<div class="hoje-card">'
-        +'<div class="hoje-card-info"><div class="hoje-card-name">'+(c.corp?'<span class="badge b-corp">B2B</span> ':'')+c.nome+' <span class="badge '+bcCls+'">'+POT_LABEL[c.pot]+'</span></div><div class="hoje-card-meta">📞 '+c.tel+' · 📍 '+c.distKm+'km</div></div>'
+        +'<div class="hoje-card-info"><div class="hoje-card-name">'+(c.corp?'<span class="badge b-corp">B2B</span> ':'')+escapeText(c.nome)+' <span class="badge '+bcCls+'">'+POT_LABEL[c.pot]+'</span></div><div class="hoje-card-meta">📞 '+escapeText(c.tel)+' · 📍 '+escapeText(c.distKm)+'km</div></div>'
         +'<div class="hoje-card-actions"><a class="btn btn-wa btn-sm" href="'+waLink(c.telNum,c.msg)+'" target="_blank" onclick="registrarContato(\''+c.telNum+'\')">'+WA_SVG+' Zap</a><a class="btn btn-call btn-sm" href="'+telLink(c.telNum)+'">📞</a></div>'
       +'</div>';
     }).join('') + (resultados.length>6?'<span class="hoje-vermais" onclick="switchTab(\'resultados\',document.getElementById(\'tabbtn-resultados\'))">Ver todos os '+resultados.length+' na fila →</span>':'');
@@ -1374,7 +1394,7 @@ function renderHoje(){
   } else {
     followEl.innerHTML=dueList.map(([tel,h])=>{
       return '<div class="hoje-card">'
-        +'<div class="hoje-card-info"><div class="hoje-card-name">'+h.nome+'</div><div class="hoje-card-meta">📞 '+h.tel+' · vence: '+h.followUp+'</div></div>'
+        +'<div class="hoje-card-info"><div class="hoje-card-name">'+escapeText(h.nome)+'</div><div class="hoje-card-meta">📞 '+escapeText(h.tel)+' · vence: '+escapeText(h.followUp)+'</div></div>'
         +'<div class="hoje-card-actions"><a class="btn btn-wa btn-sm" href="'+waLink(tel,h.msg)+'" target="_blank">'+WA_SVG+' Zap</a><a class="btn btn-call btn-sm" href="'+telLink(tel)+'">📞</a></div>'
       +'</div>';
     }).join('');
@@ -1388,7 +1408,7 @@ function renderHoje(){
     stagEl.innerHTML=stagList.map(([tel,h])=>{
       const dias=diasDesde(h.atualizadoEm);
       return '<div class="hoje-card">'
-        +'<div class="hoje-card-info"><div class="hoje-card-name">'+h.nome+'</div><div class="hoje-card-meta">📞 '+h.tel+' · '+dias+' dias sem atualização</div></div>'
+        +'<div class="hoje-card-info"><div class="hoje-card-name">'+escapeText(h.nome)+'</div><div class="hoje-card-meta">📞 '+escapeText(h.tel)+' · '+dias+' dias sem atualização</div></div>'
         +'<div class="hoje-card-actions"><a class="btn btn-wa btn-sm" href="'+waLink(tel,h.msg)+'" target="_blank">'+WA_SVG+' Zap</a><a class="btn btn-call btn-sm" href="'+telLink(tel)+'">📞</a></div>'
       +'</div>';
     }).join('');
@@ -1417,40 +1437,40 @@ function switchTab(id,el){
 }
 
 /* ══ SAVES ════════════════════════════════════════ */
-function salvarProxy(){ const v=document.getElementById('proxyUrlInput').value.trim(); if(!v){showToast('⚠️ URL vazia!');return;} localStorage.setItem('prosp_proxy',v); showToast('✓ Proxy salvo!'); }
-function salvarApiKey(){ const v=document.getElementById('apiKeyInput').value.trim(); if(!v){showToast('⚠️ Chave vazia!');return;} localStorage.setItem('prosp_apikey',v); showToast('✓ Chave salva!'); }
-function salvarAssinatura(){ localStorage.setItem('prosp_assin',document.getElementById('assinatura').value.trim()); showToast('✓ Assinatura salva!'); }
+function salvarProxy(){ const v=document.getElementById('proxyUrlInput').value.trim(); if(!v){showToast('⚠️ URL vazia!');return;} prospStorage.setItem('prosp_proxy',v); showToast('✓ Proxy salvo!'); }
+function salvarApiKey(){ const v=document.getElementById('apiKeyInput').value.trim(); if(!v){showToast('⚠️ Chave vazia!');return;} prospStorage.setItem('prosp_apikey',v); showToast('✓ Chave salva!'); }
+function salvarAssinatura(){ prospStorage.setItem('prosp_assin',document.getElementById('assinatura').value.trim()); showToast('✓ Assinatura salva!'); }
 function salvarMsgsRotacao(){
   const v1=document.getElementById('msgVar1').value.trim();
   const v2=document.getElementById('msgVar2').value.trim();
   const v3=document.getElementById('msgVar3').value.trim();
   const arr=[v1,v2,v3].filter(v=>v);
-  localStorage.setItem('prosp_msgs',JSON.stringify(arr));
-  localStorage.setItem('prosp_msgRotIdx','0');
+  prospStorage.setItem('prosp_msgs',JSON.stringify(arr));
+  prospStorage.setItem('prosp_msgRotIdx','0');
   showToast(arr.length?'✓ '+arr.length+' mensagem(ns) salva(s)!':'✓ Removidas — usando mensagem automática.');
 }
 
 /* ══ BACKUP ═══════════════════════════════════════ */
 function exportarBackup(){
   const data={ v:5, exportado:new Date().toLocaleString('pt-BR'),
-    prosp_proxy:localStorage.getItem('prosp_proxy')||'https://script.google.com/macros/s/AKfycbzBOBq9qcoycBi86GDQP77tyj_kBRNKxIL6R5ld7bOYet0sFhugqDifq_tbz6Zp8sY/exec',
-    prosp_apikey:localStorage.getItem('prosp_apikey')||'',
-    prosp_assin:localStorage.getItem('prosp_assin')||'',
-    prosp_msgs:localStorage.getItem('prosp_msgs')||'[]',
-    prosp_enderecos:localStorage.getItem('prosp_enderecos')||'[]',
-    prosp_ativo:localStorage.getItem('prosp_ativo')||'0',
-    prosp_historico:localStorage.getItem('prosp_historico')||'{}',
-    prosp_fila:localStorage.getItem('prosp_fila')||'[]',
-    prosp_meta:localStorage.getItem('prosp_meta')||'20',
-    prosp_contador:localStorage.getItem('prosp_contador')||'{}',
-    prosp_func_nome:localStorage.getItem('prosp_func_nome')||'',
-    prosp_alan_wa:localStorage.getItem('prosp_alan_wa')||''
+    prosp_proxy:prospStorage.getItem('prosp_proxy')||'https://script.google.com/macros/s/AKfycbzBOBq9qcoycBi86GDQP77tyj_kBRNKxIL6R5ld7bOYet0sFhugqDifq_tbz6Zp8sY/exec',
+    prosp_apikey:prospStorage.getItem('prosp_apikey')||'',
+    prosp_assin:prospStorage.getItem('prosp_assin')||'',
+    prosp_msgs:prospStorage.getItem('prosp_msgs')||'[]',
+    prosp_enderecos:prospStorage.getItem('prosp_enderecos')||'[]',
+    prosp_ativo:prospStorage.getItem('prosp_ativo')||'0',
+    prosp_historico:prospStorage.getItem('prosp_historico')||'{}',
+    prosp_fila:prospStorage.getItem('prosp_fila')||'[]',
+    prosp_meta:prospStorage.getItem('prosp_meta')||'20',
+    prosp_contador:prospStorage.getItem('prosp_contador')||'{}',
+    prosp_func_nome:prospStorage.getItem('prosp_func_nome')||'',
+    prosp_alan_wa:prospStorage.getItem('prosp_alan_wa')||''
   };
   const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([JSON.stringify(data,null,2)],{type:'application/json'})); a.download='backup-prospeccao-'+new Date().toISOString().slice(0,10)+'.json'; a.click(); showToast('✓ Backup exportado!');
 }
 function importarBackup(){
   const inp=document.createElement('input'); inp.type='file'; inp.accept='.json';
-  inp.onchange=e=>{ const r=new FileReader(); r.onload=ev=>{ try{ const d=JSON.parse(ev.target.result); if(!d.v){showToast('⚠️ Arquivo inválido!');return;} ['prosp_proxy','prosp_apikey','prosp_assin','prosp_msgs','prosp_enderecos','prosp_ativo','prosp_historico','prosp_fila','prosp_meta','prosp_contador','prosp_func_nome','prosp_alan_wa'].forEach(k=>{ if(d[k]!==undefined) localStorage.setItem(k,d[k]); }); showToast('✓ Restaurado! Recarregando…'); setTimeout(()=>location.reload(),1200); }catch(e){showToast('⚠️ Erro!');} }; r.readAsText(e.target.files[0]); }; inp.click();
+  inp.onchange=e=>{ const r=new FileReader(); r.onload=ev=>{ try{ const d=JSON.parse(ev.target.result); if(!d.v){showToast('⚠️ Arquivo inválido!');return;} ['prosp_proxy','prosp_apikey','prosp_assin','prosp_msgs','prosp_enderecos','prosp_ativo','prosp_historico','prosp_fila','prosp_meta','prosp_contador','prosp_func_nome','prosp_alan_wa'].forEach(k=>{ if(d[k]!==undefined) prospStorage.setItem(k,d[k]); }); showToast('✓ Restaurado! Recarregando…'); setTimeout(()=>location.reload(),1200); }catch(e){showToast('⚠️ Erro!');} }; r.readAsText(e.target.files[0]); }; inp.click();
 }
 
 /* ══ GUIA — CHECKLIST ═════════════════════════════ */
@@ -1465,8 +1485,8 @@ const CHECKLIST_ITEMS = [
 ];
 function renderChecklist(){
   const hoje=hojeISO();
-  const saved=JSON.parse(localStorage.getItem('prosp_checklist')||'{}');
-  const savedDate=localStorage.getItem('prosp_checklist_date')||'';
+  const saved=JSON.parse(prospStorage.getItem('prosp_checklist')||'{}');
+  const savedDate=prospStorage.getItem('prosp_checklist_date')||'';
   const data = savedDate===hoje ? saved : {};
   document.getElementById('checklistDate').textContent=hoje;
   document.getElementById('checklistBody').innerHTML = CHECKLIST_ITEMS.map(it=>{
@@ -1479,16 +1499,16 @@ function renderChecklist(){
 }
 function marcarChecklist(key, e){
   const hoje=hojeISO();
-  const savedDate=localStorage.getItem('prosp_checklist_date')||'';
-  let data = savedDate===hoje ? JSON.parse(localStorage.getItem('prosp_checklist')||'{}') : {};
+  const savedDate=prospStorage.getItem('prosp_checklist_date')||'';
+  let data = savedDate===hoje ? JSON.parse(prospStorage.getItem('prosp_checklist')||'{}') : {};
   data[key]=!data[key];
-  localStorage.setItem('prosp_checklist',JSON.stringify(data));
-  localStorage.setItem('prosp_checklist_date',hoje);
+  prospStorage.setItem('prosp_checklist',JSON.stringify(data));
+  prospStorage.setItem('prosp_checklist_date',hoje);
   renderChecklist();
 }
 function resetChecklist(){
-  localStorage.removeItem('prosp_checklist');
-  localStorage.setItem('prosp_checklist_date',hojeISO());
+  prospStorage.removeItem('prosp_checklist');
+  prospStorage.setItem('prosp_checklist_date',hojeISO());
   renderChecklist();
   showToast('✓ Checklist reiniciada!');
 }
@@ -1525,7 +1545,7 @@ function toggleObjSection(i){
 
 /* ══ GUIA — COPIAR SCRIPT ═════════════════════════ */
 function copiarScript(idx){
-  const funcNome=localStorage.getItem('prosp_func_nome')||'[SEU NOME]';
+  const funcNome=prospStorage.getItem('prosp_func_nome')||'[SEU NOME]';
   const el=document.getElementById('script'+idx);
   if(!el) return;
   let txt=el.textContent.replace('[SEU NOME]',funcNome);
@@ -1540,15 +1560,15 @@ function copiarScript(idx){
 function salvarFuncConfig(){
   const nome=document.getElementById('funcNomeInput').value.trim();
   const alan=document.getElementById('alanWaInput').value.trim().replace(/\D/g,'');
-  if(nome) localStorage.setItem('prosp_func_nome',nome);
-  if(alan) localStorage.setItem('prosp_alan_wa',alan);
+  if(nome) prospStorage.setItem('prosp_func_nome',nome);
+  if(alan) prospStorage.setItem('prosp_alan_wa',alan);
   showToast('✓ Dados salvos!');
 }
 
 /* ══ RELATÓRIO PARA ALAN ══════════════════════════ */
 function gerarRelatorio(){
-  const funcNome=localStorage.getItem('prosp_func_nome')||'Funcionária';
-  const alanWa=localStorage.getItem('prosp_alan_wa')||'';
+  const funcNome=prospStorage.getItem('prosp_func_nome')||'Funcionária';
+  const alanWa=prospStorage.getItem('prosp_alan_wa')||'';
   const hoje=hojeISO();
   const c=lerContadorHoje();
   const meta=lerMeta();
@@ -1597,33 +1617,33 @@ window.addEventListener('scroll',()=>{ const b=document.getElementById('back-top
 
 /* ══ INIT ═════════════════════════════════════════ */
 (function(){
-  const assin=localStorage.getItem('prosp_assin');
-  const proxy=localStorage.getItem('prosp_proxy')||'https://script.google.com/macros/s/AKfycbzBOBq9qcoycBi86GDQP77tyj_kBRNKxIL6R5ld7bOYet0sFhugqDifq_tbz6Zp8sY/exec';
-  const apiKey=localStorage.getItem('prosp_apikey');
-  const ends=localStorage.getItem('prosp_enderecos');
-  const ativo=localStorage.getItem('prosp_ativo');
-  const hist=localStorage.getItem('prosp_historico');
-  const fila=localStorage.getItem('prosp_fila');
+  const assin=prospStorage.getItem('prosp_assin');
+  const proxy=prospStorage.getItem('prosp_proxy')||'https://script.google.com/macros/s/AKfycbzBOBq9qcoycBi86GDQP77tyj_kBRNKxIL6R5ld7bOYet0sFhugqDifq_tbz6Zp8sY/exec';
+  const apiKey=prospStorage.getItem('prosp_apikey');
+  const ends=prospStorage.getItem('prosp_enderecos');
+  const ativo=prospStorage.getItem('prosp_ativo');
+  const hist=prospStorage.getItem('prosp_historico');
+  const fila=prospStorage.getItem('prosp_fila');
 
   if(assin)  document.getElementById('assinatura').value=assin;
   if(proxy)  document.getElementById('proxyUrlInput').value=proxy;
   if(apiKey) document.getElementById('apiKeyInput').value=apiKey;
-  const funcNome=localStorage.getItem('prosp_func_nome');
-  const alanWa=localStorage.getItem('prosp_alan_wa');
+  const funcNome=prospStorage.getItem('prosp_func_nome');
+  const alanWa=prospStorage.getItem('prosp_alan_wa');
   if(funcNome) document.getElementById('funcNomeInput').value=funcNome;
   if(alanWa)   document.getElementById('alanWaInput').value=alanWa;
 
   // migração/carregamento das variações de mensagem
   try{
-    const arr=JSON.parse(localStorage.getItem('prosp_msgs')||'[]');
+    const arr=JSON.parse(prospStorage.getItem('prosp_msgs')||'[]');
     if(Array.isArray(arr)){
       if(arr[0]) document.getElementById('msgVar1').value=arr[0];
       if(arr[1]) document.getElementById('msgVar2').value=arr[1];
       if(arr[2]) document.getElementById('msgVar3').value=arr[2];
     }
   }catch(e){}
-  const legacyMsg=localStorage.getItem('prosp_msg');
-  if(legacyMsg && !localStorage.getItem('prosp_msgs')){
+  const legacyMsg=prospStorage.getItem('prosp_msg');
+  if(legacyMsg && !prospStorage.getItem('prosp_msgs')){
     document.getElementById('msgVar1').value=legacyMsg;
   }
 
@@ -1654,6 +1674,10 @@ window.addEventListener('scroll',()=>{ const b=document.getElementById('back-top
   renderHoje();
 })();
 </script>
+<script src="cloud/supabase-2.102.0.js"></script>
+<script src="cloud/sync-model.js?v=1"></script>
+<script src="cloud/cloud-sync.js?v=1"></script>
 </body>
 </html>
+
 
