@@ -22,7 +22,20 @@
   try{appendBatch(changes);}catch{setStatus('Armazenamento cheio. Exporte um backup antes de sair.',true);}
   clearTimeout(timer);timer=setTimeout(sync,450);
  }
- window.cloudSync={changed,async claim(tel){
+ window.cloudSync={changed,
+ async activity(tel){
+  if(!ready||!user)throw new Error('Entre na sua conta.');
+  const {data,error}=await client.from('prospect_audit').select('id,record_key,actor,actor_name,created_at,before_doc,after_doc,is_deleted').eq('record_key','lead:'+tel).order('created_at',{ascending:false}).limit(100);
+  if(error)throw new Error('Não foi possível carregar as atividades.');return data||[];
+ },
+ async periodActivity(start,end){
+  if(!ready||!user)throw new Error('Entre na sua conta.');
+  const data=[];for(let from=0;from<10000;from+=1000){
+   const result=await client.from('prospect_audit').select('id,record_key,actor,actor_name,created_at,before_doc,after_doc,is_deleted').like('record_key','lead:%').gte('created_at',start+'T00:00:00-03:00').lt('created_at',end+'T00:00:00-03:00').order('created_at',{ascending:false}).range(from,from+999);
+   if(result.error)throw new Error('Não foi possível carregar os indicadores.');data.push(...result.data);if(result.data.length<1000)return {rows:data,truncated:false};
+  }return {rows:data,truncated:true};
+ },
+ async claim(tel){
  if(!ready||!user||!navigator.onLine)throw new Error('Conecte à internet para reservar o contato.');
  await sync();if(pending().length)throw new Error('Aguarde a sincronização antes de reservar.');
  const lead=HISTORICO[tel]||resultados.find(r=>r.telNum===tel);
@@ -59,7 +72,7 @@
   const variants=M.parse(prospStorage.getItem('prosp_msgs'),[]);[1,2,3].forEach((n)=>{if($('msgVar'+n))$('msgVar'+n).value=variants[n-1]||''});
   atualizarLocAtiva();renderChips();atualizarBadgeHist();renderMetaBar();renderFollowupBanners();renderCards();renderHist();renderKanban();renderHoje();
   if($('tab-guia')?.classList.contains('active'))renderChecklist();
-  window.refreshOperations?.();
+  window.refreshOperations?.();window.refreshWorkflow?.();
  }
  function applyRows(next){
   const previous=JSON.stringify(shadow);
@@ -91,6 +104,7 @@
   finally{busy=false;}
  }
  function lock(reason){
+  window.closeWorkflow?.();
   ready=false;stopped=true;app.hidden=true;gate.hidden=false;message.textContent=reason||'';
   prospStorage.clear();HISTORICO={};resultados=[];ENDERECOS=[];USER_LAT=null;USER_LNG=null;user=null;member=null;window.prospectRole=null;window.prospectUser=null;window.prospectTrainingRows=[];$('cloudAccountPanel').hidden=true;
  }

@@ -122,3 +122,44 @@ end $$;
 revoke all on function prospect_private.guard_lead_owner() from public,anon;
 grant execute on function prospect_private.guard_lead_owner() to authenticated;
 create trigger prospect_guard_lead_owner before insert or update on public.prospect_records for each row execute function prospect_private.guard_lead_owner();
+-- prospect_guided_workflow_and_activity (inclui validação de upsert)
+alter table public.prospect_audit add column if not exists actor_name text;
+update public.prospect_audit a set actor_name=m.name from auth.users u join public.prospect_members m on m.email=lower(u.email) where a.actor=u.id and a.actor_name is null;
+create or replace function prospect_private.audit_actor_name() returns trigger language plpgsql security invoker set search_path='' as $$
+begin
+ new.actor_name:=coalesce((select m.name from public.prospect_members m where m.email=lower(auth.jwt()->>'email') and m.active),'Conta '||left(new.actor::text,8));
+ return new;
+end $$;
+revoke all on function prospect_private.audit_actor_name() from public,anon;
+grant execute on function prospect_private.audit_actor_name() to authenticated;
+create trigger prospect_audit_actor_name before insert on public.prospect_audit for each row execute function prospect_private.audit_actor_name();
+create policy prospect_audit_team_read on public.prospect_audit for select to authenticated using (
+ (select prospect_private.current_role()) is not null and record_key like 'lead:%' and
+ (actor=(select auth.uid()) or exists(select 1 from public.prospect_records r where r.key=record_key and r.doc->>'ownerId'=(select auth.uid())::text))
+);
+create or replace function prospect_private.guard_lead_owner() returns trigger language plpgsql security invoker set search_path='' as $$
+declare previous jsonb:='{}'::jsonb; f text; commercial_changed boolean:=false;
+begin
+ if tg_op='UPDATE' then previous:=old.doc;else select doc into previous from public.prospect_records where key=new.key;previous:=coalesce(previous,'{}'::jsonb);end if;
+ if new.key like 'lead:%' then
+  if prospect_private.current_role()<>'admin' then
+   if coalesce(previous->>'ownerId','')<>'' and previous->>'ownerId'<>coalesce(new.doc->>'ownerId','') then raise exception 'Somente o gestor pode transferir um contato.' using errcode='42501';end if;
+   if coalesce(new.doc->>'ownerId','')<>'' and new.doc->>'ownerId'<>auth.uid()::text and previous->>'ownerId' is distinct from new.doc->>'ownerId' then raise exception 'Assuma o contato com sua própria conta.' using errcode='42501';end if;
+   foreach f in array array['qUse','qProduct','qQty','qDeadline','qDecision','qDelivery','qCustomization','nextAction','nextActionOwner','followUp','notas','quoteState','quoteRequestId','quoteRequestedAt','lastContactAt','lastContactKind','lastReplyAt','status'] loop
+    if previous->f is distinct from new.doc->f and new.doc->>'ownerId' is distinct from auth.uid()::text then raise exception 'Somente o responsável pode alterar o atendimento.' using errcode='42501';end if;
+   end loop;
+   foreach f in array array['quoteApprovedFor','quoteApprovedAt','quoteApprovedBy','quoteReply','quoteVersion','quoteUrl'] loop
+    if previous->f is distinct from new.doc->f then raise exception 'Somente o gestor pode aprovar o orçamento.' using errcode='42501';end if;
+   end loop;
+   if new.doc->>'quoteState' in ('ready','review') and previous->>'quoteState' is distinct from new.doc->>'quoteState' then raise exception 'Aprovação exclusiva do gestor.' using errcode='42501';end if;
+   if new.doc->>'quoteState'='sent' and previous->>'quoteState' is distinct from 'sent' and
+    (previous->>'quoteState' is distinct from 'ready' or nullif(new.doc->>'quoteRequestId','') is null or new.doc->>'quoteApprovedFor' is distinct from new.doc->>'quoteRequestId') then raise exception 'Aguarde a aprovação da versão do orçamento.' using errcode='42501';end if;
+  end if;
+  foreach f in array array['qUse','qProduct','qQty','qDeadline','qDecision','qDelivery','qCustomization'] loop
+   if previous->f is distinct from new.doc->f then commercial_changed:=true;end if;
+  end loop;
+  if commercial_changed and previous->>'quoteState' in ('ready','sent') then new.doc:=jsonb_set(new.doc,'{quoteState}','"needs_info"');end if;
+ end if;
+ return new;
+end $$;
+create index if not exists prospect_audit_created_actor_idx on public.prospect_audit(created_at desc,actor);
