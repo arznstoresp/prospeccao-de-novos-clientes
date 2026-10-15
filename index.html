@@ -589,7 +589,7 @@ Se surgir uma ocasião de brindes, pode me chamar aqui. Até mais!</div>
       <div class="field-group"><label>Chave Google Places API</label><input type="text" id="apiKeyInput" placeholder="AIzaSy…" /><div class="hint-text">Obtida em <b>console.cloud.google.com</b></div></div>
       <button class="btn btn-primary" style="margin-bottom:12px" onclick="salvarApiKey()">💾 &nbsp;Salvar Chave</button>
       <div class="field-group"><label>URL do Proxy Apps Script</label><input type="text" id="proxyUrlInput" placeholder="https://script.google.com/macros/s/…/exec" /></div>
-      <button class="btn btn-primary" onclick="salvarProxy()">💾 &nbsp;Salvar Proxy</button><button id="testeConexaoBtn" class="btn btn-ghost" onclick="testarConexao()" style="margin-top:10px">Testar conexão</button><p id="testeConexaoStatus" role="status" aria-live="polite" style="margin-top:10px;color:var(--sub)"></p><p style="font-size:12px;color:var(--sub)">A busca usa a chave configurada no Apps Script. O campo de chave acima não ativa a integração.</p>
+      <button class="btn btn-primary" onclick="salvarProxy()">💾 &nbsp;Salvar Proxy</button><button id="testeConexaoBtn" class="btn btn-ghost" onclick="testarConexao()" style="margin-top:10px">Testar conexão</button><p style="font-size:12px;color:var(--sub);margin-top:8px">O teste faz uma consulta de empresas no centro de São Paulo, sem solicitar detalhes.</p><p id="testeConexaoStatus" role="status" aria-live="polite" style="margin-top:10px;color:var(--sub)"></p><p style="font-size:12px;color:var(--sub)">A busca usa a chave configurada no Apps Script. O campo de chave acima não ativa a integração.</p>
     </div>
 
     <div class="panel">
@@ -1107,7 +1107,7 @@ async function testarConexao(){
   const btn=document.getElementById('testeConexaoBtn'),el=document.getElementById('testeConexaoStatus');
   const url=document.getElementById('proxyUrlInput').value.trim();
   btn.disabled=true;el.textContent='Testando o proxy…';
-  try{await consultarProxy(url,{});el.textContent='Proxy acessível. Faça uma busca para validar também a chave e a API do Google.';}
+  try{await consultarProxy(url,{endpoint:'nearbysearch',location:'-23.55052,-46.633308',radius:100,keyword:'academia'});el.textContent='Conexão e busca Google Places validadas. Agora escolha seu segmento e raio em Buscar.';}
   catch(e){el.textContent=e.message;}
   finally{btn.disabled=false;}
 }
