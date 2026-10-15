@@ -90,3 +90,6 @@ create index prospect_records_updated_idx on public.prospect_records(updated_at)
 create index prospect_audit_actor_idx on public.prospect_audit(actor);
 create index prospect_audit_record_idx on public.prospect_audit(record_key,created_at);
 create index prospect_batches_actor_idx on public.prospect_batches(actor);
+
+-- Migração adicional prospect_index_record_actor
+create index prospect_records_updated_by_idx on public.prospect_records(updated_by);

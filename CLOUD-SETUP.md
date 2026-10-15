@@ -5,7 +5,7 @@ Aplicação estática no GitHub Pages, com autenticação Supabase e tabelas exc
 ## Uso
 
 1. Gestor entra com sua conta existente da Central de Vendas.
-2. No navegador original, Config. → Mesclar dados deste navegador com a nuvem. Os dados antigos permanecem intactos. Backups JSON também podem ser importados por mesclagem.
+2. No primeiro login do gestor no navegador original, a migração mescla automaticamente os dados locais. Config. → Mesclar dados deste navegador com a nuvem permite repetir. Os dados antigos permanecem intactos. Backups JSON também podem ser importados por mesclagem.
 3. Config. → Acessos da equipe: nome, e-mail e senha inicial com 12 caracteres ou mais. Nenhum e-mail é enviado automaticamente. O gestor compartilha o link e a senha inicial diretamente.
 4. Funcionária entra com a mesma conta no notebook e no celular; pode trocar a senha em Minha conta. No notebook conecta o WhatsApp Web ao celular de prospecção.
 5. Observe `Sincronizado` antes de fechar. A atualização entre aparelhos ocorre ao voltar à página ou a cada 10 segundos com a aba visível.

@@ -88,6 +88,12 @@
    const legacy=prospStorage.original(),legacyDocs=M.project({getItem:k=>legacy[k]??null},user.id);
    $('migrationSummary').textContent=Object.keys(legacyDocs).filter(k=>k.startsWith('lead:')).length+' contatos encontrados neste navegador. A importação mescla os dados e mantém os registros da nuvem.';
    $('cloudAuthForm').reset();setStatus('Conectado · sincronizando');if(access.role==='admin')loadTeam();await sync();
+   if(!user||!ready)return;
+   const migrationKey='arzn-prosp-migrated:'+user.id;
+   if(access.role==='admin'&&!localStorage.getItem(migrationKey)&&Object.keys(legacyDocs).length){
+    try{const n=await mergeLegacy(legacy);localStorage.setItem(migrationKey,'1');$('migrationMessage').textContent=n+' contatos novos mesclados automaticamente. Os dados originais continuam preservados.';}
+    catch{$('migrationMessage').textContent='Não foi possível concluir a migração automática. Seus dados originais estão preservados. Use o botão abaixo para tentar novamente.';}
+   }
   }catch(error){lock(error.message||'Não foi possível acessar. Confira a conexão e tente novamente.');}
   finally{activating=false;}
  }

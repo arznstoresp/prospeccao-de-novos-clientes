@@ -19,7 +19,7 @@ function device(server,uid='owner'){
 const wait=ms=>new Promise(r=>setTimeout(r,ms));
 (async()=>{
  const server={records:new Map(),seen:new Set()};const a=device(server),b=device(server);await wait(30);
- assert.equal(a.el('prospApp').hidden,false);assert.equal(a.context.resultados.length,0);assert(a.local.getItem('prosp_fila').includes('Legacy'));
+ assert.equal(a.el('prospApp').hidden,false);assert.equal(a.context.resultados.length,1);assert(a.local.getItem('prosp_fila').includes('Legacy'));
  a.context.prospStorage.setItem('prosp_fila',JSON.stringify([{nome:'Novo',telNum:'11999999999',pot:'alta'}]));await a.sync();
  await b.sync();assert.equal(b.context.resultados[0].nome,'Novo');
  a.context.prospStorage.setItem('prosp_historico',JSON.stringify({'11999999999':{nome:'Novo',telNum:'11999999999',bucket:'history',status:'contatado',notas:'A'}}));a.context.prospStorage.setItem('prosp_fila','[]');await a.sync();await b.sync();
