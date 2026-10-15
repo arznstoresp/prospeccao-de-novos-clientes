@@ -5,7 +5,7 @@ function device(server,uid='owner'){
  const el=id=>{if(!nodes.has(id))nodes.set(id,node());return nodes.get(id)};
  const authUser={id:uid,email:uid+'@example.test'};
  const sdk={auth:{getUser:async()=>({data:{user:authUser}}),getSession:async()=>({data:{session:{user:authUser}}}),onAuthStateChange(){},signOut:async()=>({})},
- from(table){let range=[0,999];return {select(){return this},eq(){return this},order(){return this},range(a,b){range=[a,b];return Promise.resolve({data:[...server.records.values()].slice(a,b+1)})},maybeSingle:async()=>({data:{email:authUser.email,name:uid,role:'admin',active:!server.revoked}}),then(resolve){return Promise.resolve({data:[]}).then(resolve)}}},
+ from(table){let range=[0,999];return {select(){return this},eq(){return this},order(){return this},range(a,b){range=[a,b];return Promise.resolve({data:[...server.records.values()].slice(a,b+1)})},maybeSingle:async()=>({data:{email:authUser.email,name:uid,role:uid==='staff'?'staff':'admin',active:!server.revoked}}),then(resolve){return Promise.resolve({data:[]}).then(resolve)}}},
  rpc:async(name,{changes,batch_id})=>{if(server.offline)throw new Error('offline');if(!server.seen.has(batch_id)){server.seen.add(batch_id);for(const c of changes){const old=server.records.get(c.key);if(old?.deleted)continue;const doc={...(old?.doc||{}),...c.patch};if(old?.doc.bucket==='history')doc.bucket='history';server.records.set(c.key,{key:c.key,doc,deleted:!!c.deleted})}}return {}},functions:{invoke:async()=>({data:{ok:true}})}};
  const local=memory(),session=memory();local.setItem('prosp_fila',JSON.stringify([{nome:'Legacy',telNum:'11912345678'}]));
  const context={console,Map,JSON,Date,Promise,setTimeout,clearTimeout,setInterval(){},crypto:{randomUUID},navigator:{onLine:true},localStorage:local,sessionStorage:session,
@@ -29,6 +29,13 @@ const wait=ms=>new Promise(r=>setTimeout(r,ms));
  server.offline=true;a.context.prospStorage.setItem('prosp_historico',JSON.stringify({'11999999999':{...a.context.HISTORICO['11999999999'],followUp:'2026-10-16'}}));await a.sync();
  assert([...Array(a.local.length)].map((_,i)=>a.local.key(i)).some(k=>k.startsWith('arzn-prosp-outbox:')));
  server.offline=false;await a.sync();assert.equal(server.records.get('lead:11999999999').doc.followUp,'2026-10-16');
+ const staff=device(server,'staff');await wait(30);
+ assert.equal(staff.el('tabbtn-config').hidden,true);assert.equal(staff.el('tab-config').hidden,true);
+ assert.equal(a.el('tabbtn-config').hidden,false);
+ staff.context.prospStorage.setItem('prosp_assin','unauthorized');await staff.sync();
+ assert.notEqual(server.records.get('cfg:prosp_assin')?.doc.value,'unauthorized');
+ staff.context.prospStorage.setItem('prosp_historico',JSON.stringify({'11999999999':{...staff.context.HISTORICO['11999999999'],notas:'Staff can work'}}));await staff.sync();
+ assert.equal(server.records.get('lead:11999999999').doc.notas,'Staff can work');
  server.revoked=true;await a.sync();assert.equal(a.el('prospApp').hidden,true);assert.equal(a.context.resultados.length,0);
  console.log('PASS: login gate, legacy preservation, two-device sync, simultaneous independent fields, offline outbox recovery and revoked access.');
 })().catch(e=>{console.error(e);process.exitCode=1});

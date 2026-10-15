@@ -105,3 +105,7 @@ revoke all on public.prospect_audit from authenticated;
 grant select,insert on public.prospect_audit to authenticated;
 revoke all on sequence public.prospect_audit_id_seq from authenticated;
 grant usage on sequence public.prospect_audit_id_seq to authenticated;
+
+-- prospect_manager_only_shared_configuration
+alter policy prospect_records_insert on public.prospect_records with check (prospect_private.allowed_record(key) and updated_by=(select auth.uid()) and (key not like 'cfg:%' or (select prospect_private.current_role())='admin'));
+alter policy prospect_records_update on public.prospect_records using (prospect_private.allowed_record(key) and (key not like 'cfg:%' or (select prospect_private.current_role())='admin')) with check (prospect_private.allowed_record(key) and updated_by=(select auth.uid()) and (key not like 'cfg:%' or (select prospect_private.current_role())='admin'));

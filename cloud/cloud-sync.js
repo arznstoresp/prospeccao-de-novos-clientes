@@ -11,6 +11,7 @@
  const pending=()=>{const batches=[];if(!user)return batches;for(let i=0;i<localStorage.length;i++){const key=localStorage.key(i);if(key?.startsWith(outPrefix(user.id))){const a=M.parse(localStorage.getItem(key),[]);if(Array.isArray(a))a.forEach(b=>b?.id&&Array.isArray(b.changes)&&batches.push({...b,storageKey:key}));}}return batches;};
  function setStatus(text,error=false){status.textContent=text;status.style.color=error?'#ffb36b':'#b6eacb';}
  function appendBatch(changes){
+  if(member?.role!=='admin')changes=changes.filter(c=>!c.key.startsWith('cfg:'));
   if(!changes.length||!user)return;
   const key=ownKey(),queue=M.parse(localStorage.getItem(key),[]);queue.push({id:crypto.randomUUID(),changes});
   localStorage.setItem(key,JSON.stringify(queue));setStatus('Alterações salvas neste aparelho · sincronizando…');
@@ -22,6 +23,16 @@
   clearTimeout(timer);timer=setTimeout(sync,450);
  }
  window.cloudSync={changed};
+ function applyRole(){
+  window.prospectRole=member?.role||null;
+  const admin=member?.role==='admin';
+  $('tabbtn-config').hidden=!admin;
+  $('tab-config').hidden=!admin;
+  $('teamPanel').hidden=!admin;$('migrationPanel').hidden=!admin;
+  if(!admin&&$('tab-config').classList.contains('active'))switchTab('hoje',$('tabbtn-hoje'));
+ }
+ $('cloudMyAccount').onclick=()=>{const panel=$('cloudAccountPanel');panel.hidden=!panel.hidden;$('cloudMyAccount').setAttribute('aria-expanded',String(!panel.hidden));};
+
  async function allRows(){
   const list=[];for(let from=0;;from+=1000){const {data,error}=await client.from('prospect_records').select('key,doc,deleted,revision').order('key').range(from,from+999);if(error)throw error;list.push(...data);if(data.length<1000)break;}return list;
  }
@@ -53,10 +64,10 @@
    const {data:access,error:accessError}=await client.from('prospect_members').select('email,name,role,active').eq('email',user.email.toLowerCase()).maybeSingle();
    if(accessError)throw accessError;
    if(!access?.active){lock('Seu acesso foi desativado. Procure o gestor.');return;}
-   member=access;
+   member=access;applyRole();
    for(const batch of pending()){
     if(!user||user.id!==uid)return;
-    const {error}=await client.rpc('prospect_apply',{changes:batch.changes,batch_id:batch.id});if(error)throw error;
+    const {error}=await client.rpc('prospect_apply',{changes:member.role==='admin'?batch.changes:batch.changes.filter(c=>!c.key.startsWith('cfg:')),batch_id:batch.id});if(error)throw error;
     const remaining=M.parse(localStorage.getItem(batch.storageKey),[]).filter(b=>b.id!==batch.id);
     if(remaining.length)localStorage.setItem(batch.storageKey,JSON.stringify(remaining));else localStorage.removeItem(batch.storageKey);
    }
@@ -67,7 +78,7 @@
  }
  function lock(reason){
   ready=false;stopped=true;app.hidden=true;gate.hidden=false;message.textContent=reason||'';
-  prospStorage.clear();HISTORICO={};resultados=[];ENDERECOS=[];USER_LAT=null;USER_LNG=null;user=null;member=null;
+  prospStorage.clear();HISTORICO={};resultados=[];ENDERECOS=[];USER_LAT=null;USER_LNG=null;user=null;member=null;window.prospectRole=null;$('cloudAccountPanel').hidden=true;
  }
  async function activate(session){
   if(activating)return;if(!session?.user){lock('Entre com sua conta para acessar os dados da equipe.');return;}
@@ -77,7 +88,7 @@
    const {data:{user:verified},error:verifyError}=await client.auth.getUser();if(verifyError||!verified)throw new Error('Sessão inválida. Entre novamente.');
    const {data:access,error}=await client.from('prospect_members').select('email,name,role,active').eq('email',verified.email.toLowerCase()).maybeSingle();
    if(error)throw error;if(!access?.active)throw new Error('Esta conta não está liberada para a prospecção. Peça ao Alan para liberar seu acesso.');
-   user=verified;member=access;stopped=false;
+   user=verified;member=access;applyRole();stopped=false;
    const remote=await allRows();
    // Recover unsent browser changes before replacing the local projection.
    const cached=prospStorage.cached(user.id);
