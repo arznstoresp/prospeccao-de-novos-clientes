@@ -1,0 +1,15 @@
+const assert=require('node:assert/strict'),M=require(require('node:fs').existsSync(__dirname+'/../cloud/sync-model.js')?'../cloud/sync-model.js':'./sync-model.js');
+const store=o=>({getItem:k=>o[k]??null}),uid='u1';
+const a=M.project(store({prosp_fila:JSON.stringify([{nome:'Empresa',telNum:'+55 (11) 99999-9999'}]),prosp_historico:JSON.stringify({'11999999999':{nome:'Empresa',telNum:'11999999999',status:'interesse',notas:'Não perder'}}),prosp_apikey:'SECRET',prosp_func_nome:'Maria'}),uid);
+assert.equal(a['lead:11999999999'].bucket,'history');assert(!JSON.stringify(a).includes('SECRET'));assert.equal(a['usr:u1:prosp_func_nome'].value,'Maria');
+const before={'lead:11999999999':{bucket:'history',status:'contatado',notas:'nota A'}};
+const first=M.diff(before,{'lead:11999999999':{...before['lead:11999999999'],notas:'nota B'}});
+assert.deepEqual(first,[{key:'lead:11999999999',patch:{notas:'nota B'}}]);
+const remote=[{key:'lead:11999999999',doc:{...before['lead:11999999999'],telNum:'11999999999',status:'interesse'},deleted:false}];
+const merged=M.overlay(remote,[{changes:first}]);assert.equal(merged[0].doc.status,'interesse');assert.equal(merged[0].doc.notas,'nota B');
+assert.equal(M.overlay(remote,[{changes:[{key:'lead:11999999999',patch:{bucket:'queue'}}]}])[0].doc.bucket,'history');
+assert.equal(M.overlay([{...remote[0],deleted:true}],[{changes:first}])[0].deleted,true);
+const restored=M.materialize([...merged,{key:'usr:u2:prosp_func_nome',doc:{value:'Outra pessoa'}},{key:'lead:11888888888',doc:{telNum:"evil' onclick='bad()",bucket:'queue',maps:'javascript:alert(1)'}}],uid);
+assert.equal(restored.prosp_func_nome,undefined);assert.equal(JSON.parse(restored.prosp_fila)[0].telNum,'11888888888');assert.equal(JSON.parse(restored.prosp_fila)[0].maps,'');assert.equal(JSON.parse(restored.prosp_historico)['11999999999'].notas,'nota B');
+const deletion=M.diff(before,{});assert.equal(deletion[0].deleted,true);
+console.log('PASS: migração, DDI, precedência do histórico, credenciais excluídas, campos simultâneos, tombstones, isolamento por usuário e links seguros.');
