@@ -22,9 +22,19 @@
   try{appendBatch(changes);}catch{setStatus('Armazenamento cheio. Exporte um backup antes de sair.',true);}
   clearTimeout(timer);timer=setTimeout(sync,450);
  }
- window.cloudSync={changed};
+ window.cloudSync={changed,async claim(tel){
+ if(!ready||!user||!navigator.onLine)throw new Error('Conecte à internet para reservar o contato.');
+ await sync();if(pending().length)throw new Error('Aguarde a sincronização antes de reservar.');
+ const lead=HISTORICO[tel]||resultados.find(r=>r.telNum===tel);
+ if(!lead)throw new Error('Contato não encontrado.');
+ if(lead.ownerId&&lead.ownerId!==user.id&&member.role!=='admin')throw new Error('Esse contato já tem responsável.');
+ const {error}=await client.rpc('prospect_apply',{changes:[{key:'lead:'+tel,patch:{ownerId:user.id,ownerName:member.name||user.email}}],batch_id:crypto.randomUUID()});
+ if(error)throw new Error('Não foi possível reservar. Outro atendimento pode ter assumido; sincronize.');
+ await sync();
+ }};
  function applyRole(){
   window.prospectRole=member?.role||null;
+  window.prospectUser=user?{id:user.id,name:member?.name||user.email,role:member?.role}:null;
   const admin=member?.role==='admin';
   $('tabbtn-config').hidden=!admin;
   $('tab-config').hidden=!admin;
@@ -49,11 +59,15 @@
   const variants=M.parse(prospStorage.getItem('prosp_msgs'),[]);[1,2,3].forEach((n)=>{if($('msgVar'+n))$('msgVar'+n).value=variants[n-1]||''});
   atualizarLocAtiva();renderChips();atualizarBadgeHist();renderMetaBar();renderFollowupBanners();renderCards();renderHist();renderKanban();renderHoje();
   if($('tab-guia')?.classList.contains('active'))renderChecklist();
+  window.refreshOperations?.();
  }
  function applyRows(next){
-  rows=next;const data=M.materialize(M.overlay(rows,pending()),user.id);
+  const previous=JSON.stringify(shadow);
+  rows=next;
+  window.prospectTrainingRows=member?.role==='admin'?next.filter(r=>r.key.startsWith('usr:')&&!r.deleted):[];
+  const data=M.materialize(M.overlay(rows,pending()),user.id);
   if(!data.prosp_func_nome)data.prosp_func_nome=member.name||'';
-  prospStorage.load(user.id,data);shadow=M.project(prospStorage,user.id);refreshApp();
+  prospStorage.load(user.id,data);shadow=M.project(prospStorage,user.id);if(previous!==JSON.stringify(shadow))refreshApp();else window.refreshOperations?.();
  }
  async function sync(){
   if(!user||!ready||busy||stopped)return;
@@ -78,7 +92,7 @@
  }
  function lock(reason){
   ready=false;stopped=true;app.hidden=true;gate.hidden=false;message.textContent=reason||'';
-  prospStorage.clear();HISTORICO={};resultados=[];ENDERECOS=[];USER_LAT=null;USER_LNG=null;user=null;member=null;window.prospectRole=null;$('cloudAccountPanel').hidden=true;
+  prospStorage.clear();HISTORICO={};resultados=[];ENDERECOS=[];USER_LAT=null;USER_LNG=null;user=null;member=null;window.prospectRole=null;window.prospectUser=null;window.prospectTrainingRows=[];$('cloudAccountPanel').hidden=true;
  }
  async function activate(session){
   if(activating)return;if(!session?.user){lock('Entre com sua conta para acessar os dados da equipe.');return;}

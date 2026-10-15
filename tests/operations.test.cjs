@@ -1,0 +1,15 @@
+const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict');
+const values=new Map(),events={},nodes=new Map();
+const node=id=>{if(!nodes.has(id))nodes.set(id,{value:'',addEventListener(type,fn){events[id+':'+type]=fn;}});return nodes.get(id)};
+const leads=[{telNum:'11999999999',nome:'Empresa <teste>',ownerId:'seller',ownerName:'Emily'}];
+const ctx={console,Map,URL,window:null,prospStorage:{getItem:k=>values.get(k)||null,setItem:(k,v)=>values.set(k,v)},document:{getElementById:node,addEventListener:(k,fn)=>events[k]=fn,createElement:()=>({}),head:{append(){}}},HISTORICO:{},resultados:leads,normalizarTelefone:v=>{let n=String(v).replace(/\D/g,'');return n.length>11?n.slice(2):n;},lerVariantes:()=>[],showToast(){},switchTab(){},STATUS_CFG:{novo:{label:'Não contatado'},proposta:{label:'Proposta enviada'}},renderCards(){},renderHist(){},renderHoje(){}};
+ctx.window=ctx;ctx.prospectUser={id:'seller',name:'Emily Rama'};ctx.prospectRole='staff';vm.createContext(ctx);
+vm.runInContext(fs.readFileSync((fs.existsSync(__dirname+'/../cloud/operations.js')?__dirname+'/../cloud/operations.js':__dirname+'/operations.js'),'utf8'),ctx);
+values.set('prosp_seller_phone','11911112222');
+assert(ctx.prospectSignature().includes('Emily Rama'));assert(ctx.prospectSignature().includes('11911112222'));
+assert(ctx.prospectMessage(leads[0]).includes('Emily Rama'));assert(!ctx.prospectMessage(leads[0]).includes('Minha Empresa'));
+assert.equal(ctx.prospectCanWork('11999999999'),true);
+leads[0].ownerId='other';assert.equal(ctx.prospectCanWork('11999999999'),false);
+let prevented=false;events.click({target:{closest:()=>({href:'https://wa.me/5511999999999'})},preventDefault(){prevented=true;},stopImmediatePropagation(){}});
+assert(prevented);leads[0].ownerId='seller';assert(ctx.prospectControls(leads[0]).includes('Registrar abordagem enviada'));assert(ctx.prospectControls(leads[0]).includes('Empresa &lt;teste&gt;'));
+console.log('PASS: assinatura individual, mensagens, etapas, escape e bloqueio de contato de outro responsável.');

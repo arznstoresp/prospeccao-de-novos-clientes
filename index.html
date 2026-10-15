@@ -342,7 +342,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 
 <div class="wrap" id="prospApp" hidden>
 <div class="cloud-top"><div><strong id="cloudUser">Equipe</strong><small id="cloudStatus" role="status" aria-live="polite">Conectando…</small></div><div class="cloud-top-actions"><button id="cloudMyAccount" type="button" class="btn btn-ghost btn-sm" aria-expanded="false" aria-controls="cloudAccountPanel">Minha conta</button><button id="cloudRetry" type="button" class="btn btn-ghost btn-sm">Sincronizar</button><button id="cloudShare" type="button" class="btn btn-ghost btn-sm">Copiar link</button><button id="cloudLogout" type="button" class="btn btn-ghost btn-sm">Sair</button></div></div>
-<div id="cloudAccountPanel" hidden><section class="panel"><div class="panel-title">Minha conta</div><p class="cloud-note">No primeiro acesso da funcionária, troque a senha inicial por uma senha pessoal. O login é o mesmo no notebook e no celular.</p><form id="myPasswordForm" class="cloud-form"><label for="myCurrentPassword">Senha atual</label><input id="myCurrentPassword" type="password" autocomplete="current-password" required><label for="myNewPassword">Nova senha</label><input id="myNewPassword" type="password" autocomplete="new-password" minlength="12" maxlength="128" required><label for="myConfirmPassword">Repita a nova senha</label><input id="myConfirmPassword" type="password" autocomplete="new-password" minlength="12" maxlength="128" required><button id="myPasswordBtn" class="btn btn-ghost" type="submit">Trocar minha senha</button></form><p id="myPasswordMessage" class="cloud-message" role="status"></p></section></div>
+<div id="cloudAccountPanel" hidden><section class="panel"><div class="panel-title">Seu atendimento</div><p class="cloud-note">A assinatura é individual. Este número não conecta nem troca a conta aberta no WhatsApp.</p><form id="sellerProfile" class="cloud-form"><label for="sellerDisplayName">Nome de atendimento</label><input id="sellerDisplayName" maxlength="80" required><label for="sellerPhone">WhatsApp profissional com DDD</label><input id="sellerPhone" inputmode="tel" maxlength="20" placeholder="11 99999-9999" required><button class="btn btn-primary" type="submit">Salvar minha assinatura</button></form><p id="sellerProfileStatus" role="status"></p></section><section class="panel"><div class="panel-title">Minha conta</div><p class="cloud-note">No primeiro acesso da funcionária, troque a senha inicial por uma senha pessoal. O login é o mesmo no notebook e no celular.</p><form id="myPasswordForm" class="cloud-form"><label for="myCurrentPassword">Senha atual</label><input id="myCurrentPassword" type="password" autocomplete="current-password" required><label for="myNewPassword">Nova senha</label><input id="myNewPassword" type="password" autocomplete="new-password" minlength="12" maxlength="128" required><label for="myConfirmPassword">Repita a nova senha</label><input id="myConfirmPassword" type="password" autocomplete="new-password" minlength="12" maxlength="128" required><button id="myPasswordBtn" class="btn btn-ghost" type="submit">Trocar minha senha</button></form><p id="myPasswordMessage" class="cloud-message" role="status"></p></section></div>
 
   <div class="header">
     <div class="logo">
@@ -496,7 +496,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
   </div>
 
   <!-- ══ FUNIL KANBAN ══ -->
-  <div id="tab-funil" class="tab-content">
+  <div id="tab-funil" class="tab-content"><div id="segmentDashboard" class="panel"></div>
     <div class="panel">
       <div class="panel-title">🗂️ Funil de Vendas</div>
       <div class="kanban-hint">No desktop largo, todas as colunas cabem na tela. No celular, arraste para o lado para ver mais, ou use ▶ Avançar.</div>
@@ -618,13 +618,15 @@ let HISTORICO    = {};
 let SELECIONADOS = new Set();
 let MODO_FILA    = false;
 
-const ORDER = ['novo','contatado','interesse','fechado'];
+const ORDER=['novo','contatado','interesse','qualificado','proposta','fechado'];
 
 /* ══ STATUS ═══════════════════════════════════════ */
 const STATUS_CFG = {
   novo:      { label:'Não contatado', cls:'s-novo',      emoji:'🔵' },
-  contatado: { label:'Contatado',     cls:'s-contatado', emoji:'🟡' },
+  contatado: { label:'Aguardando resposta',     cls:'s-contatado', emoji:'🟡' },
   interesse: { label:'Interessado',   cls:'s-interesse', emoji:'🟢' },
+  qualificado: {label:'Qualificado',cls:'s-interesse',emoji:'✅'},
+  proposta: {label:'Proposta enviada',cls:'s-contatado',emoji:'📄'},
   fechado:   { label:'Fechado',       cls:'s-fechado',    emoji:'🔥' },
   nao:       { label:'Sem interesse', cls:'s-nao',        emoji:'🔴' },
   invalido:  { label:'Número errado', cls:'s-invalido',   emoji:'🚫' },
@@ -730,7 +732,7 @@ function diasDesde(isoStr){
 }
 
 /* ══ TELEFONE ═════════════════════════════════════ */
-function waLink(telNum,msg){ return 'https://wa.me/55'+(normalizarTelefone(telNum)||telNum)+'?text='+encodeURIComponent(msg||''); }
+function waLink(telNum,msg){ const lead=HISTORICO[telNum]||resultados.find(r=>r.telNum===telNum); return 'https://wa.me/55'+(normalizarTelefone(telNum)||telNum)+'?text='+encodeURIComponent(window.prospectMessage&&lead?window.prospectMessage(lead):msg||''); }
 function telLink(telNum){ return 'tel:+55'+(normalizarTelefone(telNum)||telNum); }
 
 /* ══ MENSAGEM COM ROTAÇÃO ═════════════════════════
@@ -753,7 +755,7 @@ function lerVariantes(){
   return [];
 }
 function buildMsg(nome,nicho,rating,count){
-  const assin=prospStorage.getItem('prosp_assin')||document.getElementById('assinatura').value.trim()||'Att,\nMinha Empresa';
+  const assin=window.prospectSignature?.()||prospStorage.getItem('prosp_assin')||'ArznStoreSP';
   const variantes=lerVariantes();
 
   if(variantes.length){
@@ -844,6 +846,8 @@ function addToHist(item, statusInicial){
 
 /* setStatus: usado pelo Kanban (avançar/drag) — isolado por telNum exato */
 function setStatus(telNum,status){
+  if(window.prospectCanWork&&!window.prospectCanWork(telNum))return;
+  if(status==='fechado'&&!confirm('O pedido foi confirmado conforme as condições aprovadas pelo Alan?'))return;
   if(!HISTORICO[telNum]) return;
   HISTORICO[telNum].status=status;
   HISTORICO[telNum].atualizadoEm=hojeISO();
@@ -853,6 +857,8 @@ function setStatus(telNum,status){
 /* setQuickStatus: usado pelos botões de ação rápida nos cards
    (substitui o <select> antigo que causava confusão visual) */
 function setQuickStatus(telNum, status){
+  if(window.prospectCanWork&&!window.prospectCanWork(telNum))return;
+  if(status==='fechado'&&!confirm('O pedido foi confirmado conforme as condições aprovadas pelo Alan?'))return;
   if(!HISTORICO[telNum]){
     const c=resultados.find(r=>r.telNum===telNum);
     if(c) addToHist(c, status);
@@ -868,9 +874,11 @@ function setQuickStatus(telNum, status){
 }
 
 function setNotas(telNum,val){
+  if(window.prospectCanWork&&!window.prospectCanWork(telNum))return;
   if(HISTORICO[telNum]){ HISTORICO[telNum].notas=val; salvarHist(); }
 }
 function setFollowUp(telNum,val){
+  if(window.prospectCanWork&&!window.prospectCanWork(telNum))return;
   if(HISTORICO[telNum]){ HISTORICO[telNum].followUp=val; salvarHist(); renderHist(); renderFollowupBanners(); renderHoje(); showToast('✓ Follow-up agendado!'); }
 }
 function toggleNotas(telNum){
@@ -963,7 +971,7 @@ function renderHist(){
           +'<button class="hist-del" onclick="removerHist(\''+tel+'\')">✕ Remover</button>'
         +'</div>'
       +'</div>'
-      +buildQARow(tel,false)
+      +((window.prospectControls&&window.prospectControls(h))||'')+buildQARow(tel,false)
       +'<div class="hist-extra-row">'
         +'<div><label style="margin-bottom:3px">Retornar em</label><input type="date" class="hist-followup-input" value="'+(h.followUp||'')+'" onchange="setFollowUp(\''+tel+'\',this.value)" /></div>'
         +'<span class="hist-notes-toggle '+(h.notas?'has':'')+'" id="notasbtn-'+tel+'" onclick="toggleNotas(\''+tel+'\')">📝 '+(h.notas?'Ver notas':'Notas')+'</span>'
@@ -1214,9 +1222,9 @@ function renderCards(){
       +'<div class="rc-info"><div class="rc-row">⭐ <strong>'+escapeText(c.avaliacao)+'</strong></div><div class="rc-row">📞 <strong>'+escapeText(c.tel)+'</strong></div><div class="rc-dist">📍 '+escapeText(c.distKm)+' km</div><div class="rc-row addr">'+escapeText(c.end)+'</div></div>'
       +(c.maps?'<div class="rc-info"><a style="color:var(--neon)" target="_blank" rel="noopener noreferrer" href="'+escapeText(c.maps)+'">Conferir no Maps ↗</a></div>':'')
       +'<div class="rc-info" style="font-size:10px;color:var(--sub)">WhatsApp não verificado. Confira o contato e registre o resultado após a conversa.</div>'
-      +'<div class="rc-actions"><a class="btn btn-wa" href="'+wa+'" target="_blank" onclick="registrarContato(\''+c.telNum+'\')">'+WA_SVG+' WhatsApp</a><a class="btn btn-call" href="'+telLink(c.telNum)+'">📞</a><button class="btn-toggle-msg" id="tb'+idx+'" onclick="toggleMsg('+idx+')">Ver msg</button></div>'
-      +'<div class="rc-msg" id="cm'+idx+'">'+escapeText(c.msg)+'</div>'
-      +buildQARow(c.telNum,true)
+      +'<div class="rc-actions"><a class="btn btn-wa" href="'+wa+'" target="_blank" >'+WA_SVG+' WhatsApp</a><a class="btn btn-call" href="'+telLink(c.telNum)+'">📞</a><button class="btn-toggle-msg" id="tb'+idx+'" onclick="toggleMsg('+idx+')">Ver msg</button></div>'
+      +'<div class="rc-msg" id="cm'+idx+'">'+escapeText(window.prospectMessage?window.prospectMessage(c):c.msg)+'</div>'
+      +((window.prospectControls&&window.prospectControls(c))||'')+buildQARow(c.telNum,true)
     +'</div>';
   }).join('')+'</div>';
 }
@@ -1225,6 +1233,7 @@ function renderCards(){
    status 'contatado' automaticamente (só se ainda era 'novo',
    nunca rebaixa um status mais avançado já existente) */
 function registrarContato(telNum){
+  if(window.prospectCanWork&&!window.prospectCanWork(telNum))return;
   const c=resultados.find(r=>r.telNum===telNum);
   if(c) addToHist(c); // se ainda não existir no histórico, cria como 'novo'
   if(HISTORICO[telNum] && HISTORICO[telNum].status==='novo'){
@@ -1275,10 +1284,13 @@ function renderKanban(){
   if(!board) return;
   const cols=[
     {key:'novo',label:'🔵 Não contatado'},
-    {key:'contatado',label:'🟡 Contatado'},
+    {key:'contatado',label:'🟡 Aguardando resposta'},
     {key:'interesse',label:'🟢 Interessado'},
+    {key:'qualificado',label:'✅ Qualificado'},
+    {key:'proposta',label:'📄 Proposta enviada'},
     {key:'fechado',label:'🔥 Fechado'},
     {key:'nao',label:'🔴 Sem interesse'},
+    {key:'invalido',label:'🚫 Número errado'},
   ];
   const itens=Object.entries(HISTORICO);
 
@@ -1292,7 +1304,7 @@ function renderKanban(){
           return '<div class="kanban-card" draggable="true" ondragstart="dragStart(event,\''+tel+'\')">'
             +'<div class="kanban-card-name">'+corpBadge+escapeText(h.nome)+'</div>'
             +'<div class="kanban-card-meta">📞 '+escapeText(h.tel)+' · 📍 '+(h.distKm||'?')+'km</div>'
-            +'<div class="kanban-card-actions">'
+            +((window.prospectControls&&window.prospectControls(h))||'')+'<div class="kanban-card-actions">'
               +(next?'<button class="kanban-mini-btn" onclick="setStatus(\''+tel+'\',\''+next+'\')">▶ Avançar</button>':'<span class="kanban-mini-btn" style="flex:1;opacity:.4">fim</span>')
               +'<a class="kanban-mini-btn icon-only" style="color:var(--green)" href="'+waLink(tel,h.msg)+'" target="_blank" title="WhatsApp">💬</a>'
               +'<a class="kanban-mini-btn icon-only" style="color:var(--blue)" href="'+telLink(tel)+'" title="Ligar">📞</a>'
@@ -1335,7 +1347,7 @@ function renderHoje(){
       const bcCls={muito:'b-muito',alta:'b-alta',media:'b-media'}[c.pot];
       return '<div class="hoje-card">'
         +'<div class="hoje-card-info"><div class="hoje-card-name">'+(c.corp?'<span class="badge b-corp">B2B</span> ':'')+escapeText(c.nome)+' <span class="badge '+bcCls+'">'+POT_LABEL[c.pot]+'</span></div><div class="hoje-card-meta">📞 '+escapeText(c.tel)+' · 📍 '+escapeText(c.distKm)+'km</div></div>'
-        +'<div class="hoje-card-actions"><a class="btn btn-wa btn-sm" href="'+waLink(c.telNum,c.msg)+'" target="_blank" onclick="registrarContato(\''+c.telNum+'\')">'+WA_SVG+' Zap</a><a class="btn btn-call btn-sm" href="'+telLink(c.telNum)+'">📞</a></div>'
+        +'<div class="hoje-card-actions"><a class="btn btn-wa btn-sm" href="'+waLink(c.telNum,c.msg)+'" target="_blank" >'+WA_SVG+' Zap</a><a class="btn btn-call btn-sm" href="'+telLink(c.telNum)+'">📞</a></div>'
       +'</div>';
     }).join('') + (resultados.length>6?'<span class="hoje-vermais" onclick="switchTab(\'resultados\',document.getElementById(\'tabbtn-resultados\'))">Ver todos os '+resultados.length+' na fila →</span>':'');
   }
@@ -1629,8 +1641,9 @@ window.addEventListener('scroll',()=>{ const b=document.getElementById('back-top
 })();
 </script>
 <script src="cloud/supabase-2.102.0.js"></script>
-<script src="cloud/sync-model.js?v=1"></script>
-<script src="cloud/cloud-sync.js?v=2"></script>
+<script src="cloud/sync-model.js?v=3"></script>
+<script src="cloud/operations.js?v=1"></script>
+<script src="cloud/cloud-sync.js?v=3"></script>
 </body>
 </html>
 

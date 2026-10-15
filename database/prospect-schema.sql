@@ -109,3 +109,16 @@ grant usage on sequence public.prospect_audit_id_seq to authenticated;
 -- prospect_manager_only_shared_configuration
 alter policy prospect_records_insert on public.prospect_records with check (prospect_private.allowed_record(key) and updated_by=(select auth.uid()) and (key not like 'cfg:%' or (select prospect_private.current_role())='admin'));
 alter policy prospect_records_update on public.prospect_records using (prospect_private.allowed_record(key) and (key not like 'cfg:%' or (select prospect_private.current_role())='admin')) with check (prospect_private.allowed_record(key) and updated_by=(select auth.uid()) and (key not like 'cfg:%' or (select prospect_private.current_role())='admin'));
+
+-- prospect_atomic_lead_ownership
+create or replace function prospect_private.guard_lead_owner() returns trigger language plpgsql security invoker set search_path='' as $$
+begin
+ if new.key like 'lead:%' and prospect_private.current_role()<>'admin' then
+  if tg_op='UPDATE' and coalesce(old.doc->>'ownerId','')<>'' and old.doc->>'ownerId'<>coalesce(new.doc->>'ownerId','') then raise exception 'Somente o gestor pode transferir um contato.' using errcode='42501';end if;
+  if coalesce(new.doc->>'ownerId','')<>'' and new.doc->>'ownerId'<>auth.uid()::text and (tg_op='INSERT' or old.doc->>'ownerId' is distinct from new.doc->>'ownerId') then raise exception 'Assuma o contato com sua própria conta.' using errcode='42501';end if;
+ end if;
+ return new;
+end $$;
+revoke all on function prospect_private.guard_lead_owner() from public,anon;
+grant execute on function prospect_private.guard_lead_owner() to authenticated;
+create trigger prospect_guard_lead_owner before insert or update on public.prospect_records for each row execute function prospect_private.guard_lead_owner();
