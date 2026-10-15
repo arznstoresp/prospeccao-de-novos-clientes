@@ -93,3 +93,15 @@ create index prospect_batches_actor_idx on public.prospect_batches(actor);
 
 -- Migração adicional prospect_index_record_actor
 create index prospect_records_updated_by_idx on public.prospect_records(updated_by);
+
+-- Migração prospect_explicit_least_privilege_grants
+revoke all on public.prospect_members from authenticated;
+grant select on public.prospect_members to authenticated;
+revoke all on public.prospect_records from authenticated;
+grant select,insert,update on public.prospect_records to authenticated;
+revoke all on public.prospect_batches from authenticated;
+grant select,insert on public.prospect_batches to authenticated;
+revoke all on public.prospect_audit from authenticated;
+grant select,insert on public.prospect_audit to authenticated;
+revoke all on sequence public.prospect_audit_id_seq from authenticated;
+grant usage on sequence public.prospect_audit_id_seq to authenticated;
