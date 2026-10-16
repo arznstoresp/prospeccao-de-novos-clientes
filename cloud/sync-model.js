@@ -2,7 +2,7 @@
 (function(root){
  const SHARED=['prosp_enderecos','prosp_ativo','prosp_assin','prosp_msgs','prosp_alan_wa','prosp_proxy'];
  const PERSONAL=['prosp_func_nome','prosp_meta','prosp_contador','prosp_checklist','prosp_checklist_date','prosp_msgRotIdx'];
- PERSONAL.push('prosp_seller_name','prosp_seller_phone','prosp_training_notes',...Array.from({length:30},(_,i)=>'prosp_training_day_'+(i+1)));
+ PERSONAL.push('prosp_launch_checks','prosp_seller_name','prosp_seller_phone','prosp_training_notes',...Array.from({length:30},(_,i)=>'prosp_training_day_'+(i+1)));
  const parse=(v,f)=>{try{return JSON.parse(v)||f}catch{return f}};
  const phone=v=>{let n=String(v||'').replace(/\D/g,'');if((n.length===12||n.length===13)&&n.startsWith('55'))n=n.slice(2);return /^\d{10,11}$/.test(n)?n:''};
  const clean=o=>Object.fromEntries(Object.entries(o||{}).filter(([k])=>!['__proto__','prototype','constructor'].includes(k)));
