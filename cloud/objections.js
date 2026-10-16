@@ -8,6 +8,8 @@ window.resetObjections=()=>{search.value='';category.value='';filter();};
 search.addEventListener('input',filter);category.addEventListener('change',filter);
 function openHash(){const target=document.getElementById(location.hash.slice(1));if(target&&root.contains(target)&&target.tagName==='DETAILS'){window.resetObjections();target.open=true;target.scrollIntoView({block:'start'});}}
 window.addEventListener('hashchange',openHash);openHash();
+root.querySelectorAll('.ob-shortcuts a').forEach(link=>link.addEventListener('click',event=>{const href=link.getAttribute('href'),target=document.getElementById(href.slice(1));if(!target)return;event.preventDefault();window.resetObjections();target.open=true;history.replaceState(null,'',href);target.scrollIntoView({block:'start'});}));
+
 root.querySelectorAll('[data-ob-copy]').forEach(button=>{const label=button.textContent;button.addEventListener('click',async()=>{
  const source=document.getElementById(button.dataset.obCopy);if(!source)return;let text=source.textContent;
  let name='';try{name=typeof prospStorage!=='undefined'?(prospStorage.getItem('prosp_seller_name')||window.prospectUser?.name||''):'';}catch{}

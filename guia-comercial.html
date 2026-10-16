@@ -12,4 +12,4 @@ function openGuideHash(){const el=document.getElementById(location.hash.slice(1)
 window.addEventListener('hashchange',openGuideHash);openGuideHash();
 function copiarScript(i){const el=document.getElementById('script'+i);if(!el)return;navigator.clipboard.writeText(el.textContent).then(()=>{const b=el.nextElementSibling;b.textContent='Copiado — personalize os campos';setTimeout(()=>b.textContent='Copiar modelo',2500);}).catch(()=>{el.focus();alert('Selecione e copie o texto do modelo.');});}
 function imprimirManual(){window.resetObjections?.();document.querySelectorAll('details').forEach(d=>d.open=true);window.print();}
-</script><script src="cloud/objections.js?v=1"></script></body></html>
+</script><script src="cloud/objections.js?v=2"></script></body></html>
