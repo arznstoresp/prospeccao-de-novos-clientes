@@ -20,4 +20,4 @@ window.cloudSync={claim:async t=>{const h=HISTORICO[t]||resultados.find(x=>x.tel
 save();
 document.getElementById('demoActor').onchange=e=>{window.closeWorkflow?.();window.prospectUser=e.target.value==='manager'?{id:'demo-manager',name:'Gestor de teste',role:'admin'}:{id:'demo-seller',name:'Vendedora de teste',role:'staff'};window.prospectRole=window.prospectUser.role;window.refreshWorkflow();};
 document.addEventListener('click',e=>{if(e.target.closest('a[href^="https://wa.me"]')){e.preventDefault();showToast('Teste: nenhum WhatsApp foi aberto.');}},true);
-</script><script src="../cloud/workflow-model.js?v=3"></script><script src="../cloud/workflow.js?v=4"></script><script>window.refreshWorkflow();</script></body></html>
+</script><script src="../cloud/workflow-model.js?v=3"></script><script src="../cloud/workflow.js?v=5"></script><script>window.refreshWorkflow();</script></body></html>

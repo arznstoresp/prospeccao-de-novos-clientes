@@ -145,7 +145,7 @@ begin
   if prospect_private.current_role()<>'admin' then
    if coalesce(previous->>'ownerId','')<>'' and previous->>'ownerId'<>coalesce(new.doc->>'ownerId','') then raise exception 'Somente o gestor pode transferir um contato.' using errcode='42501';end if;
    if coalesce(new.doc->>'ownerId','')<>'' and new.doc->>'ownerId'<>auth.uid()::text and previous->>'ownerId' is distinct from new.doc->>'ownerId' then raise exception 'Assuma o contato com sua própria conta.' using errcode='42501';end if;
-   foreach f in array array['qUse','qProduct','qQty','qDeadline','qDecision','qDelivery','qCustomization','nextAction','nextActionOwner','followUp','notas','quoteState','quoteRequestId','quoteRequestedAt','lastContactAt','lastContactKind','lastReplyAt','status'] loop
+   foreach f in array array['qUse','qProduct','qQty','qDeadline','qDecision','qDelivery','qCustomization','nextAction','nextActionOwner','followUp','notas','closeReason','closeDetail','quoteState','quoteRequestId','quoteRequestedAt','lastContactAt','lastContactKind','lastReplyAt','status'] loop
     if previous->f is distinct from new.doc->f and new.doc->>'ownerId' is distinct from auth.uid()::text then raise exception 'Somente o responsável pode alterar o atendimento.' using errcode='42501';end if;
    end loop;
    foreach f in array array['quoteApprovedFor','quoteApprovedAt','quoteApprovedBy','quoteReply','quoteVersion','quoteUrl'] loop
