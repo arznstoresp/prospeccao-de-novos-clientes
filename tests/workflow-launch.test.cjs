@@ -30,3 +30,11 @@ const docs=S.project(storage,'emily');
 assert(docs['usr:emily:prosp_launch_checks']);assert(!docs['usr:alan:prosp_launch_checks']);
 assert.equal(S.materialize(Object.entries(docs).map(([key,doc])=>({key,doc})),'alan').prosp_launch_checks,undefined);
 console.log('PASS: prioridade da fila, isolamento, motivos de encerramento, legado preservado e ficha de cotação sem notas internas.');
+
+const vm=require('node:vm'),source=fs.readFileSync(path.join(root,'workflow.js'),'utf8');
+const begin=source.indexOf("$('wfStage').onchange="),end=source.indexOf("\n $('wfLoadTimeline')",begin);
+const stage={value:'nao'},lead={status:'novo',closeReason:'nao_contatar'};let changed='';
+const ctx={$:id=>stage,flush:()=>{stage.value='novo';return true;},find:()=>lead,W,admin:()=>false,mine:()=>true,setQuickStatus:(_,s)=>{changed=s;},updateDialogSummary(){},loadTimeline(){},confirm:()=>true,saveStatus(){}};
+vm.runInNewContext('const tel="11900000000";'+source.slice(begin,end),ctx);stage.onchange();
+assert.equal(changed,'nao','A etapa escolhida deve sobreviver ao flush do rascunho');
+console.log('PASS: troca de etapa preservada durante salvamento pendente.');
