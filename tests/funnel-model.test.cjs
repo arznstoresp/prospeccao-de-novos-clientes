@@ -1,0 +1,14 @@
+const assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');const root=fs.existsSync(path.join(__dirname,'../cloud/funnel-model.js'))?path.join(__dirname,'../cloud'):__dirname;const M=require(path.join(root,'funnel-model.js'));
+assert.equal(M.groups.length,4);
+for(const [status,group]of Object.entries({novo:'abordar',contatado:'conversa',interesse:'conversa',qualificado:'orcamento',proposta:'orcamento',fechado:'fechados',nao:'encerrados',invalido:'encerrados'}))assert.equal(M.group({status}),group);
+const history={'11900000000':{nome:'Histórico preservado',status:'proposta',ownerId:'seller'}};
+const original=JSON.stringify(history);const leads=M.collect([{telNum:'11900000000',nome:'Fila antiga'},{tel:'5511900000001',nome:'Disponível'}],history);
+assert.equal(leads.length,2);assert.equal(leads.find(h=>h.telNum==='11900000000').nome,'Histórico preservado');assert.equal(JSON.stringify(history),original);
+const rows=[...leads,{telNum:'11900000002',status:'nao',ownerId:'seller'},{telNum:'11900000003',status:'invalido',ownerId:'seller'},{telNum:'11900000004',status:'fechado',ownerId:'seller'},{telNum:'11900000005',status:'contatado',ownerId:'other'}];
+assert.equal(M.select(rows,{uid:'seller',scope:'work'}).length,3);
+assert.equal(M.select(rows,{uid:'seller',scope:'mine',view:'closed'}).length,2);
+assert.equal(M.select(rows,{uid:'seller',scope:'all'}).length,4);
+assert.equal(M.select(rows,{uid:'seller',scope:'free'}).length,1);
+assert.equal(M.select(rows,{uid:'seller',scope:'all',view:'closed'}).some(h=>h.status==='fechado'),false);
+assert.equal(M.select([{nome:'Futuro',followUp:'2026-11-01'},{nome:'Hoje',followUp:'2026-10-16'},{nome:'Vencido',followUp:'2026-10-15'}],{uid:'seller',date:'2026-10-16'}).at(0).nome,'Vencido');
+console.log('PASS: quatro grupos, fila incluída, deduplicação, filtros por responsável e encerrados, prioridade e dados preservados.');

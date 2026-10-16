@@ -1,0 +1,10 @@
+(function(root){
+'use strict';
+const groups=[{key:'abordar',label:'Para abordar',hint:'Confira a empresa e assuma antes de enviar.'},{key:'conversa',label:'Em conversa',hint:'Responda, descubra a necessidade e combine o retorno.'},{key:'orcamento',label:'Orçamento e proposta',hint:'Complete a ficha e acompanhe a análise e a decisão.'},{key:'fechados',label:'Fechados',hint:'Pedidos confirmados; acompanhe a passagem para produção.'}];
+function group(h){const s=h.status||'novo';if(['nao','invalido'].includes(s))return 'encerrados';if(s==='fechado')return 'fechados';if(['qualificado','proposta'].includes(s))return 'orcamento';if(s==='novo')return 'abordar';return 'conversa';}
+function phone(v){let p=String(v||'').replace(/\D/g,'');if(p.startsWith('55')&&p.length>11)p=p.slice(2);return /^\d{10,11}$/.test(p)?p:'';}
+function collect(queue,history){const map=new Map();for(const h of queue||[]){const tel=phone(h.telNum||h.tel);if(tel)map.set(tel,{...h,telNum:tel});}for(const [key,h]of Object.entries(history||{})){if(!h)continue;const tel=phone(h.telNum||key||h.tel);if(tel)map.set(tel,{...h,telNum:tel});}return [...map.values()];}
+function select(leads,{uid,scope='work',view='active',date=''}){return leads.filter(h=>{if(view==='closed'?group(h)!=='encerrados':group(h)==='encerrados')return false;if(scope==='mine'&&h.ownerId!==uid)return false;if(scope==='free'&&h.ownerId)return false;if(scope==='work'&&h.ownerId&&h.ownerId!==uid)return false;return true;}).sort((a,b)=>{const rank=h=>group(h)==='fechados'||group(h)==='encerrados'?3:h.followUp&&h.followUp<date?0:h.followUp===date?1:2;return rank(a)-rank(b)||String(a.followUp||'').localeCompare(String(b.followUp||''))||String(a.nome||'').localeCompare(String(b.nome||''));});}
+const api={groups,group,collect,select};
+if(typeof module!=='undefined'&&module.exports)module.exports=api;else root.ProspectFunnelModel=api;
+})(typeof window!=='undefined'?window:globalThis);
