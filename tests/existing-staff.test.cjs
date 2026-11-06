@@ -1,0 +1,10 @@
+const assert=require('node:assert/strict'),vm=require('node:vm'),fs=require('node:fs');
+const source=require('node:module').stripTypeScriptTypes(fs.readFileSync(require('node:path').join(__dirname,'../functions/prospect-team-admin.ts'),'utf8').replace(/^import .*\n/,''));
+async function run(role='staff',fail=false){
+ let handler,writes=[],reactivated=false;
+ const api={auth:{getUser:async()=>({data:{user:{id:'manager',email:'manager@example.test',email_confirmed_at:'yes'}}}),admin:{createUser:async()=>({data:{},error:{code:'email_exists'}}),listUsers:async()=>({data:{users:[{id:'staff-id',email:'staff@example.test'}]}}),updateUserById:async(id,fields)=>{writes.push({id,keys:Object.keys(fields)});return {error:fail?{}:null};}}},from:()=>{let email,updating=false;return {select(){return this},eq(key,value){if(key==='email')email=value;return this},update(fields){updating=true;assert.equal(fields.active,true);return this},async maybeSingle(){if(updating){reactivated=true;return {data:{email}};}return {data:email==='manager@example.test'?{role:'admin',active:true}:{role}};}}}};
+ vm.runInNewContext(source,{createClient:()=>api,Deno:{env:{get:()=>''},serve:fn=>handler=fn},Response});
+ const response=await handler(new Request('https://example.test',{method:'POST',headers:{Authorization:'Bearer test'},body:JSON.stringify({action:'create',email:'staff@example.test',name:'Staff',password:'Example-only-123'})}));
+ return {status:response.status,body:await response.json(),writes,reactivated};
+}
+(async()=>{const ok=await run();assert.equal(ok.status,200);assert.equal(ok.reactivated,true);assert.deepEqual(ok.writes,[{id:'staff-id',keys:['password']}]);const admin=await run('admin');assert.equal(admin.status,403);assert.equal(admin.writes.length,0);const failure=await run('staff',true);assert.equal(failure.status,400);assert.equal(failure.reactivated,false);console.log('PASS existing staff: password update + reactivation, admin protected, no reactivation after password failure');})().catch(e=>{console.error(e);process.exit(1)});

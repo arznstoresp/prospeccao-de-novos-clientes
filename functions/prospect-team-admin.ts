@@ -43,12 +43,31 @@ Deno.serve(async(req:Request)=>{
  if(body.action!=='create')return reply({error:'Ação inválida.'},400);
  const name=String(body.name||'').trim().slice(0,100),password=String(body.password||'');
  if(!name||password.length<12||password.length>128)return reply({error:'Informe o nome e uma senha inicial de 12 a 128 caracteres.'},400);
- // Auth users are shared with the existing company project. Never reset or modify an existing user's credentials.
+ // Reset credentials only for existing staff memberships, after manager authentication.
  const {data:created,error:createError}=await admin.auth.admin.createUser({email,password,email_confirm:true});
  if(createError){
   if(createError.code==='email_exists'||createError.code==='email_exists_error'||/already|registered/i.test(createError.message)){
+   const {data:existing,error:memberError}=await admin.from('prospect_members').select('role').eq('email',email).maybeSingle();
+   if(memberError)return reply({error:'Não foi possível conferir o acesso existente.'},500);
+   if(existing?.role==='admin')return reply({error:'O acesso do gestor não pode ser alterado neste formulário.'},403);
+   if(existing?.role==='staff'){
+    let staffId:string|null=null;
+    for(let page=1;page<=1000;page++){
+     const {data,error}=await admin.auth.admin.listUsers({page,perPage:1000});
+     if(error)return reply({error:'Não foi possível localizar a conta.'},500);
+     const match=data.users.find(u=>u.email?.toLowerCase()===email);
+     if(match){staffId=match.id;break;}
+     if(data.users.length<1000)break;
+    }
+    if(!staffId||staffId===user.id)return reply({error:'Conta da vendedora não encontrada.'},400);
+    const {error:passwordError}=await admin.auth.admin.updateUserById(staffId,{password});
+    if(passwordError)return reply({error:'Não foi possível salvar a senha. Confira os requisitos e tente novamente.'},400);
+    const {data:updated,error:reactivateError}=await admin.from('prospect_members').update({active:true}).eq('email',email).eq('role','staff').select('email').maybeSingle();
+    if(reactivateError||!updated)return reply({error:'Senha salva, mas não foi possível reativar o acesso. Clique em Reativar na lista.'},500);
+    return reply({ok:true,existing:true,message:'Senha atualizada e acesso reativado. A vendedora já pode entrar com a senha que você informou. Ela também vale na Central de Vendas.'});
+   }
    const {error}=await admin.from('prospect_members').upsert({email,name,role:'staff',active:true},{onConflict:'email',ignoreDuplicates:true});
-   return error?reply({error:'Não foi possível liberar este acesso.'},500):reply({ok:true,existing:true,message:'Esta conta já existe. Cadastrar novamente não altera a senha nem reativa acessos desativados. Use Reativar e Definir senha na lista da equipe.'});
+   return error?reply({error:'Não foi possível liberar este acesso.'},500):reply({ok:true,existing:true,message:'Conta já existente vinculada à equipe. Use Definir senha para alterar sua senha atual.'});
   }
   return reply({error:'Não foi possível criar a conta. Confira o e-mail e os requisitos da senha.'},400);
  }
