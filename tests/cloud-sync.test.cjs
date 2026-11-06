@@ -1,7 +1,7 @@
 const fs=require('node:fs'),vm=require('node:vm'),assert=require('node:assert/strict'),{randomUUID}=require('node:crypto');
 const memory=()=>{const m=new Map();return {get length(){return m.size},key:i=>[...m.keys()][i],getItem:k=>m.get(k)??null,setItem:(k,v)=>m.set(k,String(v)),removeItem:k=>m.delete(k)}};
 function device(server,uid='owner'){
- const nodes=new Map();const node=()=>({hidden:false,style:{},value:'',textContent:'',listeners:{},addEventListener(k,f){this.listeners[k]=f},reset(){},replaceChildren(){},append(){},classList:{contains(){return false}}});
+ const nodes=new Map();const node=()=>({hidden:false,dataset:{},style:{},value:'',textContent:'',listeners:{},addEventListener(k,f){this.listeners[k]=f},reset(){},replaceChildren(){},append(){},classList:{contains(){return false}}});
  const el=id=>{if(!nodes.has(id))nodes.set(id,node());return nodes.get(id)};
  const authUser={id:uid,email:uid+'@example.test'};
  const sdk={auth:{getUser:async()=>({data:{user:authUser}}),getSession:async()=>({data:{session:{user:authUser}}}),onAuthStateChange(){},signOut:async()=>({})},

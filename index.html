@@ -544,7 +544,16 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 <dialog id="wfDialog" aria-labelledby="wfDialogTitle"><div class="wf-dialog-head"><div><span class="sg-kicker">Atendimento orientado</span><h2 id="wfDialogTitle"></h2><small id="wfDialogOwner"></small><small id="wfDialogSync" role="status" style="display:block;margin-top:5px"></small></div><button type="button" id="wfClose" class="btn btn-ghost btn-sm">Salvar e fechar</button></div><div id="wfDialogBody"></div><p id="wfSaveStatus" role="status" aria-live="polite"></p></dialog>
   <!-- ══ CONFIG ══ -->
   <div id="tab-config" class="tab-content"><section id="migrationPanel" class="panel" hidden><div class="panel-title">Trazer seus dados anteriores</div><p id="migrationSummary" class="cloud-note"></p><button id="migrateLocalBtn" type="button" class="btn btn-primary">Mesclar dados deste navegador com a nuvem</button><p id="migrationMessage" class="cloud-message" role="status"></p><p class="cloud-note">Faça isso no navegador onde você usava o sistema. Os dados originais ficam preservados. A opção Importar Backup também mescla contatos, sem substituir toda a base.</p></section>
-<section id="teamPanel" class="panel" hidden><div class="panel-title">Acessos da equipe</div><p class="cloud-note">Crie um acesso individual para a funcionária. Depois envie o mesmo link para o notebook e o celular dela. No notebook, conecte o WhatsApp Web ao número de prospecção.</p><form id="teamForm" class="cloud-form"><label for="teamName">Nome</label><input id="teamName" type="text" maxlength="100" required><label for="teamEmail">E-mail da funcionária</label><input id="teamEmail" type="email" autocomplete="off" required><label for="teamPassword">Senha inicial (mínimo 12 caracteres)</label><input id="teamPassword" type="password" autocomplete="new-password" minlength="12" maxlength="128" required><button id="teamCreateBtn" class="btn btn-primary" type="submit">Criar acesso da funcionária</button></form><p id="teamMessage" class="cloud-message" role="status"></p><div id="teamList"></div></section>
+<section id="teamPanel" class="panel" hidden><div class="panel-title">Acessos da equipe</div><p class="cloud-note">Crie um acesso individual para a funcionária. Depois envie o mesmo link para o notebook e o celular dela. No notebook, conecte o WhatsApp Web ao número de prospecção.</p><form id="teamForm" class="cloud-form"><label for="teamName">Nome</label><input id="teamName" type="text" maxlength="100" required><label for="teamEmail">E-mail da funcionária</label><input id="teamEmail" type="email" autocomplete="off" required><label for="teamPassword">Senha inicial (mínimo 12 caracteres)</label><input id="teamPassword" type="password" autocomplete="new-password" minlength="12" maxlength="128" required><button id="teamCreateBtn" class="btn btn-primary" type="submit">Criar acesso da funcionária</button></form><p id="teamMessage" class="cloud-message" role="status"></p><div id="teamList"></div><section id="teamResetPanel" class="panel" hidden style="margin-top:16px">
+<div class="panel-title">Definir senha da vendedora</div>
+<p id="teamPasswordTarget" class="cloud-note"></p>
+<p class="cloud-note">Você define a senha e informa diretamente à vendedora. Não é necessário confirmar por e-mail. A nova senha também será usada na Central de Vendas, pois os dois sistemas compartilham a conta.</p>
+<form id="teamResetForm" class="cloud-form">
+<label for="teamNewPassword">Nova senha (12 a 128 caracteres)</label><input id="teamNewPassword" type="password" autocomplete="new-password" minlength="12" maxlength="128" required>
+<label for="teamConfirmPassword">Repita a nova senha</label><input id="teamConfirmPassword" type="password" autocomplete="new-password" minlength="12" maxlength="128" required>
+<button id="teamResetBtn" class="btn btn-primary" type="submit">Salvar nova senha</button>
+<button id="teamResetCancel" class="btn btn-ghost" type="button">Cancelar</button>
+</form><p id="teamResetMessage" class="cloud-message" role="status"></p></section></section>
 
     <div class="panel">
       <div class="panel-title">📍 Endereço de Origem</div>
@@ -1610,7 +1619,7 @@ window.addEventListener('scroll',()=>{ const b=document.getElementById('back-top
 <script src="cloud/sync-model.js?v=4"></script>
 <script src="cloud/operations.js?v=2"></script>
 <script src="cloud/workflow-model.js?v=3"></script><script src="cloud/workflow.js?v=6"></script>
-<script src="cloud/cloud-sync.js?v=5"></script>
+<script src="cloud/cloud-sync.js?v=6"></script>
 <script src="cloud/objections.js?v=2"></script><script src="cloud/funnel-model.js?v=1"></script><script src="cloud/funnel.js?v=1"></script></body>
 </html>
 

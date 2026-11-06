@@ -105,6 +105,7 @@
  }
  function lock(reason){
   window.closeWorkflow?.();
+  $('teamResetForm').reset();$('teamResetPanel').hidden=true;$('teamResetForm').dataset.email='';
   ready=false;stopped=true;app.hidden=true;gate.hidden=false;message.textContent=reason||'';
   prospStorage.clear();HISTORICO={};resultados=[];ENDERECOS=[];USER_LAT=null;USER_LNG=null;user=null;member=null;window.prospectRole=null;window.prospectUser=null;window.prospectTrainingRows=[];$('cloudAccountPanel').hidden=true;
  }
@@ -155,11 +156,35 @@
  $('cloudRetry').addEventListener('click',sync);
  $('cloudReloadAuth').addEventListener('click',async()=>{const {data}=await client.auth.getSession();await activate(data.session)});
  $('cloudAccountSwitch').addEventListener('click',async()=>{await client.auth.signOut({scope:'local'});lock('Entre com a conta liberada para você.')});
+ async function teamError(data,error){
+  if(data?.error)return data.error;
+  if(error?.context){try{const body=await error.context.json();if(body.error)return body.error;}catch{}}
+  return 'Não foi possível concluir. Confira sua conexão e tente novamente.';
+ }
+ function openTeamPassword(person){
+  $('teamPasswordTarget').textContent=person.name+' · '+person.email;
+  $('teamResetForm').dataset.email=person.email;
+  $('teamResetForm').reset();$('teamResetMessage').textContent='';$('teamResetPanel').hidden=false;
+  $('teamResetPanel').scrollIntoView({behavior:'smooth',block:'center'});$('teamNewPassword').focus();
+ }
+ $('teamResetCancel').onclick=()=>{$('teamResetForm').reset();$('teamResetForm').dataset.email='';$('teamResetPanel').hidden=true;};
+ $('teamResetForm').addEventListener('submit',async e=>{
+  e.preventDefault();const form=$('teamResetForm'),msg=$('teamResetMessage'),btn=$('teamResetBtn');
+  if($('teamNewPassword').value!==$('teamConfirmPassword').value){msg.textContent='As senhas não coincidem.';return;}
+  btn.disabled=true;$('teamResetCancel').disabled=true;msg.textContent='Definindo senha…';
+  try{
+   const {data,error}=await client.functions.invoke('prospect-team-admin',{body:{action:'set_password',email:form.dataset.email,password:$('teamNewPassword').value}});
+   if(error||data?.error)throw new Error(await teamError(data,error));
+   form.reset();msg.textContent=data.message;
+  }catch(error){msg.textContent=error.message;}
+  finally{btn.disabled=false;$('teamResetCancel').disabled=false;}
+ });
  async function loadTeam(){
   const list=$('teamList');list.replaceChildren();
   const {data,error}=await client.from('prospect_members').select('email,name,role,active').order('created_at');
   if(error){list.textContent='Não foi possível carregar a equipe.';return;}
   for(const person of data){const row=document.createElement('div');row.className='cloud-team-row';const text=document.createElement('span');text.textContent=person.name+' · '+person.email+' · '+(person.active?'Ativo':'Desativado');row.append(text);
+   if(person.role==='staff'&&person.active){const reset=document.createElement('button');reset.className='btn btn-primary btn-sm';reset.textContent='Definir senha';reset.onclick=()=>openTeamPassword(person);row.append(reset);}
    if(person.role!=='admin'){const b=document.createElement('button');b.className='btn btn-ghost btn-sm';b.textContent=person.active?'Desativar':'Reativar';b.onclick=async()=>{b.disabled=true;try{const {error}=await client.functions.invoke('prospect-team-admin',{body:{action:'toggle',email:person.email,active:!person.active}});if(error)throw error;await loadTeam();}catch{$('teamMessage').textContent='Não foi possível alterar o acesso.';b.disabled=false;}};row.append(b);}list.append(row);
   }
  }

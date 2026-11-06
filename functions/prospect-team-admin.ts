@@ -21,6 +21,25 @@ Deno.serve(async(req:Request)=>{
   const {error}=await admin.from('prospect_members').update({active:body.active===true}).eq('email',email);
   return error?reply({error:'Não foi possível alterar o acesso.'},500):reply({ok:true});
  }
+ if(body.action==='set_password'){
+  const password=typeof body.password==='string'?body.password:'';
+  if(password.length<12||password.length>128)return reply({error:'Use uma senha de 12 a 128 caracteres.'},400);
+  const {data:target,error:targetError}=await admin.from('prospect_members').select('role,active').eq('email',email).maybeSingle();
+  if(targetError)return reply({error:'Não foi possível conferir o acesso.'},500);
+  if(!target||target.role!=='staff'||!target.active)return reply({error:'Selecione uma vendedora com acesso ativo.'},403);
+  let targetId:string|null=null;
+  for(let page=1;page<=1000;page++){
+   const {data,error}=await admin.auth.admin.listUsers({page,perPage:1000});
+   if(error)return reply({error:'Não foi possível localizar a conta.'},500);
+   const match=data.users.find(u=>u.email?.toLowerCase()===email);
+   if(match){targetId=match.id;break;}
+   if(data.users.length<1000)break;
+  }
+  if(!targetId||targetId===user.id)return reply({error:'Conta da vendedora não encontrada.'},400);
+  const {error}=await admin.auth.admin.updateUserById(targetId,{password});
+  if(error)return reply({error:'Não foi possível definir a senha. Use de 12 a 128 caracteres e confira os requisitos de segurança.'},400);
+  return reply({ok:true,message:'Senha definida. A vendedora já pode entrar com a nova senha. Ela também vale para a Central de Vendas.'});
+ }
  if(body.action!=='create')return reply({error:'Ação inválida.'},400);
  const name=String(body.name||'').trim().slice(0,100),password=String(body.password||'');
  if(!name||password.length<12||password.length>128)return reply({error:'Informe o nome e uma senha inicial de 12 a 128 caracteres.'},400);
