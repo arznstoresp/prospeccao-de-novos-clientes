@@ -139,7 +139,13 @@
  $('cloudAuthForm').addEventListener('submit',async e=>{
   e.preventDefault();const btn=$('cloudLoginBtn');btn.disabled=true;message.textContent='Entrando…';
   try{const {data,error}=await client.auth.signInWithPassword({email:$('cloudEmail').value.trim(),password:$('cloudPassword').value});if(error)throw error;await activate(data.session);}
-  catch{message.textContent='Não foi possível entrar. Confira e-mail, senha e conexão. Use a senha da sua conta já existente na Central de Vendas, se houver.';}
+  catch(error){
+   const code=error?.code;
+   if(code==='invalid_credentials')message.textContent='E-mail ou senha não conferem. Confira o e-mail da sua conta e digite a senha atual. Se você usa a Central de Vendas, a senha é a mesma. Se continuar, peça ao gestor para recuperar seu acesso.';
+   else if(code==='email_not_confirmed')message.textContent='Seu e-mail ainda precisa ser confirmado. Procure o gestor para concluir a liberação.';
+   else if(error?.status===429||code==='over_request_rate_limit')message.textContent='Muitas tentativas de acesso. Aguarde alguns minutos e tente novamente.';
+   else message.textContent='Não foi possível conectar ao serviço de acesso. Confira a internet e tente novamente. Seus dados permanecem salvos.';
+  }
   finally{btn.disabled=false;}
  });
  $('cloudLogout').addEventListener('click',async()=>{
