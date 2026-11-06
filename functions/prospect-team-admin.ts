@@ -48,7 +48,7 @@ Deno.serve(async(req:Request)=>{
  if(createError){
   if(createError.code==='email_exists'||createError.code==='email_exists_error'||/already|registered/i.test(createError.message)){
    const {error}=await admin.from('prospect_members').upsert({email,name,role:'staff',active:true},{onConflict:'email',ignoreDuplicates:true});
-   return error?reply({error:'Não foi possível liberar este acesso.'},500):reply({ok:true,existing:true,message:'Acesso liberado. Esta conta já existe e deve usar sua senha atual.'});
+   return error?reply({error:'Não foi possível liberar este acesso.'},500):reply({ok:true,existing:true,message:'Esta conta já existe. Cadastrar novamente não altera a senha nem reativa acessos desativados. Use Reativar e Definir senha na lista da equipe.'});
   }
   return reply({error:'Não foi possível criar a conta. Confira o e-mail e os requisitos da senha.'},400);
  }
