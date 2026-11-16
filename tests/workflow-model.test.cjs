@@ -19,3 +19,10 @@ assert.equal(W.metrics([...events,events[0]]).totals.primeiro_envio,1);
 assert.equal(W.metrics([row('11912345678',{status:'novo'},{status:'interesse'})]).totals.resposta,undefined);
 const other=W.metrics([events[0],row('11900000000',{},{...lead,lastContactAt:'z',lastContactKind:'initial'},'b')]);assert.equal(Object.keys(other.actors).length,2);
 console.log('PASS: qualificação, aprovação por versão, mensagens por segmento/momento e atividades únicas por período/autor.');
+
+const car=W.message({nome:'Carbox Automóveis',nicho:'revenda',status:'novo'},{name:'Alan'});
+assert.match(car,/kits de entrega de veículos/);assert.match(car,/pós-venda/);assert.equal((car.match(/ArznStoreSP/g)||[]).length,1);assert.doesNotMatch(car,/Encontrei|\[NOME\]/);
+assert.match(W.message({nome:'Exemplo',nicho:'clínica odontológica'},c),/uniformes para a equipe/);
+assert.match(W.message({nome:'Exemplo',nicho:'organizadores de feiras'},c),/kits para participantes/);
+assert.match(W.message({nome:'Exemplo',nicho:'Outros'},c),/brindes e uniformes/);
+assert.match(W.message({...lead,status:'contatado'},c),/Retomo meu contato/);
