@@ -21,7 +21,7 @@ const other=W.metrics([events[0],row('11900000000',{},{...lead,lastContactAt:'z'
 console.log('PASS: qualificação, aprovação por versão, mensagens por segmento/momento e atividades únicas por período/autor.');
 
 const car=W.message({nome:'Carbox Automóveis',nicho:'revenda',status:'novo'},{name:'Alan'});
-assert.ok(car.startsWith('Olá, equipe Carbox Automóveis! Tudo bem? Aqui é Alan, da ArznStoreSP.'));
+assert.ok(car.startsWith('Olá, equipe Carbox Automóveis!\nTudo bem? Aqui é o Alan, consultor da ArznStoreSP.'));
 assert.match(car,/ação, evento ou reposição de materiais\?/);
 assert.ok(car.endsWith('https://arznstoresp.com.br/'));
 assert.equal((car.match(/ArznStoreSP/g)||[]).length,1);
@@ -29,3 +29,5 @@ assert.match(W.message({...lead,status:'contatado'},c),/Retomo meu contato/);
 
 assert.ok(W.message({nome:'Loja da Vila'},c).startsWith('Olá, equipe Loja da Vila!'));
 assert.ok(W.message({nome:'   '},c).startsWith('Olá, tudo bem? Aqui é Emily'));
+
+assert.equal(W.message({nome:'Excelente Automóveis',status:'novo'},{name:'Alan'}),"Olá, equipe Excelente Automóveis!\nTudo bem? Aqui é o Alan, consultor da ArznStoreSP.\n\nAjudamos empresas a fortalecer sua imagem com materiais personalizados, unindo qualidade, agilidade e atenção a cada detalhe.\n\nOferecemos uniformes, brindes corporativos, materiais gráficos e peças em impressão 3D para deixar sua marca em destaque.\n\nVocês estão planejando alguma ação, evento ou reposição de materiais?\n\nConheça nosso catálogo:\nhttps://arznstoresp.com.br/");
