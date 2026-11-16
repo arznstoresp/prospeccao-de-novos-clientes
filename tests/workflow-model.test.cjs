@@ -21,8 +21,11 @@ const other=W.metrics([events[0],row('11900000000',{},{...lead,lastContactAt:'z'
 console.log('PASS: qualificação, aprovação por versão, mensagens por segmento/momento e atividades únicas por período/autor.');
 
 const car=W.message({nome:'Carbox Automóveis',nicho:'revenda',status:'novo'},{name:'Alan'});
-assert.match(car,/kits de entrega de veículos/);assert.match(car,/pós-venda/);assert.equal((car.match(/ArznStoreSP/g)||[]).length,1);assert.doesNotMatch(car,/Encontrei|\[NOME\]/);
+assert.ok(car.startsWith('Olá, equipe Carbox Automóveis! Sou Alan, da ArznStoreSP.'));assert.match(car,/na entrega do veículo/);assert.match(car,/pós-venda/);assert.equal((car.match(/ArznStoreSP/g)||[]).length,1);assert.doesNotMatch(car,/Encontrei|\[NOME\]/);
 assert.match(W.message({nome:'Exemplo',nicho:'clínica odontológica'},c),/uniformes para a equipe/);
 assert.match(W.message({nome:'Exemplo',nicho:'organizadores de feiras'},c),/kits para participantes/);
 assert.match(W.message({nome:'Exemplo',nicho:'Outros'},c),/brindes e uniformes/);
 assert.match(W.message({...lead,status:'contatado'},c),/Retomo meu contato/);
+
+assert.ok(W.message({nome:'Loja da Vila'},c).startsWith('Olá, equipe Loja da Vila!'));
+assert.ok(W.message({nome:'   '},c).startsWith('Olá! Sou Emily'));
