@@ -110,6 +110,61 @@ function managerDecision(state){if(!admin()||!activeTel||!flush(activeTel))retur
  patch(activeTel,p);$('wf-nextActionOwner').value=p.nextActionOwner||h.nextActionOwner||'seller';$('wf-nextAction').value=p.nextAction||h.nextAction||'';refresh();updateDialogSummary();saveStatus(state==='ready'?'Aprovação registrada. A vendedora receberá após sincronizar.':statusText());loadTimeline();}
 function context(){return {name:prospStorage.getItem('prosp_seller_name')||window.prospectUser?.name||'Atendimento',signature:window.prospectSignature()};}
 function generateMessage(){if(!activeTel)return;previewDirty=false;$('wfMessage').value=W.message(find(activeTel),context(),$('wfMessageMode').value);if(!$('wfMessage').value)saveStatus('Não há mensagem sugerida para este estado. Confira recusa, encerramento ou aprovação antes de enviar.');updateWhatsapp();}
+
+const quick=$('quickMessage');
+let quickTel=null,quickReady=false,quickOpened=false,quickVersion=0;
+const quickStatus=text=>{$('quickStatus').textContent=text;};
+function resetQuick(){quickVersion++;quickTel=null;quickReady=false;quickOpened=false;$('quickText').value='';$('quickWhatsapp').removeAttribute('href');}
+function canQuick(tel){
+ const h=find(tel);
+ return !!window.prospectUser&&!!h&&mine(h)&&!W.terminal(h.status)&&!['ready','sent'].includes(h.quoteState)&&tipoTelefone(tel)!=='revisar';
+}
+function quickLink(){
+ const value=$('quickText').value.trim();
+ if(!quickReady||!canQuick(quickTel)||!value){$('quickWhatsapp').removeAttribute('href');return;}
+ $('quickWhatsapp').href='https://wa.me/55'+quickTel+'?text='+encodeURIComponent(value);
+}
+if(quick){
+ quick.addEventListener('close',()=>{if(!quick.open)resetQuick();});
+ $('quickClose').onclick=()=>quick.close();
+ $('quickFull').onclick=()=>{const tel=quickTel;quick.close();if(tel)window.openLeadWorkflow(tel);};
+ $('quickText').oninput=quickLink;
+ $('quickWhatsapp').onclick=e=>{
+  if(!quickReady||!canQuick(quickTel)||!$('quickText').value.trim()||/\[[^\]]+\]/.test($('quickText').value)){
+   e.preventDefault();quickStatus('Confira o contato e o texto da mensagem.');return;
+  }
+  if(!prospStorage.getItem('prosp_seller_phone')){
+   e.preventDefault();quickStatus('Cadastre seu WhatsApp profissional em Minha conta.');return;
+  }
+  quickLink();quickOpened=true;$('quickSent').hidden=false;quickStatus('Depois de enviar pelo WhatsApp, clique em Já enviei.');
+ };
+ $('quickSent').onclick=()=>{
+  if(!quickOpened||!canQuick(quickTel))return;
+  registrarContato(quickTel);quick.close();showToast('Envio registrado.');
+ };
+}
+window.openQuickMessage=async tel=>{
+ if(!quick||quick.open||!/^\d{10,11}$/.test(tel))return;
+ const h=find(tel),uid=window.prospectUser?.id;
+ if(!uid||!h||W.terminal(h.status)||tipoTelefone(tel)==='revisar')return;
+ if(h.ownerId&&!mine(h)){showToast('Este contato já tem responsável. Abra a ficha para consultar.');return;}
+ if(h.quoteState==='ready'||h.quoteState==='sent'){window.openLeadWorkflow(tel);return;}
+ resetQuick();const version=quickVersion;quickTel=tel;
+ $('quickTitle').textContent=h.nome||'Preparar mensagem';$('quickPhone').textContent=h.tel||tel;
+ $('quickText').disabled=true;$('quickWhatsapp').hidden=true;$('quickSent').hidden=true;$('quickFull').disabled=true;
+ quickStatus(h.ownerId?'Preparando mensagem…':'Assumindo contato…');quick.showModal();
+ try{
+  if(!h.ownerId)await window.cloudSync.claim(tel);
+  if(!quick.open||version!==quickVersion||window.prospectUser?.id!==uid)return;
+  if(!canQuick(tel))throw Error('O contato ainda não está atribuído a você. Confira a sincronização e tente novamente.');
+  const draft=W.message(find(tel),context(),'auto');
+  if(!draft)throw Error('Abra a ficha completa para continuar.');
+  $('quickText').value=draft;$('quickText').disabled=false;$('quickWhatsapp').hidden=false;
+  quickReady=true;quickLink();quickStatus('Revise o texto antes de abrir o WhatsApp.');
+ }catch(error){if(quick.open&&version===quickVersion)quickStatus(error.message||'Não foi possível preparar este contato.');}
+ finally{if(quick.open&&version===quickVersion)$('quickFull').disabled=false;}
+};
+
 function updateWhatsapp(){if(activeTel)$('wfOpenWhatsapp').href='https://wa.me/55'+activeTel+'?text='+encodeURIComponent($('wfMessage').value);}
 function validateMessage(){const text=$('wfMessage').value.trim(),h=find(activeTel);if(typeof tipoTelefone==='function'&&tipoTelefone(activeTel)==='revisar'){saveStatus('Confira o telefone da empresa antes de usar o WhatsApp.');return false;}if(W.terminal(h.status)){saveStatus('Atendimento encerrado. Não envie nova abordagem.');return false;}if(!text||/\[[^\]]+\]/.test(text)){saveStatus('Escreva a mensagem e substitua os campos entre colchetes antes de copiar/enviar.');return false;}if(!prospStorage.getItem('prosp_seller_phone')){saveStatus('Preencha seu telefone profissional em Minha conta antes de enviar.');return false;}if($('wfMessageMode').value==='proposal'&&!W.approved(h)){saveStatus('Esta versão precisa de aprovação do gestor.');return false;}return true;}
 async function loadTimeline(){if(!activeTel)return;const tel=activeTel,token=++activityToken;$('wfTimeline').textContent='Carregando atividades salvas…';try{const rows=await window.cloudSync.activity(tel);if(activeTel!==tel||token!==activityToken)return;const html=rows.flatMap(r=>W.activity(r).map(event=>'<li><strong>'+E(event.label)+'</strong><small>'+E(new Date(r.created_at).toLocaleString('pt-BR',{timeZone:'America/Sao_Paulo'}))+' • '+E(r.actor_name||'Conta '+String(r.actor).slice(0,8))+'</small></li>')).join('');$('wfTimeline').innerHTML=html?'<ol class="wf-timeline">'+html+'</ol>':'Nenhuma atividade disponível no servidor ainda. Confira a sincronização.';}catch(e){if(activeTel===tel)$('wfTimeline').textContent=e.message;}}
@@ -159,7 +214,7 @@ function renderClosureReport(){
 
 function refresh(){if(!window.prospectUser)return;if(!$('wfFrom').value)$('wfFrom').value=today();if(!$('wfTo').value)$('wfTo').value=today();renderList();renderToday();renderClosureReport();if(dialog.open)updateDialogSummary();}
 window.refreshWorkflow=refresh;
-window.closeWorkflow=()=>{for(const timer of draftTimers.values())clearTimeout(timer);draftTimers.clear();if(dialog.open)dialog.close();activeTel=null;listStamp='';};
+window.closeWorkflow=()=>{if(quick?.open){resetQuick();quick.close();}for(const timer of draftTimers.values())clearTimeout(timer);draftTimers.clear();if(dialog.open)dialog.close();activeTel=null;listStamp='';};
 document.addEventListener('click',e=>{const a=e.target.closest?.('a[href]');if(!a)return;let u;try{u=new URL(a.href);}catch{return;}if(u.hostname!=='wa.me'&&u.protocol!=='tel:')return;const tel=normalizarTelefone(u.protocol==='tel:'?u.pathname:u.pathname.slice(1)),h=find(tel);if(h&&['nao','invalido'].includes(h.status)){e.preventDefault();e.stopImmediatePropagation();showToast('Contato encerrado por recusa ou destino incorreto. Não enviar nova abordagem.');}},true);
 const oldControls=window.prospectControls;window.prospectControls=h=>(oldControls?oldControls(h):'')+'<button type="button" class="btn btn-ghost btn-sm wf-open" onclick="openLeadWorkflow(\''+normalizarTelefone(h.telNum||h.tel)+'\')">Abrir atendimento passo a passo</button>';
 window.prospectMessage=h=>W.message(h,context(),'auto');

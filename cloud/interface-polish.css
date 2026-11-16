@@ -24,3 +24,28 @@
  #prospApp .wf-lead-actions{min-width:0}
  #prospApp .wf-lead-actions .btn{min-width:min(100%,140px)}
 }
+
+#prospApp .contact-toolbar{display:grid;grid-template-columns:max-content minmax(125px,175px) minmax(0,1fr)}
+#prospApp .contact-toolbar select{width:auto;margin:0}
+#prospApp .contact-toolbar label{margin:0}
+#prospApp .result-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));gap:14px}
+#prospApp .rc-compact{display:flex;flex-direction:column;gap:8px;padding:16px;min-width:0}
+#prospApp .rc-compact h3{margin:0;padding-right:26px}
+#prospApp .rc-compact .rc-select{top:15px;right:15px}
+.rc-meta,.rc-number span{font-size:.8125rem;color:var(--sub);overflow-wrap:anywhere}
+.rc-number{display:flex;align-items:center;flex-wrap:wrap;gap:8px}
+.rc-number span{border:1px solid var(--line2);border-radius:5px;padding:2px 6px}
+.rc-buttons{display:flex;align-items:stretch;gap:8px;margin-top:auto}
+.rc-footer{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding-top:7px;border-top:1px solid var(--line)}
+.rc-footer :is(a,button){background:none;border:0;padding:4px 0;color:var(--sub);font:inherit;font-size:.8125rem;cursor:pointer;text-decoration:underline;text-underline-offset:3px}
+#quickMessage{width:min(530px,calc(100% - 24px));max-height:calc(100dvh - 24px);margin:auto;padding:20px;background:#19191f;color:#fff;border:1px solid #56525a;border-radius:14px;overflow:auto}
+#quickMessage::backdrop{background:#000a}
+#quickMessage header{display:flex;justify-content:space-between;gap:12px;align-items:flex-start;margin-bottom:14px}
+#quickMessage h2{font-size:1.125rem;margin:0;overflow-wrap:anywhere}
+#quickMessage small,#quickStatus{color:#c2c0c9;font-size:.875rem}
+#quickMessage label{display:block;margin:0 0 6px}
+#quickText{width:100%;padding:10px;background:#23232b;color:#fff;border:1px solid #56525a;border-radius:8px;font:inherit;font-size:16px;line-height:1.45;resize:vertical;min-height:120px;height:min(235px,42dvh)}
+#quickStatus{margin:8px 0;min-height:2em}
+.quick-actions{display:flex;gap:8px;margin:0 0 9px}
+.quick-actions .btn{min-height:44px;flex:1;width:auto}
+@media(max-width:650px){#prospApp .contact-toolbar{grid-template-columns:minmax(0,max-content) minmax(0,1fr)}#prospApp .contact-toolbar small{grid-column:1/-1}#quickMessage{padding:15px}}
