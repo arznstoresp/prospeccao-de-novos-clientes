@@ -8,7 +8,7 @@ const approved={...lead,quoteState:'ready',quoteRequestId:'a',quoteApprovedFor:'
 assert(W.approved(approved));assert.equal(W.stageError(approved,'proposta'),'');
 assert(W.stageError(approved,'fechado'));assert.equal(W.stageError({...approved,quoteState:'sent'},'fechado'),'');
 const c={name:'Emily',signature:'Emily | ArznStoreSP'};
-assert(W.message({...lead,status:'novo'},c).includes('ações para alunos'));
+assert.match(W.message({...lead,status:'novo'},c),/uniformes, brindes corporativos, materiais gráficos e peças em impressão 3D/);
 assert(!W.message({...lead,status:'contatado',qUse:''},c).includes('Obrigado pelo retorno'));
 assert.equal(W.message({...lead,status:'nao'},c),'');
 assert.equal(W.message(lead,c,'proposal'),'');assert(W.message(approved,c,'proposal').includes(approved.quoteReply));
@@ -21,11 +21,11 @@ const other=W.metrics([events[0],row('11900000000',{},{...lead,lastContactAt:'z'
 console.log('PASS: qualificação, aprovação por versão, mensagens por segmento/momento e atividades únicas por período/autor.');
 
 const car=W.message({nome:'Carbox Automóveis',nicho:'revenda',status:'novo'},{name:'Alan'});
-assert.ok(car.startsWith('Olá, equipe Carbox Automóveis! Sou Alan, da ArznStoreSP.'));assert.match(car,/na entrega do veículo/);assert.match(car,/pós-venda/);assert.equal((car.match(/ArznStoreSP/g)||[]).length,1);assert.doesNotMatch(car,/Encontrei|\[NOME\]/);
-assert.match(W.message({nome:'Exemplo',nicho:'clínica odontológica'},c),/uniformes para a equipe/);
-assert.match(W.message({nome:'Exemplo',nicho:'organizadores de feiras'},c),/kits para participantes/);
-assert.match(W.message({nome:'Exemplo',nicho:'Outros'},c),/brindes e uniformes/);
+assert.ok(car.startsWith('Olá, equipe Carbox Automóveis! Tudo bem? Aqui é Alan, da ArznStoreSP.'));
+assert.match(car,/ação, evento ou reposição de materiais\?/);
+assert.ok(car.endsWith('https://arznstoresp.com.br/'));
+assert.equal((car.match(/ArznStoreSP/g)||[]).length,1);
 assert.match(W.message({...lead,status:'contatado'},c),/Retomo meu contato/);
 
 assert.ok(W.message({nome:'Loja da Vila'},c).startsWith('Olá, equipe Loja da Vila!'));
-assert.ok(W.message({nome:'   '},c).startsWith('Olá! Sou Emily'));
+assert.ok(W.message({nome:'   '},c).startsWith('Olá, tudo bem? Aqui é Emily'));
