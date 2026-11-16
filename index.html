@@ -435,6 +435,24 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
         <input type="text" id="nichoInput" placeholder="Digite ou clique numa sugestão…" onkeydown="if(event.key==='Enter')buscar()" />
       </div>
 
+      <div class="tag-section-lbl">🎯 Nichos com oportunidade de compra</div>
+      <p class="cloud-note">Escolha um nicho para preencher a busca e ver uma oferta de entrada. Confira cada contato antes de abordar.</p>
+      <button class="btn btn-ghost btn-sm" type="button" onclick="const r=document.getElementById('raioSlider');r.value=3;r.dispatchEvent(new Event('input'))">Usar raio de 3 km</button>
+      <div class="tags-row">
+        <button class="tag corp" type="button" data-offer="Kits para participantes e brindes para patrocinadores" data-target="Produção" aria-pressed="false" onclick="setTag(this,'agencias de eventos')">Agências de eventos</button>
+        <button class="tag corp" type="button" data-offer="Brindes para estandes e kits para expositores" data-target="Produção" aria-pressed="false" onclick="setTag(this,'organizadores de feiras')">Organizadores de feiras</button>
+        <button class="tag corp" type="button" data-offer="Camisetas de turma, squeezes e kits de matrícula" data-target="Coordenação" aria-pressed="false" onclick="setTag(this,'escola particular')">Escolas particulares</button>
+        <button class="tag corp" type="button" data-offer="Uniformes e brindes para ações com pacientes" data-target="Administrativo" aria-pressed="false" onclick="setTag(this,'clinica odontologica')">Clínicas odontológicas</button>
+        <button class="tag corp" type="button" data-offer="Uniformes e kits para entrega de chaves" data-target="Compras" aria-pressed="false" onclick="setTag(this,'construtora')">Construtoras</button>
+        <button class="tag corp" type="button" data-offer="Uniformes de portaria" data-target="Operações" aria-pressed="false" onclick="setTag(this,'administradora de condominios')">Administradoras de condomínios</button>
+        <button class="tag corp" type="button" data-offer="Chaveiros e kits para entrega de veículos" data-target="Pós-venda" aria-pressed="false" onclick="setTag(this,'concessionaria de veiculos')">Concessionárias</button>
+        <button class="tag corp" type="button" data-offer="Uniformes e chaveiros" data-target="Gestor da unidade" aria-pressed="false" onclick="setTag(this,'oficina mecanica')">Oficinas e auto centers</button>
+        <button class="tag corp" type="button" data-offer="Uniformes para instalação" data-target="Operações" aria-pressed="false" onclick="setTag(this,'empresa de energia solar')">Empresas de energia solar</button>
+        <button class="tag corp" type="button" data-offer="Camisetas e kits de integração" data-target="RH" aria-pressed="false" onclick="setTag(this,'industria metalurgica')">Indústrias e metalúrgicas</button>
+        <button class="tag corp" type="button" data-offer="Camisetas e squeezes para desafios" data-target="Gestor da unidade" aria-pressed="false" onclick="setTag(this,'estudio crossfit')">Estúdios de treino e CrossFit</button>
+        <button class="tag corp" type="button" data-offer="Cadernetas e canetas para turmas" data-target="Produção" aria-pressed="false" onclick="setTag(this,'treinamento corporativo')">Treinamento corporativo</button>
+      </div>
+      <p id="nichoOferta" class="cloud-note" role="status" hidden></p>
       <div class="tag-section-lbl">💼 Nichos Corporativos (B2B)</div>
       <div class="tags-row">
         <span class="tag corp" onclick="setTag(this,'contabilidade')">📑 Contabilidade</span>
@@ -453,7 +471,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
         <span class="tag corp" onclick="setTag(this,'imobiliaria')">🏠 Imobiliária</span>
       </div>
 
-      <div class="tag-section-lbl">🛍️ Consumidor Final</div>
+      <div class="tag-section-lbl">🛍️ Comércios e serviços locais</div>
       <div class="tags-row">
         <span class="tag" onclick="setTag(this,'academia')">🏋️ Academia</span>
         <span class="tag" onclick="setTag(this,'restaurante')">🍽️ Restaurante</span>
@@ -651,6 +669,18 @@ function nextStatus(s){ const i=ORDER.indexOf(s); return (i>=0&&i<ORDER.length-1
 
 /* ══ NICHOS ═══════════════════════════════════════ */
 const NICHO_CFG = {
+  'agencias de eventos': {keyword:'agência de eventos',type:'',corp:true},
+  'organizadores de feiras': {keyword:'organização de feiras e congressos',type:'',corp:true},
+  'escola particular': {keyword:'escola particular',type:'',corp:true},
+  'clinica odontologica': {keyword:'clínica odontológica',type:'',corp:true},
+  'construtora': {keyword:'construtora',type:'',corp:true},
+  'administradora de condominios': {keyword:'administradora de condomínios',type:'',corp:true},
+  'concessionaria de veiculos': {keyword:'concessionária de veículos',type:'',corp:true},
+  'oficina mecanica': {keyword:'oficina mecânica',type:'',corp:true},
+  'empresa de energia solar': {keyword:'instalação energia solar',type:'',corp:true},
+  'industria metalurgica': {keyword:'indústria metalúrgica',type:'',corp:true},
+  'estudio crossfit': {keyword:'crossfit',type:'',corp:true},
+  'treinamento corporativo': {keyword:'treinamento corporativo',type:'',corp:true},
   'contabilidade':            { keyword:'contabilidade escritório',     type:'accounting',           corp:true },
   'advocacia escritorio':     { keyword:'advocacia escritório',         type:'lawyer',               corp:true },
   'rh recrutamento':          { keyword:'recursos humanos recrutamento',type:'establishment',        corp:true },
@@ -704,10 +734,7 @@ const NICHO_CFG = {
 
 function resolveNicho(q){
   const n=q.toLowerCase().trim().normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-  for(const [k,v] of Object.entries(NICHO_CFG)){
-    const kn=k.normalize('NFD').replace(/[\u0300-\u036f]/g,'');
-    if(n===kn||n.includes(kn)||kn.includes(n)) return v;
-  }
+  if(Object.hasOwn(NICHO_CFG,n))return NICHO_CFG[n];
   return { keyword:q, type:'', corp:false };
 }
 
@@ -1003,7 +1030,19 @@ function setTag(el,val){
   const inp=document.getElementById('nichoInput');
   if(el.classList.contains('on')){el.classList.remove('on');inp.value='';}
   else{document.querySelectorAll('.tag').forEach(t=>t.classList.remove('on'));el.classList.add('on');inp.value=val;}
+  syncNichoSuggestion();
 }
+function syncNichoSuggestion(){
+  const active=document.querySelector('[data-offer].tag.on');
+  const hint=document.getElementById('nichoOferta');
+  document.querySelectorAll('[data-offer].tag').forEach(tag=>tag.setAttribute('aria-pressed',String(tag===active)));
+  hint.hidden=!active;
+  hint.textContent=active?'Oferta de entrada: '+active.dataset.offer+'. Procure: '+active.dataset.target+'.':'';
+}
+document.getElementById('nichoInput').addEventListener('input',()=>{
+  document.querySelectorAll('#tab-buscar .tag.on').forEach(tag=>tag.classList.remove('on'));
+  syncNichoSuggestion();
+});
 function setPot(val,el){
   potFiltro=val;
   document.querySelectorAll('.pot-pill').forEach(b=>b.className='pot-pill');
@@ -1048,6 +1087,7 @@ function salvarMeta(){
 
 /* ══ BUSCA ════════════════════════════════════════ */
 async function buscar(){
+  if(document.getElementById('buscarBtn').disabled)return;
   const query=document.getElementById('nichoInput').value.trim();
   if(!query){showToast('⚠️ Selecione um nicho!');return;}
   if(USER_LAT===null){showToast('⚠️ Configure o endereço!');switchTab('config',document.getElementById('tabbtn-config'));return;}
@@ -1060,7 +1100,7 @@ async function buscar(){
   switchTab('resultados',document.getElementById('tabbtn-resultados'));
   document.getElementById('statsRow').style.display='none';
   document.getElementById('bulkBarWrap').innerHTML='';
-  document.getElementById('resultado').innerHTML='<div class="empty-state"><div class="spinner"></div><p style="margin-top:16px">Buscando <b>'+query+'</b> em <b>'+document.getElementById('raioSlider').value+'km</b>…</p></div>';
+  document.getElementById('resultado').innerHTML='<div class="empty-state"><div class="spinner"></div><p style="margin-top:16px">Buscando <b>'+escapeText(query)+'</b> em <b>'+document.getElementById('raioSlider').value+'km</b>…</p></div>';
 
   try{await buscarAPI(query,proxy);}catch(e){mostrarBuscaStatus('Falha na busca: '+e.message,true);}finally{btn.disabled=false;} btn.textContent='🔍  Buscar Clientes';
 }
