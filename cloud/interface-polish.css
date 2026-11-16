@@ -1,0 +1,26 @@
+/* Consistent sizing across the prospecting interface. */
+#prospApp{--pad:clamp(14px,2vw,24px);--gap:16px}
+#prospApp .panel-title{font-size:.8rem;letter-spacing:.075em;line-height:1.4}
+#prospApp :is(.btn,.tab-btn){font-size:.875rem;min-height:42px;line-height:1.25}
+#prospApp :is(.tag,.pot-pill,.hist-filter){font-size:.8125rem;min-height:34px;line-height:1.4}
+#prospApp :is(.rc-name,.wf-lead h3){font-size:1rem;line-height:1.35;overflow-wrap:anywhere}
+#prospApp :is(.rc-row,.rc-dist,.rc-info,.cloud-note,.wf-help,.wf-lead p){font-size:.875rem;line-height:1.55}
+#prospApp .result-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr))}
+#prospApp .rc-actions{flex-wrap:wrap}
+#prospApp .rc-actions .btn-primary{width:auto;flex:1 1 150px}
+#prospApp .rc-actions .btn-call{min-width:44px}
+#prospApp .rc-info{overflow-wrap:anywhere}
+#prospApp .contact-toolbar{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin:0 0 16px}
+#prospApp .contact-toolbar :is(label,small){font-size:.875rem}
+#prospApp .contact-toolbar select{max-width:100%;min-height:42px;padding:6px 10px;background:var(--raised);color:var(--text);border:1px solid var(--line2);border-radius:8px}
+#prospApp .contact-toolbar small{flex-basis:100%;color:var(--sub)}
+#prospApp .wf-lead>div:first-child{min-width:0;overflow-wrap:anywhere}
+#wfDialog #wfMessage{font-size:1rem;line-height:1.55}
+#wfDialog .wf-help{font-size:.875rem;line-height:1.55}
+#wfDialog .wf-actions .btn{min-height:44px;font-size:.875rem}
+@media(max-width:680px){
+ #prospApp :is(.btn,.tab-btn){min-height:44px}
+ #prospApp :is(.cloud-form,.field-group) :is(input,select,textarea){font-size:16px;max-width:100%}
+ #prospApp .wf-lead-actions{min-width:0}
+ #prospApp .wf-lead-actions .btn{min-width:min(100%,140px)}
+}

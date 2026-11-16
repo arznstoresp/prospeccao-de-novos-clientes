@@ -301,7 +301,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 .sales-guide{color:#dedede;line-height:1.8;font-size:14px}.sales-guide p{margin:12px 0}.sales-guide h2{font-size:24px;line-height:1.3;letter-spacing:-.5px;margin:0 0 16px;color:white}.sales-guide h3{font-size:17px;color:#ff9b51;margin:22px 0 10px}.sales-guide h4{font-size:14px;color:white;margin:18px 0 8px}.sales-guide .panel{background:#161616;border:1px solid #343434;border-radius:14px;padding:24px;margin-bottom:16px}.sg-kicker{color:#ff8b38;font-size:11px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase}.sg-lead{font-size:16px;max-width:850px;color:#ddd}.sg-nav{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}.sg-nav a,.sg-link{color:#ffb681;text-decoration:none}.sg-nav a{border:1px solid #63422b;border-radius:8px;padding:8px 12px;background:#241b14;font-size:12px}.sg-nav a:focus-visible,.sales-guide summary:focus-visible{outline:2px solid #ff8b38;outline-offset:3px}.sg-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.sg-box{padding:18px;border:1px solid #393939;border-radius:10px;background:#1e1e1e}.sales-guide ul,.sales-guide ol{padding-left:22px}.sales-guide li{margin:8px 0}.sg-note{font-size:12px;color:#b6b6b6}.sg-example,.sg-alert{padding:16px;border-left:3px solid #ff8b38;background:#251e18;margin:16px 0;border-radius:0 8px 8px 0}.sg-alert{border-left-color:#e7bd62;background:#252219}.sg-table-wrap{overflow-x:auto;margin:16px 0}.sg-table{width:100%;border-collapse:collapse;min-width:650px;font-size:12px}.sg-table th{text-align:left;color:#ffb47b;background:#252019}.sg-table td,.sg-table th{padding:12px;border-bottom:1px solid #383838;vertical-align:top}.sales-guide .guide-day{background:#1c1c1c;border-color:#3b3b3b}.sales-guide .guide-day summary{font-size:14px}.sales-guide .guide-day-body{padding-top:8px}.sg-label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#ffb681;margin-top:16px;font-weight:700}.sg-conversation{background:#101010;border-radius:8px;padding:16px;line-height:1.9}.sg-conversation p{margin:10px 0}.sg-conversation b{color:#ffb681}.sg-script{white-space:pre-wrap;margin:12px 0;color:#eee}.sales-guide [id]{scroll-margin-top:32px}.sg-phase{padding-top:12px;border-top:1px solid #444;margin-top:24px!important}.sg-small{font-size:12px}.sg-train-delivery{border-left:3px solid #7ca06d;padding:12px 16px;background:#1e251c}.sg-top-link{font-size:12px;color:#ffb681;display:inline-block;margin-top:20px}.sg-print-link{color:#ffb681;font-size:12px}
 @media(max-width:680px){.sales-guide .panel{padding:18px}.sg-grid{grid-template-columns:1fr}.sales-guide h2{font-size:21px}.sg-lead{font-size:14px}.sg-nav a{font-size:11px}.sales-guide{font-size:13px}}
 @media print{body{background:white!important;color:black!important}.sales-guide,.sales-guide *{color:black!important;background:white!important;box-shadow:none!important}.sg-nav,.sg-top-link,.btn-copy,.op-day-check,.sg-print-link{display:none!important}.sales-guide .panel{border:1px solid #aaa;break-inside:auto}.sales-guide details{break-inside:avoid}.sg-table-wrap{overflow:visible}.sg-table{min-width:0}.sg-table td,.sg-table th{padding:7px}.sg-kicker{letter-spacing:1px}}
-</style><link rel="stylesheet" href="cloud/objections.css?v=1"><link rel="stylesheet" href="cloud/funnel.css?v=1"></head>
+</style><link rel="stylesheet" href="cloud/objections.css?v=1"><link rel="stylesheet" href="cloud/funnel.css?v=1"><link rel="stylesheet" href="cloud/interface-polish.css?v=1"></head>
 <body><style>
 [hidden]{display:none!important}.cloud-gate{max-width:440px;margin:8vh auto;padding:28px;background:#181820;border:1px solid #36363e;border-radius:18px}.cloud-gate h1{font-size:25px;margin:0 0 10px}.cloud-gate p{color:#b7b7bf;margin:12px 0;line-height:1.6}.cloud-gate label{margin-top:18px}.cloud-gate input,.cloud-form input{display:block;width:100%;height:46px;background:#24242d;color:white;border:1px solid #505059;border-radius:8px;padding:10px;font:inherit}.cloud-gate button{margin-top:14px}.cloud-gate .brand{color:#ff6b00}.cloud-top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border-bottom:1px solid #35353e;flex-wrap:wrap}.cloud-top small{display:block;margin-top:3px}.cloud-top .btn{width:auto}.cloud-top-actions{display:flex;gap:6px;flex-wrap:wrap}.cloud-form{display:grid;gap:9px}.cloud-team-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}.cloud-note{font-size:12px;color:var(--sub);line-height:1.6;margin:10px 0}.cloud-message{font-size:13px;margin:12px 0;white-space:pre-wrap;color:#ffbb88}.cloud-gate a{color:#ff9448}.cloud-gate .btn{font-size:14px}
 </style>
@@ -514,6 +514,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
       <div class="stat-card s-alta"><div class="stat-num" id="sAlta">0</div><div class="stat-lbl">Alto</div></div>
       <div class="stat-card s-media"><div class="stat-num" id="sMedia">0</div><div class="stat-lbl">Médio</div></div>
     </div>
+    <div class="contact-toolbar"><label for="phoneFilter">Tipo de telefone</label><select id="phoneFilter" onchange="renderCards()"><option value="todos">Todos</option><option value="celular">Somente celulares</option><option value="fixo">Somente fixos</option><option value="revisar">Revisar formato</option></select><small id="phoneSummary" aria-live="polite"></small></div>
     <div id="bulkBarWrap"></div>
     <div id="resultado">
       <div class="empty-state"><div class="empty-icon">📋</div><h3>Nenhuma busca ainda</h3><p>Configure o endereço em <b>Config.</b> e clique em Buscar.</p></div>
@@ -1111,6 +1112,14 @@ function normalizarTelefone(value){
   if((n.length===12||n.length===13)&&n.startsWith('55')) n=n.slice(2);
   return /^(\d{10}|\d{11})$/.test(n)?n:'';
 }
+function tipoTelefone(n){
+  return /^(1[1-9]|2[12478]|3[1-578]|4[1-9]|5[1345]|6[1-9]|7[134579]|8[1-9]|9[1-9])(?:[2-5]\d{7}|9\d{8})$/.test(n)?(n.length===11?'celular':'fixo'):'revisar';
+}
+function telefoneParaNovoLead(value){
+  const raw=String(value||'').trim(),n=normalizarTelefone(raw);
+  if(!/^\+?[\d ().-]+$/.test(raw)||(raw.startsWith('+')&&!/^\+55\D*\d/.test(raw)))return '';
+  return tipoTelefone(n)==='revisar'?'':n;
+}
 function erroPlaces(data){
   const dicas={REQUEST_DENIED:'Confira no Google Cloud a chave, as restrições, a API Places e o faturamento.',OVER_QUERY_LIMIT:'Limite de consultas atingido. Confira cotas e faturamento no Google Cloud.',INVALID_REQUEST:'O Google recusou os parâmetros da pesquisa.',UNKNOWN_ERROR:'Falha temporária do Google. Tente novamente mais tarde.'};
   return (dicas[data.status]||'O serviço retornou '+(data.status||'um status desconhecido')+'.')+((data.error_message||data.error)?' Detalhe: '+(data.error_message||data.error):'');
@@ -1179,7 +1188,7 @@ async function buscarAPI(query,proxyUrl){
       const lat=d.geometry?.location?.lat??p.geometry?.location?.lat,lng=d.geometry?.location?.lng??p.geometry?.location?.lng;
       if(!Number.isFinite(lat)||!Number.isFinite(lng))continue;
       const dist=distM(LAT,LNG,lat,lng);if(dist>raioM)continue;
-      const telNum=normalizarTelefone(d.formatted_phone_number||d.international_phone_number);
+      const telNum=telefoneParaNovoLead(d.international_phone_number)||telefoneParaNovoLead(d.formatted_phone_number);
       const maps='https://www.google.com/maps/search/?api=1&query='+encodeURIComponent(d.name||p.name||'Empresa')+'&query_place_id='+encodeURIComponent(p.place_id);
       if(!telNum){semTelefone.push({nome:d.name||p.name,maps});continue;}
       if(seenTel.has(telNum)){duplicados++;continue;}
@@ -1195,18 +1204,18 @@ async function buscarAPI(query,proxyUrl){
   }
   resultados=[...resultados,...det].sort((a,b)=>({muito:0,alta:1,media:2}[a.pot]??3)-({muito:0,alta:1,media:2}[b.pot]??3)||Number(a.distKm||0)-Number(b.distKm||0));
   salvarFila();renderCards();renderHoje();
-  mostrarBuscaStatus(det.length+' novos contatos • '+duplicados+' duplicados evitados • '+semTelefone.length+' sem telefone nesta pesquisa.'+(falhas.length?' Atenção: '+falhas[0]:'')+(raw.length>40?' Foram encontradas '+raw.length+' empresas; detalhes limitados a 40 por busca.':''),!!falhas.length);
+  mostrarBuscaStatus(det.length+' novos contatos • '+duplicados+' duplicados evitados • '+semTelefone.length+' sem telefone válido nesta pesquisa.'+(falhas.length?' Atenção: '+falhas[0]:'')+(raw.length>40?' Foram encontradas '+raw.length+' empresas; detalhes limitados a 40 por busca.':''),!!falhas.length);
   const extras=document.getElementById('pesquisaComplementar');extras.replaceChildren();
   if(semTelefone.length){
-    const title=document.createElement('p');title.textContent='Sem telefone no Google: confira o site ou o perfil da empresa antes de cadastrar manualmente.';extras.append(title);
+    const title=document.createElement('p');title.textContent='Sem telefone válido no Google: confira o site ou o perfil da empresa antes de cadastrar manualmente.';extras.append(title);
     semTelefone.forEach(p=>{const a=document.createElement('a');a.textContent=p.nome+' ↗';a.href=p.maps;a.target='_blank';a.rel='noopener noreferrer';a.style.cssText='display:block;color:var(--neon);margin-top:8px';extras.append(a);});
   }
   if(!resultados.length&&!falhas.length){document.getElementById('resultado').innerHTML='<div class="empty-state"><h3>Nenhum contato novo com telefone</h3><p>Tente outro segmento ou raio. Confira também as empresas sem telefone listadas acima.</p></div>';}
 }
 function cadastrarLeadManual(event){
   event.preventDefault();
-  const form=event.currentTarget,rawNome=form.elements.nome.value.trim(),telNum=normalizarTelefone(form.elements.telefone.value);
-  if(!rawNome||!telNum){showToast('Informe empresa e telefone com DDD (10 ou 11 dígitos).');return;}
+  const form=event.currentTarget,rawNome=form.elements.nome.value.trim(),telNum=telefoneParaNovoLead(form.elements.telefone.value);
+  if(!rawNome||!telNum){showToast('Informe empresa e telefone brasileiro com DDD válido.');return;}
   const existing=[...resultados,...Object.values(HISTORICO)].some(r=>normalizarTelefone(r.telNum||r.tel)===telNum);
   if(existing){showToast('Este telefone já está na fila ou no histórico.');return;}
   // Campos entram como texto em todas as telas legadas do CRM.
@@ -1220,8 +1229,12 @@ function toggleSelecao(telNum, checked){
   if(checked) SELECIONADOS.add(telNum); else SELECIONADOS.delete(telNum);
   renderBulkBar();
 }
+function resultadosFiltrados(){
+  const tipo=document.getElementById('phoneFilter').value;
+  return resultados.filter(r=>(potFiltro==='todos'||r.pot===potFiltro)&&(tipo==='todos'||tipoTelefone(r.telNum)===tipo));
+}
 function selecionarTodosVisiveis(){
-  const lista=potFiltro==='todos'?resultados:resultados.filter(r=>r.pot===potFiltro);
+  const lista=resultadosFiltrados();
   lista.forEach(c=>SELECIONADOS.add(c.telNum));
   renderCards(); renderBulkBar();
 }
@@ -1235,7 +1248,7 @@ function renderBulkBar(){
   const wrap=document.getElementById('bulkBarWrap');
   if(SELECIONADOS.size===0 && !MODO_FILA){ wrap.innerHTML=''; return; }
   if(MODO_FILA){
-    wrap.innerHTML='<div class="bulk-bar"><b>📤 Fila de envio</b> — '+SELECIONADOS.size+' selecionados. Clique em cada WhatsApp para enviar.<button class="btn btn-ghost" onclick="voltarResultados()">← Voltar para todos</button></div>';
+    wrap.innerHTML='<div class="bulk-bar"><b>📤 Fila de envio</b> — '+SELECIONADOS.size+' selecionados. Prepare cada mensagem e revise antes de enviar.<button class="btn btn-ghost" onclick="voltarResultados()">← Voltar para todos</button></div>';
   } else {
     wrap.innerHTML='<div class="bulk-bar"><b>'+SELECIONADOS.size+'</b> selecionado(s)<button class="btn btn-ghost" onclick="selecionarTodosVisiveis()">Selecionar todos visíveis</button><button class="btn btn-ghost" onclick="limparSelecao()">Limpar seleção</button><button class="btn btn-primary" onclick="gerarFila()">📤 Gerar Fila de Envio</button></div>';
   }
@@ -1245,7 +1258,9 @@ function renderBulkBar(){
 const WA_SVG='<svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>';
 
 function renderCards(){
-  let lista=potFiltro==='todos'?resultados:resultados.filter(r=>r.pot===potFiltro);
+  let lista=resultadosFiltrados();
+  const tipos={celular:0,fixo:0,revisar:0};resultados.forEach(r=>tipos[tipoTelefone(r.telNum)]++);
+  document.getElementById('phoneSummary').textContent=tipos.celular+' celulares · '+tipos.fixo+' fixos · '+tipos.revisar+' para revisar. WhatsApp não verificado.';
   if(MODO_FILA) lista=lista.filter(r=>SELECIONADOS.has(r.telNum));
 
   const cnt={muito:0,alta:0,media:0};
@@ -1261,13 +1276,13 @@ function renderCards(){
   renderBulkBar();
 
   if(!lista.length){
-    document.getElementById('resultado').innerHTML='<div class="empty-state"><div class="empty-icon">🔍</div><h3>Fila vazia</h3><p>Busque um nicho na aba <b>Buscar</b> ou ajuste o filtro de potencial.</p></div>';
+    document.getElementById('resultado').innerHTML='<div class="empty-state"><div class="empty-icon">🔍</div><h3>Fila vazia</h3><p>Busque um nicho na aba <b>Buscar</b> ou ajuste os filtros de potencial e telefone.</p></div>';
     return;
   }
 
   document.getElementById('resultado').innerHTML='<div class="result-grid">'+lista.map((c)=>{
     const bcCls={muito:'b-muito',alta:'b-alta',media:'b-media'}[c.pot];
-    const wa=waLink(c.telNum,c.msg);
+    const tipo=tipoTelefone(c.telNum);
     const checked=SELECIONADOS.has(c.telNum)?'checked':'';
     const corpBadge=c.corp?'<span class="badge b-corp">B2B</span>':'';
     const idx=resultados.indexOf(c);
@@ -1277,8 +1292,8 @@ function renderCards(){
       +'<div class="rc-info"><div class="rc-row">⭐ <strong>'+escapeText(c.avaliacao)+'</strong></div><div class="rc-row">📞 <strong>'+escapeText(c.tel)+'</strong></div><div class="rc-dist">📍 '+escapeText(c.distKm)+' km</div><div class="rc-row addr">'+escapeText(c.end)+'</div></div>'
       +(c.origem==='Scraper'?'<div class="rc-info">Origem: Scraper'+( /^https?:\/\//i.test(c.site||'') ? ' · <a target="_blank" rel="noopener noreferrer" href="'+escapeText(c.site)+'">Site ↗</a>':'')+'</div>':'')
       +(c.maps?'<div class="rc-info"><a style="color:var(--neon)" target="_blank" rel="noopener noreferrer" href="'+escapeText(c.maps)+'">Conferir no Maps ↗</a></div>':'')
-      +'<div class="rc-info" style="font-size:10px;color:var(--sub)">WhatsApp não verificado. Confira o contato e registre o resultado após a conversa.</div>'
-      +'<div class="rc-actions"><a class="btn btn-wa" href="'+wa+'" target="_blank" >'+WA_SVG+' WhatsApp</a><a class="btn btn-call" href="'+telLink(c.telNum)+'">📞</a><button class="btn-toggle-msg" id="tb'+idx+'" onclick="toggleMsg('+idx+')">Ver msg</button></div>'
+      +'<div class="rc-info">'+(tipo==='celular'?'Celular · WhatsApp não verificado':tipo==='fixo'?'Fixo · ligue ou confira se atende no WhatsApp':'Formato fora do padrão · confira no site da empresa')+'</div>'
+      +'<div class="rc-actions">'+(tipo!=='revisar'?'<button type="button" class="btn btn-primary" onclick="openLeadWorkflow(\''+c.telNum+'\',true)">'+(c.ownerId?'Preparar mensagem':'Assumir e preparar')+'</button><a class="btn btn-call" aria-label="Ligar para a empresa" href="'+telLink(c.telNum)+'">📞</a>':'<button type="button" class="btn btn-ghost" onclick="openLeadWorkflow(\''+c.telNum+'\')">Consultar ficha</button>')+'</div>'
       +'<div class="rc-msg" id="cm'+idx+'">'+escapeText(window.prospectMessage?window.prospectMessage(c):c.msg)+'</div>'
       +((window.prospectControls&&window.prospectControls(c))||'')+buildQARow(c.telNum,true)
     +'</div>';
@@ -1660,9 +1675,9 @@ window.addEventListener('scroll',()=>{ const b=document.getElementById('back-top
 <script src="cloud/supabase-2.102.0.js"></script>
 <script src="cloud/sync-model.js?v=4"></script>
 <script src="cloud/operations.js?v=2"></script>
-<script src="cloud/workflow-model.js?v=6"></script><script src="cloud/workflow.js?v=6"></script>
+<script src="cloud/workflow-model.js?v=6"></script><script src="cloud/workflow.js?v=7"></script>
 <script src="cloud/cloud-sync.js?v=6"></script>
-<script src="cloud/objections.js?v=2"></script><script src="cloud/funnel-model.js?v=1"></script><script src="cloud/funnel.js?v=1"></script><script src="cloud/csv-import-model.js?v=1"></script><script src="cloud/csv-import.js?v=1"></script></body>
+<script src="cloud/objections.js?v=2"></script><script src="cloud/funnel-model.js?v=1"></script><script src="cloud/funnel.js?v=1"></script><script src="cloud/csv-import-model.js?v=1"></script><script src="cloud/csv-import.js?v=2"></script></body>
 </html>
 
 

@@ -12,7 +12,7 @@ form.addEventListener('submit',async event=>{
  try{
   const csv=new TextDecoder('utf-8',{fatal:true}).decode(await file.arrayBuffer());
   if(window.prospectUser?.id!==userId||el('prospApp').hidden)return;
-  const {leads,duplicates,discarded}=window.ProspectCSV.prepare(csv,[...resultados,...Object.values(HISTORICO)],niche,normalizarTelefone);
+  const {leads,duplicates,discarded}=window.ProspectCSV.prepare(csv,[...resultados,...Object.values(HISTORICO)],niche,telefoneParaNovoLead);
   if(leads.length){
    resultados=[...leads.map(lead=>({...lead,msg:buildMsg(lead.nome,niche,lead.rating,0)})),...resultados];
    salvarFila();renderCards();renderHoje();renderKanban();window.refreshOperations?.();
