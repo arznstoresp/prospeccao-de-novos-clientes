@@ -4,7 +4,7 @@
  const app=$('prospApp'),gate=$('cloudGate'),status=$('cloudStatus'),message=$('cloudAuthMessage');
  if(!window.supabase||!M){message.textContent='Não foi possível carregar a conexão. Atualize a página para tentar novamente.';return;}
  const client=window.supabase.createClient('https://edztcoebgllqrkrkormc.supabase.co','sb_publishable_s6MSdF0rhidpCpddqTzNRg_1ajwnxIc',{auth:{storageKey:'arzn-prospect-auth-v1',persistSession:true,autoRefreshToken:true,detectSessionInUrl:false}});
- let user=null,member=null,shadow={},rows=[],busy=false,ready=false,activating=false,timer=null,stopped=false;
+ let user=null,member=null,shadow={},rows=[],syncInFlight=null,ready=false,activating=false,timer=null,stopped=false;
  const tabId=sessionStorage.getItem('arzn-prosp-tab')||crypto.randomUUID();sessionStorage.setItem('arzn-prosp-tab',tabId);
  const outPrefix=uid=>'arzn-prosp-outbox:'+uid+':';
  const ownKey=()=>outPrefix(user.id)+tabId;
@@ -37,13 +37,21 @@
  },
  async claim(tel){
  if(!ready||!user||!navigator.onLine)throw new Error('Conecte à internet para reservar o contato.');
- await sync();if(pending().length)throw new Error('Aguarde a sincronização antes de reservar.');
+ const uid=user.id;
+ if($('buscarBtn')?.disabled)throw new Error('A busca ainda está em andamento. Quando terminar, clique em Tentar novamente.');
+ const alreadySyncing=!!syncInFlight;
+ await sync();
+ if(alreadySyncing&&user?.id===uid&&pending().length)await sync();
+ if(!ready||user?.id!==uid)throw new Error('Entre novamente para reservar o contato.');
+ if(pending().length)throw new Error('Não foi possível sincronizar as alterações. Confira o status no topo e clique em Tentar novamente.');
  const lead=HISTORICO[tel]||resultados.find(r=>r.telNum===tel);
  if(!lead)throw new Error('Contato não encontrado.');
  if(lead.ownerId&&lead.ownerId!==user.id&&member.role!=='admin')throw new Error('Esse contato já tem responsável.');
  const {error}=await client.rpc('prospect_apply',{changes:[{key:'lead:'+tel,patch:{ownerId:user.id,ownerName:member.name||user.email}}],batch_id:crypto.randomUUID()});
  if(error)throw new Error('Não foi possível reservar. Outro atendimento pode ter assumido; sincronize.');
+ const refreshing=!!syncInFlight;
  await sync();
+ if(refreshing&&user?.id===uid&&(HISTORICO[tel]||resultados.find(r=>r.telNum===tel))?.ownerId!==uid)await sync();
  }};
  function applyRole(){
   window.prospectRole=member?.role||null;
@@ -82,11 +90,16 @@
   if(!data.prosp_func_nome)data.prosp_func_nome=member.name||'';
   prospStorage.load(user.id,data);shadow=M.project(prospStorage,user.id);if(previous!==JSON.stringify(shadow))refreshApp();else window.refreshOperations?.();
  }
- async function sync(){
-  if(!user||!ready||busy||stopped)return;
+ function sync(){
+  if(syncInFlight)return syncInFlight;
+  if(!user||!ready||stopped)return Promise.resolve();
   if(!navigator.onLine){setStatus('Sem internet · alterações guardadas neste aparelho',true);return;}
   if($('buscarBtn')?.disabled){setStatus('Busca em andamento · sincronização em seguida');return;}
-  busy=true;const uid=user.id;
+  syncInFlight=syncNow().finally(()=>{syncInFlight=null;});
+  return syncInFlight;
+ }
+ async function syncNow(){
+  const uid=user.id;
   try{
    const {data:access,error:accessError}=await client.from('prospect_members').select('email,name,role,active').eq('email',user.email.toLowerCase()).maybeSingle();
    if(accessError)throw accessError;
@@ -101,7 +114,6 @@
    const remote=await allRows();if(user?.id!==uid)return;
    applyRows(remote);setStatus(pending().length?'Novas alterações aguardando envio':'Sincronizado · '+new Date().toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'}));
   }catch(error){setStatus('Sincronização pendente · dados guardados neste aparelho. '+(error.message||'Confira sua conexão.'),true);}
-  finally{busy=false;}
  }
  function lock(reason){
   window.closeWorkflow?.();

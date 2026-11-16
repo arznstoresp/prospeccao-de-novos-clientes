@@ -565,7 +565,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
  <header><div><h2 id="quickTitle"></h2><small id="quickPhone"></small></div><button type="button" class="btn btn-ghost btn-sm" id="quickClose">Fechar</button></header>
  <label for="quickText">Mensagem</label><textarea id="quickText" rows="8"></textarea>
  <p id="quickStatus" role="status"></p>
- <div class="quick-actions"><a class="btn btn-primary" id="quickWhatsapp" target="_blank" rel="noopener noreferrer" hidden>Abrir WhatsApp</a><button type="button" class="btn btn-ghost" id="quickSent" hidden>Já enviei</button></div>
+ <div class="quick-actions"><button type="button" class="btn btn-primary" id="quickRetry" hidden>Tentar novamente</button><a class="btn btn-primary" id="quickWhatsapp" target="_blank" rel="noopener noreferrer" hidden>Abrir WhatsApp</a><button type="button" class="btn btn-ghost" id="quickSent" hidden>Já enviei</button></div>
  <button type="button" class="btn btn-ghost btn-sm" id="quickFull">Abrir ficha completa</button>
 </dialog>
 <dialog id="wfDialog" aria-labelledby="wfDialogTitle"><div class="wf-dialog-head"><div><span class="sg-kicker">Atendimento orientado</span><h2 id="wfDialogTitle"></h2><small id="wfDialogOwner"></small><small id="wfDialogSync" role="status" style="display:block;margin-top:5px"></small></div><button type="button" id="wfClose" class="btn btn-ghost btn-sm">Salvar e fechar</button></div><div id="wfDialogBody"></div><p id="wfSaveStatus" role="status" aria-live="polite"></p></dialog>
@@ -1680,8 +1680,8 @@ window.addEventListener('scroll',()=>{ const b=document.getElementById('back-top
 <script src="cloud/supabase-2.102.0.js"></script>
 <script src="cloud/sync-model.js?v=4"></script>
 <script src="cloud/operations.js?v=2"></script>
-<script src="cloud/workflow-model.js?v=7"></script><script src="cloud/workflow.js?v=8"></script>
-<script src="cloud/cloud-sync.js?v=6"></script>
+<script src="cloud/workflow-model.js?v=7"></script><script src="cloud/workflow.js?v=9"></script>
+<script src="cloud/cloud-sync.js?v=7"></script>
 <script src="cloud/objections.js?v=2"></script><script src="cloud/funnel-model.js?v=1"></script><script src="cloud/funnel.js?v=1"></script><script src="cloud/csv-import-model.js?v=1"></script><script src="cloud/csv-import.js?v=2"></script></body>
 </html>
 

@@ -129,6 +129,7 @@ if(quick){
  $('quickClose').onclick=()=>quick.close();
  $('quickFull').onclick=()=>{const tel=quickTel;quick.close();if(tel)window.openLeadWorkflow(tel);};
  $('quickText').oninput=quickLink;
+ $('quickRetry').onclick=()=>reserveQuick(quickTel,window.prospectUser?.id,quickVersion);
  $('quickWhatsapp').onclick=e=>{
   if(!quickReady||!canQuick(quickTel)||!$('quickText').value.trim()||/\[[^\]]+\]/.test($('quickText').value)){
    e.preventDefault();quickStatus('Confira o contato e o texto da mensagem.');return;
@@ -151,19 +152,28 @@ window.openQuickMessage=async tel=>{
  if(h.quoteState==='ready'||h.quoteState==='sent'){window.openLeadWorkflow(tel);return;}
  resetQuick();const version=quickVersion;quickTel=tel;
  $('quickTitle').textContent=h.nome||'Preparar mensagem';$('quickPhone').textContent=h.tel||tel;
- $('quickText').disabled=true;$('quickWhatsapp').hidden=true;$('quickSent').hidden=true;$('quickFull').disabled=true;
- quickStatus(h.ownerId?'Preparando mensagem…':'Assumindo contato…');quick.showModal();
- try{
-  if(!h.ownerId)await window.cloudSync.claim(tel);
-  if(!quick.open||version!==quickVersion||window.prospectUser?.id!==uid)return;
-  if(!canQuick(tel))throw Error('O contato ainda não está atribuído a você. Confira a sincronização e tente novamente.');
-  const draft=W.message(find(tel),context(),'auto');
-  if(!draft)throw Error('Abra a ficha completa para continuar.');
-  $('quickText').value=draft;$('quickText').disabled=false;$('quickWhatsapp').hidden=false;
-  quickReady=true;quickLink();quickStatus('Revise o texto antes de abrir o WhatsApp.');
- }catch(error){if(quick.open&&version===quickVersion)quickStatus(error.message||'Não foi possível preparar este contato.');}
- finally{if(quick.open&&version===quickVersion)$('quickFull').disabled=false;}
+ $('quickText').value=W.message(h,context(),'auto');$('quickText').disabled=false;
+ $('quickWhatsapp').hidden=true;$('quickSent').hidden=true;
+ quick.showModal();
+ await reserveQuick(tel,uid,version);
 };
+async function reserveQuick(tel,uid,version){
+ if(!tel||!uid||!quick.open||version!==quickVersion)return;
+ $('quickRetry').hidden=true;$('quickFull').disabled=true;
+ quickStatus('Sincronizando e reservando contato… Você já pode revisar a mensagem.');
+ try{
+  const current=find(tel);
+  if(current?.ownerId&&current.ownerId!==uid)throw Error('Este contato já tem responsável.');
+  if(!current?.ownerId)await window.cloudSync.claim(tel);
+  if(!quick.open||version!==quickVersion||window.prospectUser?.id!==uid)return;
+  if(!canQuick(tel))throw Error('A reserva ainda não foi confirmada. Confira a sincronização.');
+  if(!$('quickText').value.trim())throw Error('Abra a ficha completa para continuar.');
+  $('quickWhatsapp').hidden=false;quickReady=true;quickLink();quickStatus('Revise o texto antes de abrir o WhatsApp.');
+ }catch(error){
+  if(quick.open&&version===quickVersion){quickStatus(error.message||'Não foi possível reservar este contato.');$('quickRetry').hidden=false;}
+ }
+ finally{if(quick.open&&version===quickVersion)$('quickFull').disabled=false;}
+}
 
 function updateWhatsapp(){if(activeTel)$('wfOpenWhatsapp').href='https://wa.me/55'+activeTel+'?text='+encodeURIComponent($('wfMessage').value);}
 function validateMessage(){const text=$('wfMessage').value.trim(),h=find(activeTel);if(typeof tipoTelefone==='function'&&tipoTelefone(activeTel)==='revisar'){saveStatus('Confira o telefone da empresa antes de usar o WhatsApp.');return false;}if(W.terminal(h.status)){saveStatus('Atendimento encerrado. Não envie nova abordagem.');return false;}if(!text||/\[[^\]]+\]/.test(text)){saveStatus('Escreva a mensagem e substitua os campos entre colchetes antes de copiar/enviar.');return false;}if(!prospStorage.getItem('prosp_seller_phone')){saveStatus('Preencha seu telefone profissional em Minha conta antes de enviar.');return false;}if($('wfMessageMode').value==='proposal'&&!W.approved(h)){saveStatus('Esta versão precisa de aprovação do gestor.');return false;}return true;}
