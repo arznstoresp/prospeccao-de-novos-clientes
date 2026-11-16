@@ -489,6 +489,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 
   <!-- ══ RESULTADOS ══ -->
   <div id="tab-resultados" class="tab-content"><div id="buscaStatus" class="panel" role="status" aria-live="polite" hidden></div><div id="pesquisaComplementar" class="panel" style="margin-bottom:12px"></div>
+    <details class="panel" style="margin-bottom:12px"><summary class="btn btn-ghost btn-sm" style="cursor:pointer;width:fit-content">Importar CSV</summary><p class="cloud-note">Escolha um CSV em UTF-8 (até 1 MB e 250 linhas). A importação adiciona contatos à fila da equipe e não envia mensagens.</p><form id="csvImportForm" class="cloud-form"><label for="csvImportFile">Arquivo CSV</label><input id="csvImportFile" type="file" accept=".csv,text/csv" required><label for="csvImportNiche">Nicho dos contatos</label><input id="csvImportNiche" maxlength="80" placeholder="Ex.: Clínicas odontológicas" required><button id="csvImportSubmit" class="btn btn-primary" type="submit">Adicionar à fila</button></form><p id="csvImportStatus" class="cloud-message" role="status"></p></details>
     <div class="stats-row" id="statsRow" style="display:none">
       <div class="stat-card s-tot"><div class="stat-num" id="sTot">0</div><div class="stat-lbl">Na fila</div></div>
       <div class="stat-card s-muito"><div class="stat-num" id="sMuito">0</div><div class="stat-lbl">Muito alto</div></div>
@@ -1234,6 +1235,7 @@ function renderCards(){
       +(!MODO_FILA?'<input type="checkbox" class="rc-select" '+checked+' onchange="toggleSelecao(\''+c.telNum+'\',this.checked)" />':'')
       +'<div class="rc-head"><div class="rc-name">'+corpBadge+' '+escapeText(c.nome)+'</div><span class="badge '+bcCls+'">'+POT_LABEL[c.pot]+'</span></div>'
       +'<div class="rc-info"><div class="rc-row">⭐ <strong>'+escapeText(c.avaliacao)+'</strong></div><div class="rc-row">📞 <strong>'+escapeText(c.tel)+'</strong></div><div class="rc-dist">📍 '+escapeText(c.distKm)+' km</div><div class="rc-row addr">'+escapeText(c.end)+'</div></div>'
+      +(c.origem==='Scraper'?'<div class="rc-info">Origem: Scraper'+( /^https?:\/\//i.test(c.site||'') ? ' · <a target="_blank" rel="noopener noreferrer" href="'+escapeText(c.site)+'">Site ↗</a>':'')+'</div>':'')
       +(c.maps?'<div class="rc-info"><a style="color:var(--neon)" target="_blank" rel="noopener noreferrer" href="'+escapeText(c.maps)+'">Conferir no Maps ↗</a></div>':'')
       +'<div class="rc-info" style="font-size:10px;color:var(--sub)">WhatsApp não verificado. Confira o contato e registre o resultado após a conversa.</div>'
       +'<div class="rc-actions"><a class="btn btn-wa" href="'+wa+'" target="_blank" >'+WA_SVG+' WhatsApp</a><a class="btn btn-call" href="'+telLink(c.telNum)+'">📞</a><button class="btn-toggle-msg" id="tb'+idx+'" onclick="toggleMsg('+idx+')">Ver msg</button></div>'
@@ -1620,7 +1622,7 @@ window.addEventListener('scroll',()=>{ const b=document.getElementById('back-top
 <script src="cloud/operations.js?v=2"></script>
 <script src="cloud/workflow-model.js?v=3"></script><script src="cloud/workflow.js?v=6"></script>
 <script src="cloud/cloud-sync.js?v=6"></script>
-<script src="cloud/objections.js?v=2"></script><script src="cloud/funnel-model.js?v=1"></script><script src="cloud/funnel.js?v=1"></script></body>
+<script src="cloud/objections.js?v=2"></script><script src="cloud/funnel-model.js?v=1"></script><script src="cloud/funnel.js?v=1"></script><script src="cloud/csv-import-model.js?v=1"></script><script src="cloud/csv-import.js?v=1"></script></body>
 </html>
 
 
