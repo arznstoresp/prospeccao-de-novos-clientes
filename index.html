@@ -301,7 +301,7 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
 .sales-guide{color:#dedede;line-height:1.8;font-size:14px}.sales-guide p{margin:12px 0}.sales-guide h2{font-size:24px;line-height:1.3;letter-spacing:-.5px;margin:0 0 16px;color:white}.sales-guide h3{font-size:17px;color:#ff9b51;margin:22px 0 10px}.sales-guide h4{font-size:14px;color:white;margin:18px 0 8px}.sales-guide .panel{background:#161616;border:1px solid #343434;border-radius:14px;padding:24px;margin-bottom:16px}.sg-kicker{color:#ff8b38;font-size:11px;font-weight:800;letter-spacing:1.8px;text-transform:uppercase}.sg-lead{font-size:16px;max-width:850px;color:#ddd}.sg-nav{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}.sg-nav a,.sg-link{color:#ffb681;text-decoration:none}.sg-nav a{border:1px solid #63422b;border-radius:8px;padding:8px 12px;background:#241b14;font-size:12px}.sg-nav a:focus-visible,.sales-guide summary:focus-visible{outline:2px solid #ff8b38;outline-offset:3px}.sg-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}.sg-box{padding:18px;border:1px solid #393939;border-radius:10px;background:#1e1e1e}.sales-guide ul,.sales-guide ol{padding-left:22px}.sales-guide li{margin:8px 0}.sg-note{font-size:12px;color:#b6b6b6}.sg-example,.sg-alert{padding:16px;border-left:3px solid #ff8b38;background:#251e18;margin:16px 0;border-radius:0 8px 8px 0}.sg-alert{border-left-color:#e7bd62;background:#252219}.sg-table-wrap{overflow-x:auto;margin:16px 0}.sg-table{width:100%;border-collapse:collapse;min-width:650px;font-size:12px}.sg-table th{text-align:left;color:#ffb47b;background:#252019}.sg-table td,.sg-table th{padding:12px;border-bottom:1px solid #383838;vertical-align:top}.sales-guide .guide-day{background:#1c1c1c;border-color:#3b3b3b}.sales-guide .guide-day summary{font-size:14px}.sales-guide .guide-day-body{padding-top:8px}.sg-label{display:block;font-size:11px;text-transform:uppercase;letter-spacing:1px;color:#ffb681;margin-top:16px;font-weight:700}.sg-conversation{background:#101010;border-radius:8px;padding:16px;line-height:1.9}.sg-conversation p{margin:10px 0}.sg-conversation b{color:#ffb681}.sg-script{white-space:pre-wrap;margin:12px 0;color:#eee}.sales-guide [id]{scroll-margin-top:32px}.sg-phase{padding-top:12px;border-top:1px solid #444;margin-top:24px!important}.sg-small{font-size:12px}.sg-train-delivery{border-left:3px solid #7ca06d;padding:12px 16px;background:#1e251c}.sg-top-link{font-size:12px;color:#ffb681;display:inline-block;margin-top:20px}.sg-print-link{color:#ffb681;font-size:12px}
 @media(max-width:680px){.sales-guide .panel{padding:18px}.sg-grid{grid-template-columns:1fr}.sales-guide h2{font-size:21px}.sg-lead{font-size:14px}.sg-nav a{font-size:11px}.sales-guide{font-size:13px}}
 @media print{body{background:white!important;color:black!important}.sales-guide,.sales-guide *{color:black!important;background:white!important;box-shadow:none!important}.sg-nav,.sg-top-link,.btn-copy,.op-day-check,.sg-print-link{display:none!important}.sales-guide .panel{border:1px solid #aaa;break-inside:auto}.sales-guide details{break-inside:avoid}.sg-table-wrap{overflow:visible}.sg-table{min-width:0}.sg-table td,.sg-table th{padding:7px}.sg-kicker{letter-spacing:1px}}
-</style><link rel="stylesheet" href="cloud/objections.css?v=1"><link rel="stylesheet" href="cloud/funnel.css?v=1"><link rel="stylesheet" href="cloud/interface-polish.css?v=2"></head>
+</style><link rel="stylesheet" href="cloud/objections.css?v=1"><link rel="stylesheet" href="cloud/funnel.css?v=1"><link rel="stylesheet" href="cloud/interface-polish.css?v=3"></head>
 <body><style>
 [hidden]{display:none!important}.cloud-gate{max-width:440px;margin:8vh auto;padding:28px;background:#181820;border:1px solid #36363e;border-radius:18px}.cloud-gate h1{font-size:25px;margin:0 0 10px}.cloud-gate p{color:#b7b7bf;margin:12px 0;line-height:1.6}.cloud-gate label{margin-top:18px}.cloud-gate input,.cloud-form input{display:block;width:100%;height:46px;background:#24242d;color:white;border:1px solid #505059;border-radius:8px;padding:10px;font:inherit}.cloud-gate button{margin-top:14px}.cloud-gate .brand{color:#ff6b00}.cloud-top{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:12px 16px;border-bottom:1px solid #35353e;flex-wrap:wrap}.cloud-top small{display:block;margin-top:3px}.cloud-top .btn{width:auto}.cloud-top-actions{display:flex;gap:6px;flex-wrap:wrap}.cloud-form{display:grid;gap:9px}.cloud-team-row{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-top:12px;flex-wrap:wrap}.cloud-note{font-size:12px;color:var(--sub);line-height:1.6;margin:10px 0}.cloud-message{font-size:13px;margin:12px 0;white-space:pre-wrap;color:#ffbb88}.cloud-gate a{color:#ff9448}.cloud-gate .btn{font-size:14px}
 </style>
@@ -935,7 +935,7 @@ function toggleNotas(telNum){
   const box=document.getElementById('notas-'+telNum);
   const btn=document.getElementById('notasbtn-'+telNum);
   const open=box.classList.toggle('open');
-  if(btn) btn.textContent = open ? '📝 Ocultar notas' : '📝 Notas';
+  if(btn){btn.setAttribute('aria-expanded',String(open));btn.textContent=open?'Ocultar notas':'Notas';}
 }
 function removerHist(telNum){
   delete HISTORICO[telNum];
@@ -1012,20 +1012,21 @@ function renderHist(){
       +'<div class="hist-top">'
         +'<div class="hist-info">'
           +'<div class="hist-name">'+corpBadge+escapeText(h.nome)+(due?' 🔔':'')+'</div>'
-          +'<div class="hist-meta">📞 '+escapeText(h.tel)+' · 📍 '+(h.distKm||'?')+' km · adicionado em '+escapeText(h.data)+'</div>'
-          +'<div style="margin-top:6px;font-size:11px;color:var(--sub)">'+escapeText(h.end)+'</div>'
+          +'<div class="hist-meta">📞 '+escapeText(h.tel)+' · 📍 '+escapeText(h.distKm||'?')+' km · adicionado em '+escapeText(h.data)+'</div>'
+          +'<div class="hist-address">'+escapeText(h.end)+'</div>'
           +statusBadge(h.status)
         +'</div>'
         +'<div class="hist-actions">'
-          +'<div class="hist-actions-row"><a class="btn btn-wa btn-sm" href="'+wa+'" target="_blank" style="width:110px">'+WA_SVG+' Zap</a><a class="btn btn-call btn-sm" style="width:42px" href="'+telLink(tel)+'">📞</a></div>'
+          +'<div class="hist-actions-row"><a class="btn btn-wa btn-sm" href="'+wa+'" target="_blank" rel="noopener noreferrer">'+WA_SVG+' WhatsApp</a><a class="btn btn-call btn-sm" aria-label="Ligar" href="'+telLink(tel)+'">📞</a></div>'
           +'<button class="hist-del" onclick="removerHist(\''+tel+'\')">✕ Remover</button>'
         +'</div>'
       +'</div>'
-      +((window.prospectControls&&window.prospectControls(h))||'')+buildQARow(tel,false)
-      +'<div class="hist-extra-row">'
-        +'<div><label style="margin-bottom:3px">Retornar em</label><input type="date" class="hist-followup-input" value="'+(h.followUp||'')+'" onchange="setFollowUp(\''+tel+'\',this.value)" /></div>'
-        +'<span class="hist-notes-toggle '+(h.notas?'has':'')+'" id="notasbtn-'+tel+'" onclick="toggleNotas(\''+tel+'\')">📝 '+(h.notas?'Ver notas':'Notas')+'</span>'
+      +'<div class="hist-controls">'
+        +((window.prospectControls&&window.prospectControls(h))||'')
+        +'<label class="hist-return">Retornar em<input type="date" class="hist-followup-input" value="'+escapeText(h.followUp||'')+'" onchange="setFollowUp(\''+tel+'\',this.value)" /></label>'
+        +'<button type="button" class="btn btn-ghost btn-sm hist-notes-toggle '+(h.notas?'has':'')+'" id="notasbtn-'+tel+'" aria-controls="notas-'+tel+'" aria-expanded="false" onclick="toggleNotas(\''+tel+'\')">'+(h.notas?'Ver notas':'Notas')+'</button>'
       +'</div>'
+      +buildQARow(tel,false)
       +'<div class="hist-notes-box" id="notas-'+tel+'">'
         +'<textarea placeholder="Ex: Falei com o João, sócio. Decide até dia 15…" onblur="setNotas(\''+tel+'\',this.value)">'+escapeText(h.notas||'')+'</textarea>'
       +'</div>'

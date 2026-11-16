@@ -49,3 +49,32 @@
 .quick-actions{display:flex;gap:8px;margin:0 0 9px}
 .quick-actions .btn{min-height:44px;flex:1;width:auto}
 @media(max-width:650px){#prospApp .contact-toolbar{grid-template-columns:minmax(0,max-content) minmax(0,1fr)}#prospApp .contact-toolbar small{grid-column:1/-1}#quickMessage{padding:15px}}
+
+/* History: one rhythm for fields and actions, scoped to this tab. */
+#tab-historico .hist-card{padding:14px 16px;margin-bottom:10px;color-scheme:dark}
+#tab-historico .hist-card:last-child{margin-bottom:0}
+#tab-historico .hist-top{justify-content:space-between;gap:10px 16px}
+#tab-historico .hist-info{min-width:0;overflow-wrap:anywhere}
+#tab-historico .hist-name{font-size:.9375rem;line-height:1.4}
+#tab-historico :is(.hist-meta,.hist-address){font-size:.8125rem;line-height:1.45;color:var(--sub)}
+#tab-historico .hist-address{margin:3px 0}
+#tab-historico .hist-controls{display:flex;align-items:flex-end;flex-wrap:wrap;gap:8px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line)}
+#tab-historico .hist-controls .op-controls{display:contents}
+#tab-historico .hist-controls .op-controls>span{flex-basis:100%;color:var(--sub);font-size:.8125rem}
+#tab-historico .hist-controls label{display:flex;flex-direction:column;gap:4px;margin:0;min-width:0;font-size:.75rem;line-height:1.25;letter-spacing:0;text-transform:none;color:var(--sub)}
+#tab-historico .hist-controls .op-controls label{order:1;flex:0 1 190px}
+#tab-historico .hist-controls .hist-return{order:2;flex:0 1 158px}
+#tab-historico .hist-controls :is(select,input[type=date]){width:100%;max-width:none;min-width:0;min-height:42px;height:42px;margin:0;padding:0 10px;background:var(--raised);border:1px solid var(--line2);border-radius:var(--radius-sm);color:var(--text);font:inherit;font-size:.875rem;letter-spacing:0}
+#tab-historico .hist-controls .btn{order:3;width:auto;min-height:42px;padding:6px 10px;font-size:.8125rem!important;white-space:normal}
+#tab-historico .hist-actions-row .btn-wa{width:auto;padding-inline:12px;text-decoration:none}
+#tab-historico .hist-qa-row{gap:6px;margin-top:9px}
+#tab-historico .hist-qa-row .qa-btn{flex:0 1 auto;min-height:34px;padding:5px 10px;font-size:.75rem}
+#tab-historico :is(select,input,button):focus-visible{outline:2px solid var(--neon);outline-offset:2px}
+@media(max-width:560px){
+ #tab-historico .hist-card{padding:12px}
+ #tab-historico .hist-info{flex-basis:100%}
+ #tab-historico .hist-actions{flex-direction:row;align-items:center;justify-content:space-between;width:100%}
+ #tab-historico .hist-controls :is(.op-controls label,.hist-return){flex:1 1 135px}
+ #tab-historico .hist-controls :is(select,input[type=date]){font-size:16px;min-height:44px;height:44px}
+ #tab-historico .hist-controls .btn{flex:0 1 auto;min-height:44px}
+}
