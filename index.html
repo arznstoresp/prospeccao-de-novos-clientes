@@ -1745,6 +1745,17 @@ window.addEventListener('scroll',()=>{ const b=document.getElementById('back-top
   if(funcNome) document.getElementById('funcNomeInput').value=funcNome;
   if(alanWa)   document.getElementById('alanWaInput').value=alanWa;
 
+  // Ativa o padrão aprovado uma única vez, preservando as variações anteriores.
+  const messageVersion='arzn-alan-2026-11-24';
+  const migrateMessages=localStorage.getItem('prosp_message_version')!==messageVersion;
+  if(migrateMessages){
+    const previous={variantes:localStorage.getItem('prosp_msgs'),legado:localStorage.getItem('prosp_msg')};
+    localStorage.setItem('prosp_message_backup_'+messageVersion,JSON.stringify(previous));
+    localStorage.setItem('prosp_msgs','[]');
+    localStorage.removeItem('prosp_msg');
+    localStorage.setItem('prosp_msgRotIdx','0');
+  }
+
   // migração/carregamento das variações de mensagem
   try{
     const arr=JSON.parse(localStorage.getItem('prosp_msgs')||'[]');
@@ -1769,6 +1780,12 @@ window.addEventListener('scroll',()=>{ const b=document.getElementById('back-top
   if(!Array.isArray(resultados)) resultados=[];
   // segurança: remove da fila qualquer um que já tenha ido para o histórico
   resultados=resultados.filter(r=>r && r.telNum && !HISTORICO[r.telNum]);
+  if(migrateMessages){
+    resultados.forEach(r=>{r.msg=buildMsg(r.nome||r.name||'sua empresa');});
+    salvarFila();
+    localStorage.setItem('prosp_message_version',messageVersion);
+  }
+
 
   if(ENDERECOS.length>0){
     const idx=parseInt(ativo||'0');
