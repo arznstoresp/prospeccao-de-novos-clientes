@@ -622,12 +622,17 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;heigh
       <div class="panel-title">✉️ Scripts de Mensagem</div>
       <div class="script-card">
         <div class="script-label">1º Contato (WhatsApp)</div>
-        <div class="script-body" id="script0">Olá, [NOME]! Aqui é [SEU NOME], da ArznStoreSP, na Zona Norte. Vi que a [EMPRESA] se destaca na área.
-A gente faz brindes personalizados e pensei em um kit para vocês.
-Posso te mandar 2 sugestões com a marca de vocês?
-Se não fizer sentido agora, é só avisar.
+        <div class="script-body" id="script0">Olá, equipe [NOME]!
+Tudo bem? Aqui é o Alan, consultor da ArznStoreSP.
 
-[SEU NOME] | ArznStoreSP | (11) 98801-1285 | @arznstoresp</div>
+Ajudamos empresas a fortalecer sua imagem com materiais personalizados, unindo qualidade, agilidade e atenção a cada detalhe.
+
+Oferecemos uniformes, brindes corporativos, materiais gráficos e peças em impressão 3D para deixar sua marca em destaque.
+
+Vocês estão planejando alguma ação, evento ou reposição de materiais?
+
+Conheça nosso catálogo:
+https://arznstoresp.com.br/</div>
         <button class="btn-copy" onclick="copiarScript(0)">📋 Copiar</button>
       </div>
       <div class="script-card">
@@ -913,7 +918,7 @@ function telLink(telNum){ return 'tel:+55'+telNum; }
    Lê até 3 variações cadastradas em Config. e alterna
    entre elas a cada lead, evitando padrão repetitivo.
    Se nenhuma variação for cadastrada, usa mensagem
-   automática padrão (com dados do Google quando houver).
+   padrão da ArznStoreSP, com o nome da empresa.
 ══════════════════════════════════════════════════ */
 function lerVariantes(){
   try{
@@ -939,9 +944,7 @@ function buildMsg(nome,nicho,rating,count){
     return template.replace(/\[NOME\]/g,nome)+'\n\n'+assin;
   }
 
-  const stars=(rating&&count)?rating+' ★ ('+(count).toLocaleString('pt-BR')+' aval.)':'';
-  const dest=stars?' — '+stars+' no Google —':'';
-  return 'Olá! Tudo bem? 😊\n\nSomos especializados em *produtos personalizados* para empresas da região.\n\nVi que *'+nome+'*'+dest+' se destaca na área e queria apresentar nossas soluções: *camisetas, canecas, garrafas térmicas, uniformes e kits personalizados* com a identidade da empresa.\n\nPodemos montar um orçamento sem compromisso?\n\n'+assin;
+  return "Olá, equipe [NOME]!\nTudo bem? Aqui é o Alan, consultor da ArznStoreSP.\n\nAjudamos empresas a fortalecer sua imagem com materiais personalizados, unindo qualidade, agilidade e atenção a cada detalhe.\n\nOferecemos uniformes, brindes corporativos, materiais gráficos e peças em impressão 3D para deixar sua marca em destaque.\n\nVocês estão planejando alguma ação, evento ou reposição de materiais?\n\nConheça nosso catálogo:\nhttps://arznstoresp.com.br/".replace(/\[NOME\]/g,()=>nome);
 }
 
 /* ══ ENDEREÇOS ════════════════════════════════════ */
