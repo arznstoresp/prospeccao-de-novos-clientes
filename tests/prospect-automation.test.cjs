@@ -1,0 +1,14 @@
+const {test}=require('node:test');const assert=require('node:assert/strict');const M=require('../assets/prospect-automation-model.js');
+const date='2026-11-24';const lead=(nome,extra={})=>({nome,telNum:'11988011285',status:'contatado',atualizadoEm:'2026-11-23',...extra});
+test('normaliza código de país e valida telefone sem inferir WhatsApp',()=>{assert.equal(M.phone('+55 (11) 98801-1285'),'11988011285');assert.equal(M.phone('1133334444'),'1133334444');for(const n of ['123','119880112851','551199','1100000000'])assert.equal(M.phone(n),null);});
+test('dia comercial respeita fim de semana e virada de mês/ano',()=>{assert.equal(M.businessDay('2026-11-27',2),'2026-12-01');assert.equal(M.businessDay('2026-12-31',1),'2027-01-01');});
+test('hoje segue São Paulo, inclusive na virada UTC',()=>assert.equal(M.today(new Date('2026-11-25T01:30:00Z')),'2026-11-24'));
+test('atrasados vêm antes de hoje, estagnados e novos; futuros e encerrados ficam fora',()=>{
+ const h={'1133334444':lead('Atrasado',{followUp:'2026-11-23'}),'1133334445':lead('Hoje',{followUp:date}),'1133334446':lead('Futuro',{followUp:'2026-11-25'}),'1133334447':lead('Encerrado',{followUp:date,status:'nao'}),'1133334448':lead('Parado',{atualizadoEm:'2026-11-10'})};
+ assert.deepEqual(M.queue([lead('Novo',{status:undefined})],h,date).items.map(i=>i.lead.nome),['Atrasado','Hoje','Parado','Novo']);
+});
+test('deduplica fila por telefone nacional e internacional, inclusive encerrados',()=>{const h={'5511988011285':lead('Já conhecido',{status:'fechado'})};const q=M.queue([lead('Duplicado'),lead('Duplicado2',{telNum:'5511988011285'}),lead('Inválido',{telNum:'123'})],h,date);assert.equal(q.items.length,0);assert.equal(q.invalid,1);});
+test('prioriza novo corporativo e depois proximidade, sem usar avaliações como intenção de compra',()=>{const q=M.queue([lead('Perto',{telNum:'1133334444',distKm:'1'}),lead('Corporativo',{telNum:'1133334445',corp:true,distKm:'5'}),lead('Longe',{telNum:'1133334446',distKm:'8',rating:5})],{},date);assert.deepEqual(q.items.map(x=>x.lead.nome),['Corporativo','Perto','Longe']);});
+test('não retorna contato recente sem próxima data antes de quatro dias',()=>assert.equal(M.queue([],{1133334444:lead('Recente')},date).items.length,0));
+test('segmento usa nicho informado, sem prometer necessidade ou orçamento',()=>{assert.match(M.segment('concessionária de automóveis'),/entrega de veículos/);assert.match(M.segment('clínica odontológica'),/jalecos/);assert.equal(M.segment('segmento desconhecido'),'');});
+test('acompanhamento de interessado pede informações e preserva nome da empresa',()=>{const m=M.followMessage(lead('Excelente Automóveis',{status:'interesse'}));assert.match(m,/equipe Excelente Automóveis!/);assert.match(m,/quantidades e prazo/);assert(!m.includes('orçamento já enviado'));});

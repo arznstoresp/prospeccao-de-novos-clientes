@@ -1,0 +1,7 @@
+.action-workspace{border:1px solid var(--neon);background:var(--card);border-radius:var(--radius);padding:var(--pad);margin-bottom:var(--gap)}
+.action-workspace h2{font-size:19px;margin:6px 0}.action-workspace p{color:var(--sub);font-size:13px;margin:6px 0 12px}.action-workspace label{margin-top:10px}
+.action-workspace .action-buttons{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}.action-workspace .action-buttons .btn{width:auto;min-height:44px;flex:1 1 150px}
+.action-workspace textarea{height:230px;padding:12px;line-height:1.6;font-size:14px;font-weight:400;resize:vertical}.action-workspace input[type=date]{max-width:220px}
+.action-workspace .action-badge{font-size:11px;color:var(--neon);font-weight:700;letter-spacing:.6px}.action-workspace .action-preview-list{padding-left:20px;font-size:12px;color:var(--sub);margin-top:12px}
+.action-workspace .action-check{display:flex;gap:8px;align-items:center;text-transform:none;letter-spacing:0;font-size:13px;cursor:pointer}.action-workspace .action-check input{width:18px;height:18px;flex-shrink:0}
+.action-workspace .action-issue{color:var(--amber);font-size:12px}.action-workspace [hidden]{display:none!important}
